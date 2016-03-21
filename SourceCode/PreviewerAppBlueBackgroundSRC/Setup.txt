@@ -7,12 +7,10 @@ Then, cd to the root directory of the project (not src), run:
 LINUX:
 sudo npm install -g bower && sudo npm install -g gulp
 sudo npm install && bower install && composer update
-bower update
 
 WINDOWS:
 npm install -g bower && npm install -g gulp
 npm install && bower install && composer update
-bower update
 
 This should generate all you need to run things.
 Then, run:
