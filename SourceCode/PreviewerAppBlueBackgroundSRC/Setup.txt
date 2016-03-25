@@ -7,14 +7,18 @@ Then, cd to the root directory of the project (not src), run:
 LINUX:
 sudo npm install -g bower && sudo npm install -g gulp
 sudo npm install && bower install && composer update
+sudo bower update
 
 WINDOWS:
 npm install -g bower && npm install -g gulp
 npm install && bower install && composer update
+bower update
+
+If any questions are asked as to which version of Angular to install, use 1.4.x.
 
 This should generate all you need to run things.
 Then, run:
 gulp
 
-This should open a server. In your browser, go to localhost:8000, and you should see the application.
+This should run a server in the terminal. In your browser, go to localhost:8000, and you should see the application.
 You cannot have two terminals with the gulp command running at the same time.
