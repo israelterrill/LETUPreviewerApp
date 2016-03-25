@@ -81,15 +81,51 @@ previewerApp.controller('MapsController', function($scope, NgMap) {
     selected: $scope.buildings[0]
   };
   $scope.markers =[];
+  $scope.not_checked = true;
+  $scope.geoEnabled = true;
   NgMap.getMap().then(function(map) {
     map.getStreetView().setVisible(false);
+        var options = {
+                        enableHighAccuracy: true
+                    };
+        navigator.geolocation.getCurrentPosition(function(pos) {
+            console.log(JSON.stringify(pos));
+            var currMarker = new google.maps.Marker({
+                map: map,
+                position: new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude),
+                title: "You Are Here"
+            });
+            var currentWindow = new google.maps.InfoWindow({
+                content: '<h4 id="firstHeading" class="firstHeading">You Are Here</h4>'
+            });
+
+            currMarker.addListener('click', function() {
+              currentWindow.open(map, currMarker);
+            });
+            currentWindow.open(map, currMarker);
+            $scope.markers.push(currMarker);
+            $scope.currentPosition = currMarker.position;
+            map.panTo(currMarker.position);
+            $scope.geoEnabled = true;
+        },
+        function(error) {
+                $scope.geoEnabled = false;
+                alert('Unable to get location: ' + error.message
+                + '\nPlease select a location from the dropdown to get started');
+                var defaultBuilding = $scope.buildings[0];
+                window.console.log(map);
+                window.console.log(defaultBuilding);
+                var pos = new google.maps.LatLng(defaultBuilding.lat, defaultBuilding.long);
+                map.panTo(pos);
+        }, options);
+
     $scope.onSelected = function(building, $select) {
       while($scope.markers.length > 0) {
         $scope.markers.pop().setMap(null);
       }
 
       var infowindow = new google.maps.InfoWindow({
-          content: '<h1 id="firstHeading" class="firstHeading">'+building.name+'</h1>'
+          content: '<h4 id="firstHeading" class="firstHeading">'+building.name+'</h4>'
       });
 
       var marker = new google.maps.Marker({
@@ -101,10 +137,37 @@ previewerApp.controller('MapsController', function($scope, NgMap) {
         infowindow.open(map, marker);
       });
       $scope.markers.push(marker);
-
+      //In case no geolocation
         var ll = new google.maps.LatLng(building.lat, building.long);
         map.panTo(ll);
+    if ($scope.geoEnabled === true) {
+        var options = {
+                        enableHighAccuracy: true
+                    };
 
+        navigator.geolocation.getCurrentPosition(function(pos) {
+                        console.log(JSON.stringify(pos));
+                        var currMarker = new google.maps.Marker({
+                            map: map,
+                            position: new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude),
+                            title: "You Are Here"
+                        });
+                        var currentWindow = new google.maps.InfoWindow({
+                            content: '<h4 id="firstHeading" class="firstHeading">You Are Here</h4>'
+                        });
+
+                        currMarker.addListener('click', function() {
+                          currentWindow.open(map, currMarker);
+                        });
+                        currentWindow.open(map, currMarker);
+                        $scope.markers.push(currMarker);
+                        $scope.currentPosition = currMarker.position;
+                        map.panTo(currMarker.position);
+                    },
+                    function(error) {
+                        alert('Unable to get location: ' + error.message);
+                    }, options);
+                }
         document.activeElement.blur();
         $select.search="";
       };
