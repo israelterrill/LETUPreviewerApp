@@ -255,28 +255,31 @@ previewerApp.controller('ScheduleController', function($scope, $location) {
 });
 
 previewerApp.controller('ActivitiesController', function($scope, $location) {
-  $scope.titles = [
-    "Rube Goldberg Competition",
-    "East Texas Symphonic Band",
-    "Student Projects",
-  ];
-  $scope.dates = [
-    "3-5 pm",
-    "7:30-9 pm",
-    "Any time",
-  ];
-  $scope.locations = [
-    "<a href=\"#\maps\">Belcher Gym (Solheim)</a>",
-    "Belcher Auditorium",
-    "Glaske",
-  ];
-  $scope.descriptions = [
-    "Come watch our Electronics Lab III students as they showcase their Rube Goldberg contraptions!",
-    "Join us in the Belcher center for the East Texas Symphonic Band's spring concert.",
-    "Walk down Glaske's halls and check out students' interactive class projects, from robots to model elevators.",
-  ];
+    $scope.activities = [
+        {
+                title: "Rube Goldberg Competition",
+                date: "3-5 pm",
+                location: "<a href=\"#\maps\">Belcher Gym (Solheim)</a>",
+                description: "Come watch our Electronics Lab III students as they showcase their Rube Goldberg contraptions!"
+        },
+        {
+                title: "East Texas Symphonic Band",
+                date: "7:30-9 pm",
+                location: "Belcher Auditorium",
+                description: "Join us in the Belcher center for the East Texas Symphonic Band's spring concert."
+        },
+    {
+                title: "Student Projects",
+                date: "Any Time",
+                location: "Glaske",
+                description: "Join us in the Belcher center for the East Texas Symphonic Band's spring concert."
+        }
+    ];
 
-  var numberOfPanels = 3; //can be set dynamically
+    for(var i = 0; i < $scope.activities.length; i++) {
+        $scope.activities[i].id = i;
+    }
+  var numberOfPanels = $scope.activities.length; //can be set dynamically
   $scope.counts = Array.apply(1, {length: numberOfPanels}).map(Number.call, Number)
 });
 
