@@ -254,6 +254,33 @@ previewerApp.controller('ScheduleController', function($scope, $location) {
   window.console.log($scope.counts);
 });
 
+previewerApp.controller('ActivitiesController', function($scope, $location) {
+  $scope.titles = [
+    "Rube Goldberg Competition",
+    "East Texas Symphonic Band",
+    "Student Projects",
+  ];
+  $scope.dates = [
+    "3-5 pm",
+    "7:30-9 pm",
+    "Any time",
+  ];
+  $scope.locations = [
+    "<a href=\"#\maps\">Belcher Gym (Solheim)</a>",
+    "Belcher Auditorium",
+    "Glaske",
+  ];
+  $scope.descriptions = [
+    "Come watch our Electronics Lab III students as they showcase their Rube Goldberg contraptions!",
+    "Join us in the Belcher center for the East Texas Symphonic Band's spring concert.",
+    "Walk down Glaske's halls and check out students' interactive class projects, from robots to model elevators.",
+  ];
+
+  var numberOfPanels = 3; //can be set dynamically
+  $scope.counts = Array.apply(1, {length: numberOfPanels}).map(Number.call, Number)
+});
+
+
 previewerApp.controller('DiningController', function($scope, NgMap) {
   $scope.markers=[];
   NgMap.getMap().then(function(map) {
