@@ -1,0 +1,68 @@
+API FORMATS
+
+MAPS FORMAT
+
+[
+   { name: 'Building Name', code: 'Initials', lat: 'latitudeCoord', long:'longitudeCoord'},
+   { name: 'Heath Hardwick Hall', code: 'HHH', lat: '32.467455', long: '-94.726533'},
+...
+]
+
+
+SCHEDULE FORMAT
+
+[
+	//Schedule Object
+	{
+		scheduleTitle: 'Aviation Preview',
+		scheduleDates: 'MM/DD/YYYY-MM/DD/YYYY',
+		events:	[
+			{ 
+				title: 'someTitle',
+				datesAndTimes: 'Any format like "Thursday" or "MM/DD/YYYY"',
+				location: 'someLocation',
+				description: 'some description'
+			}, 
+			{ 
+				title: 'someTitle',
+				datesAndTimes: 'Any format like "Thursday" or "MM/DD/YYYY"',
+				location: 'someLocation',
+				description: 'some description'
+			}
+		]
+	},
+...
+]
+
+
+EVENTS FORMAT
+
+[
+	{
+		title: "EventTitle",
+		date: "date and time",
+		location: "location name and maybe link to maps",
+		description: "A short description of the event"
+	},
+	{
+		title: "Rube Goldberg Competition",
+		date: "3-5 pm",
+		location: "<a href=\"#\maps\">Belcher Gym (Solheim)</a>",
+		description: "Come watch our Electronics Lab III students as they showcase their Rube Goldberg contraptions!"
+	}
+]
+
+
+QUESTION FORMAT
+
+[
+        {
+            question: "question",
+            answer: "The answer to the question",
+        },
+        {
+            question: "How do I apply to become a student?",
+            answer: "You can apply to LeTourneau online <a target=\"_blank\" href=\"http://www.letu.edu/_Admissions/Trad_Resources/\">here.</a>",
+        }
+...
+]
