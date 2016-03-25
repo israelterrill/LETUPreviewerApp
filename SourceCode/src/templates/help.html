@@ -11,18 +11,18 @@
         ui-state='myAccordion'
         ui-default='0'>
 
-        <div class="panel panel-default" ng-repeat="i in counts">
-          <div class="panel-heading" ui-set="{'myAccordion': i}">
+        <div class="panel panel-default" ng-repeat="question in questions">
+          <div class="panel-heading" ui-set="{'myAccordion': {{ question.id }}}">
 
             <h4 class="panel-title">
-                {{questionTitles[i]}}
+                {{ question.query }}
             </h4>
           </div>
 
-          <div ui-if="myAccordion == {{i}}">
+          <div ui-if="myAccordion == {{ question.id }}">
             <div class="panel-body">
               <div>
-                <p ng-bind-html="questionBodies[i] | unsafe"></p>
+                <p ng-bind-html="question.answer | unsafe"></p>
               </div>
             </div>
           </div>

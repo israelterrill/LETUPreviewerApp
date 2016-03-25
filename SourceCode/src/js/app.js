@@ -268,7 +268,7 @@ previewerApp.controller('ActivitiesController', function($scope, $location) {
                 location: "Belcher Auditorium",
                 description: "Join us in the Belcher center for the East Texas Symphonic Band's spring concert."
         },
-    {
+        {
                 title: "Student Projects",
                 date: "Any Time",
                 location: "Glaske",
@@ -338,25 +338,25 @@ previewerApp.controller('DiningController', function($scope, NgMap) {
 });
 
 previewerApp.controller('HelpController', function($scope, $location) {
-  $scope.questionTitles = [
-    "I have some extra time. What should I do?",
-    "How do I apply to become a student?",
-    "What should I expect from a class visit?",
-    "When do I meet my host?",
-    "Another question",
-    "Yet another question",
-  ];
+    $scope.questions = [
+        {
+            query: "How do I apply to become a student?",
+            answer: "You can apply to LeTourneau online <a target=\"_blank\" href=\"http://www.letu.edu/_Admissions/Trad_Resources/\">here.</a>",
+        },
+        {
+            query: "What should I expect from a class visit?",
+            answer: "The professor and students will welcome you, and you'll get to experience LeTourneau's small class sizes and interactive classes."
+        },
+        {
+            query: "Another question",
+            answer: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        }
+    ];
 
-  $scope.questionBodies = [
-    "Check out our <a href=\"#/activities\">events listing</a>, or just ask some current students about their experience.",
-    "You can apply to LeTourneau online <a href=\"http://www.letu.edu/_Admissions/Trad_Resources/\">here.</a>",
-    "The professor and students will welcome you, and you'll get to experience LeTourneau's small class sizes and interactive classes.",
-    "The number of the room where you're staying is on your nametag. Your host may have classes, but they will welcome you as soon as they can.",
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-  ];
-
-  var numberOfPanels = 6; //can be set dynamically
+  var numberOfPanels = $scope.questions.length;
+  for(var i = 0; i < numberOfPanels; i++) {
+      $scope.questions[i].id = i;
+  }
   $scope.counts = Array.apply(1, {length: numberOfPanels}).map(Number.call, Number);
 });
 
