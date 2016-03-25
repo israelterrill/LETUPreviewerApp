@@ -9,8 +9,8 @@
         <div class="panel-group"
           ui-state='myAccordion'
           ui-default='0'>
-          <div class="panel-body">
 
+          <div class="panel-body">
             <ui-select ng-model="model.selected" ng-change="onSelected($select.selected, $select)" theme="select2" ng-disabled="disabled" style="width: 50%;margin-bottom: 10px;margin-left: -15px;" title="Choose an event">
               <ui-select-match placeholder="Select Event...">{{$select.selected.scheduleTitle}}</ui-select-match>
               <ui-select-choices repeat="schedule in schedules | propsFilter: {scheduleTitle: $select.search, scheduleDates: $select.search}">
@@ -22,25 +22,27 @@
             </ui-select>
           </div>
 
-          <div class="panel panel-default" ng-repeat="event in events">
+         <div class="panel panel-default" ng-repeat="event in schedule.events">
             <div class="panel-heading" ui-set="{'myAccordion': event.id}">
 
               <h4 class="panel-title">
                   {{event.title}}
               </h4>
             </div>
-
+            
             <div ui-if="myAccordion == {{event.id}}">
               <div class="panel-body">
-                {{event.dates}}</br>
-                <p ng-bind-html="locations[i] | unsafe"></p>
+                {{event.datesAndTimes}}</br>
+                <p ng-bind-html="event.location | unsafe"></p>
                 <p ng-bind-html="event.description | unsafe"></p>
               </div>
             </div>
+
           </div>
 
         </div>
       </div>
+
     </div>
   </div>
 </section>

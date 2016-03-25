@@ -134,173 +134,61 @@ previewerApp.controller('MapsController', function($scope, NgMap) {
 });
 
 previewerApp.controller('ScheduleController', function($scope, $location) {
-  $scope.schedules = [
-  //Schedule 1
-  {
-    scheduleTitle: 'Preview Day',
-    scheduleDates: '03/1/2016-03/5/2016',
-    titles: [
-      "Check-in begins",
-      "Campus tours",
-      "Department overviews",
-      "Parent/student chat with enrollment officers",
-      "Welcome dinner",
-      "Breakfast with admissions",
-      "More events...",
-      "Check-in begins",
-      "Campus tours",
-      "Department overviews",
-      "Parent/student chat with enrollment officers",
-      "Welcome dinner",
-      "Breakfast with admissions",
-      "More events..."
-    ],
-    dates: [
-      "4 pm Thursday",
-      "4:15-5:30 pm Thursday",
-      "5:30 pm Thursday",
-      "6:30 pm Thursday",
-      "7 pm Thursday",
-      "8 am Friday",
-      "Date goes here",
-      "4 pm Thursday",
-      "4:15-5:30 pm Thursday",
-      "5:30 pm Thursday",
-      "6:30 pm Thursday",
-      "7 pm Thursday",
-      "8 am Friday",
-      "Date goes here",
-    ],
-    locations: [
-      "Student Center [AFSC]",
-      "South Hall lobby",
-      "MSC-3 Little Theater",
-      "MSC-3 Little Theater",
-      "Corner Cafe",
-      "Corner Cafe",
-      "Glaske C121",
-      "Student Center [AFSC]",
-      "South Hall lobby",
-      "MSC-3 Little Theater",
-      "MSC-3 Little Theater",
-      "Corner Cafe",
-      "Corner Cafe",
-      "Glaske C121",
-    ],
-    descriptions: [
-      "Check in, get settled in, and get ready for a great visit!",
-      "Spend 1 hour finding out why students from all 50 states and over 20 countries choose LETU.",
-      "Learn about the different departments and programs LETU offers.",
-      "Find out how to apply to become a student at LETU and get answers to questions about student life, chapel, and academics at LETU.",
-      "Enjoy dinner at our Corner Cafe with admissions officers and current students.",
-      "Enjoy breakfast at the Corner Cafe with admissions officers and current students.",
-      "The event description would go here if this were a real event.",
-      "Check in, get settled in, and get ready for a great visit!",
-      "Spend 1 hour finding out why students from all 50 states and over 20 countries choose LETU.",
-      "Learn about the different departments and programs LETU offers.",
-      "Find out how to apply to become a student at LETU and get answers to questions about student life, chapel, and academics at LETU.",
-      "Enjoy dinner at our Corner Cafe with admissions officers and current students.",
-      "Enjoy breakfast at the Corner Cafe with admissions officers and current students.",
-      "The event description would go here if this were a real event."
-    ]
-  },
-  //Schedule 2
-  {
-    scheduleTitle: 'LETU Fun and Relaxation Day',
-    scheduleDates: '05/1/2016-05/5/2016',
-    titles: [
-      "Sit Down and Rest",
-      "Do Something with Someone Special",
-      "Impress Dr. Baas",
-      "Make Coffee",
-      "Think about Computers...",
-      "Go Exercise",
-      "More Events..."
-    ],
-    dates: [
-      "Whenever you want",
-      "4:15-5:30 pm Thursday",
-      "5:30 pm Thursday",
-      "6:30 pm Thursday",
-      "7 pm Thursday",
-      "8 am Friday",
-      "Date goes here",
-    ],
-    locations: [
-      "Wherever you want",
-      "South Hall lobby",
-      "MSC-3 Little Theater",
-      "MSC-3 Little Theater",
-      "Corner Cafe",
-      "Corner Cafe",
-      "Glaske C121",
-    ],
-    descriptions: [
-      "Be happy!",
-      "Spend 1 hour finding out why students from all 50 states and over 20 countries choose LETU.",
-      "Learn about the different departments and programs LETU offers.",
-      "Find out how to apply to become a student at LETU and get answers to questions about student life, chapel, and academics at LETU.",
-      "Enjoy dinner at our Corner Cafe with admissions officers and current students.",
-      "Enjoy breakfast at the Corner Cafe with admissions officers and current students.",
-      "The event description would go here if this were a real event."
-    ]
-  }
-];
-  $scope.schedule = $scope.schedules[0];
-  $scope.events = [];
-  for (var i = 0; i < $scope.schedule.titles.length; i++) {
-      $scope.events.push({
-      title: $scope.schedule.titles[i],
-      dates: $scope.schedule.dates[i],
-      location: $scope.schedule.locations[i],
-      description: $scope.schedule.descriptions[i],
-      id: i
-    });
-  }
+  $scope.schedules =
+    [
+    	{
+    		scheduleTitle: 'Aviation Preview',
+            scheduleDates: '03/1/2016-03/5/2016',
+    		events:	[
+    			{
+    				title: 'Check-in begins',
+    				datesAndTimes: 'Thursday (03/02/2016), 4:15-5:30 pm',
+        			location: 'HHH',
+    				description: 'Spend 1 hour finding out why students from all 50 states and over 20 countries choose LETU.',
+    			},
+    			{
+    				title: 'someTitle',
+    				datesAndTimes: 'Thursday (03/02/2016), 4:15-5:30 pm',
+        			location: 'someLocation',
+    				description: 'some description',
+    			}
+    		]
+    	},
+        {
+            scheduleTitle: 'Engineering Preview',
+            scheduleDates: '03/1/2016-03/5/2016',
+            events:	[
+                {
+                    title: 'Stuff',
+                    datesAndTimes: 'Thursday (03/02/2016), 4:15-5:30 pm',
+                    location: 'HHH',
+                    description: 'Spend 1 hour finding out why students from all 50 states and over 20 countries choose LETU.',
+                },
+                {
+                    title: 'Cool Engineering Stuff',
+                    datesAndTimes: 'Thursday (03/02/2016), 4:15-5:30 pm',
+                    location: 'someLocation',
+                    description: 'some description',
+                }
+         ]
+        }
+    ];
 
+  $scope.schedule = $scope.schedules[0];
+    for (var i = 0; i < $scope.schedule.events.length; i++) {
+        $scope.schedule.events[i].id = i;
+    }
   $scope.onSelected = function(schedule, $select) {
     $scope.schedule = schedule;
-    $scope.events = [];
-    for (var i = 0; i < $scope.schedule.titles.length; i++) {
-        $scope.events.push({
-        title: $scope.schedule.titles[i],
-        dates: $scope.schedule.dates[i],
-        location: $scope.schedule.locations[i],
-        description: $scope.schedule.descriptions[i],
-        id: i
-      });
+    for (var i = 0; i < $scope.schedule.events.length; i++) {
+        $scope.schedule.events[i].id = i;
     }
     document.activeElement.blur();
     $select.search="";
   };
-  var numberOfPanels = 7; //can be set dynamically
-  $scope.counts = Array.apply(1, {length: numberOfPanels}).map(Number.call, Number)
-});
-
-previewerApp.controller('ActivitiesController', function($scope, $location) {
-  $scope.titles = [
-    "Rube Goldberg Competition",
-    "East Texas Symphonic Band",
-    "Student Projects",
-  ];
-  $scope.dates = [
-    "3-5 pm",
-    "7:30-9 pm",
-    "Any time",
-  ];
-  $scope.locations = [
-    "<a href=\"#\maps\">Belcher Gym (Solheim)</a>",
-    "Belcher Auditorium",
-    "Glaske",
-  ];
-  $scope.descriptions = [
-    "Come watch our Electronics Lab III students as they showcase their Rube Goldberg contraptions!",
-    "Join us in the Belcher center for the East Texas Symphonic Band's spring concert.",
-    "Walk down Glaske's halls and check out students' interactive class projects, from robots to model elevators.",
-  ];
-
-  var numberOfPanels = 3; //can be set dynamically
-  $scope.counts = Array.apply(1, {length: numberOfPanels}).map(Number.call, Number)
+  var numberOfPanels = $scope.schedule.events.length;
+  $scope.counts = Array.apply(1, {length: numberOfPanels}).map(Number.call, Number);
+  window.console.log($scope.counts);
 });
 
 previewerApp.controller('DiningController', function($scope, NgMap) {
