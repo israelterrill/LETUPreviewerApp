@@ -1,5 +1,5 @@
-bower_components/
-components/
-node_modules/
-vendor/
-www/
+SourceCode/bower_components
+SourceCode/components
+SourceCode/node_modules
+SourceCode/vendor
+SourceCode/www
