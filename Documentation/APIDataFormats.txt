@@ -42,14 +42,16 @@ EVENTS FORMAT
 		title: "EventTitle",
 		date: "date and time",
 		location: "location name and maybe link to maps",
-		description: "A short description of the event"
+		description: "a short description of the event",
+		imageLink: "some image URL"
 	},
 	{
 		title: "Rube Goldberg Competition",
 		date: "3-5 pm",
 		location: "<a href=\"#\maps\">Belcher Gym (Solheim)</a>",
 		description: "Come watch our Electronics Lab III students as they showcase their Rube Goldberg contraptions!"
-	}
+		imageLink: "https://c2.staticflickr.com/2/1182/534059168_88325d465a_z.jpg?zz=1"	
+}
 ]
 
 
