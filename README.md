@@ -7,7 +7,6 @@ SourceCode: The source code and all associated images and resources for the proj
 
 Documentation: The SRS and SDS documents and other project documents
 
-DiaFiles: The diagrams for the project.
 
 TestServer: An example/test API for the project.
 
