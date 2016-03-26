@@ -1,2 +1,0 @@
-2/19/2016	Windows Code added
-3/16/2015	Geolocation for GPS phones added to maps page (not dining); README Updated
