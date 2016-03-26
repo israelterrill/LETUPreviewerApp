@@ -9,6 +9,8 @@ Documentation: The SRS and SDS documents and other project documents
 
 DiaFiles: The diagrams for the project.
 
+TestServer: An example/test API for the project.
+
 
 ## Front-end Setup
 Install NodeJS/npm (may come installed in the same package)
@@ -43,7 +45,7 @@ npm install && bower install && composer update
 
 bower update
 
-### For Both:
+### Both:
 
 
 This should generate all you need to run things.
@@ -59,6 +61,30 @@ You cannot have two terminals with the gulp command running at the same time.
 
 Lastly, if you want information/map data to actually show in the
 front-end, then you MUST run and follow the instructions in the ../TestServer
-directory (or write your own web server, following the API data formats
-specified in the ../Documentation/APIDataFormat.txt file).
+directory or in the [Test Server Setup] (#api-test-server-setup) section found below (or write your own web server, following the API data formats specified in the ../Documentation/APIDataFormat.txt file).
+
+
+## API Test Server Setup
+
+
+This server serves as a test API for the application. Start this after running
+gulp from the SourceCode directory after following the instructions in
+README.txt or the [Front-end Setup](#front-end-setup) section above.
+
+
+To use this server, first install http and httpdispatcher:
+
+
+npm install http && npm install httpdispatcher
+
+
+Then, in the TestServer directory run:
+node Server.js
+
+
+This should start a web server with the port set to 8080. The served data is 
+according to the format in Documentation/APIDataFormats.txt.
+
+
+
 
