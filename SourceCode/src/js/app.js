@@ -16,6 +16,9 @@ var previewerApp = angular.module('PreviewerApp', [
   .when('/help', {templateUrl:'help.html', reloadOnSearch: false});
 });
 
+//CHANGE THIS TO CORRECT BASE!
+var httpRequestBase = 'http://localhost:8080';
+
 previewerApp.controller('MainController', function($scope, $location) {
 
   $scope.$on("$routeChangeSuccess", function($currentRoute, $previousRoute) {
@@ -68,219 +71,176 @@ previewerApp.controller('HomeController', function($scope, $location) {
   }
 });
 
-previewerApp.controller('MapsController', function($scope, NgMap) {
-  $scope.buildings = [
-   { name: 'Heath Hardwick Hall', code: 'HHH', lat: '32.467455', long: '-94.726533'},
-   { name: 'Thomas Hall', code: 'THOM', lat: '32.468040', long: '-94.724982'},
-   { name: 'Longview Hall', code: 'LH', lat: '32.467663', long: '-94.727333'},
-   { name: 'Glaske',  code: 'GLSK', lat: '32.464961', long: '-94.727397'},
-   { name: 'Machine Tool and Design Lab', code: 'MTDL', lat: '32.465211', long: '-94.725745'},
-   { name: 'Computer Science Projects Lab', code: 'CSPL', lat: '32.465236', long: '-94.725321'},
- ];
-  $scope.building = {
-    selected: $scope.buildings[0]
-  };
-  $scope.markers =[];
-  $scope.not_checked = true;
-  $scope.geoEnabled = true;
-  NgMap.getMap().then(function(map) {
-    map.getStreetView().setVisible(false);
-        var options = {
-                        enableHighAccuracy: true
-                    };
-        navigator.geolocation.getCurrentPosition(function(pos) {
-            console.log(JSON.stringify(pos));
-            var currMarker = new google.maps.Marker({
-                map: map,
-                position: new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude),
-                title: "You Are Here"
-            });
-            var currentWindow = new google.maps.InfoWindow({
-                content: '<h4 id="firstHeading" class="firstHeading">You Are Here</h4>'
-            });
+previewerApp.controller('MapsController', function($scope, $http, NgMap) {
 
-            currMarker.addListener('click', function() {
-              currentWindow.open(map, currMarker);
-            });
-            currentWindow.open(map, currMarker);
-            $scope.markers.push(currMarker);
-            $scope.currentPosition = currMarker.position;
-            map.panTo(currMarker.position);
-            $scope.geoEnabled = true;
-        },
-        function(error) {
-                $scope.geoEnabled = false;
-                alert('Unable to get location: ' + error.message
-                + '\nPlease select a location from the dropdown to get started');
-                var defaultBuilding = $scope.buildings[0];
-                window.console.log(map);
-                window.console.log(defaultBuilding);
-                var pos = new google.maps.LatLng(defaultBuilding.lat, defaultBuilding.long);
-                map.panTo(pos);
-        }, options);
+ $http({
+   method: 'GET',
+   url: httpRequestBase + '/maps',
+ }).then(function successCallback(response) {
+     $scope.buildings = response.data;
+     $scope.building = {
+       selected: $scope.buildings[0]
+     };
+     $scope.markers =[];
+     $scope.not_checked = true;
+     $scope.geoEnabled = true;
+     NgMap.getMap().then(function(map) {
+       map.getStreetView().setVisible(false);
+           var options = {
+               enableHighAccuracy: true
+            };
+           navigator.geolocation.getCurrentPosition(function(pos) {
+               var currMarker = new google.maps.Marker({
+                   map: map,
+                   position: new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude),
+                   title: "You Are Here"
+               });
+               var currentWindow = new google.maps.InfoWindow({
+                   content: '<h4 id="firstHeading" class="firstHeading">You Are Here</h4>'
+               });
 
-    $scope.onSelected = function(building, $select) {
-      while($scope.markers.length > 0) {
-        $scope.markers.pop().setMap(null);
-      }
+               currMarker.addListener('click', function() {
+                 currentWindow.open(map, currMarker);
+               });
+               currentWindow.open(map, currMarker);
+               $scope.markers.push(currMarker);
+               $scope.currentPosition = currMarker.position;
+               map.panTo(currMarker.position);
+               $scope.geoEnabled = true;
+           },
+           function(error) {
+                   $scope.geoEnabled = false;
+                   alert('Unable to get location: ' + error.message
+                   + '\nPlease select a location from the dropdown to get started');
+                   var defaultBuilding = $scope.buildings[0];
+                   window.console.log(map);
+                   window.console.log(defaultBuilding);
+                   var pos = new google.maps.LatLng(defaultBuilding.lat, defaultBuilding.long);
+                   map.panTo(pos);
+           }, options);
 
-      var infowindow = new google.maps.InfoWindow({
-          content: '<h4 id="firstHeading" class="firstHeading">'+building.name+'</h4>'
-      });
+       $scope.onSelected = function(building, $select) {
+         while($scope.markers.length > 0) {
+             $scope.markers.pop().setMap(null);
+         }
 
-      var marker = new google.maps.Marker({
-          map: map,
-          position: new google.maps.LatLng(building.lat, building.long),
-          title: building.name
-      });
-      marker.addListener('click', function() {
-        infowindow.open(map, marker);
-      });
-      $scope.markers.push(marker);
-      //In case no geolocation
-        var ll = new google.maps.LatLng(building.lat, building.long);
-        map.panTo(ll);
-    if ($scope.geoEnabled === true) {
-        var options = {
-                        enableHighAccuracy: true
-                    };
+         var infowindow = new google.maps.InfoWindow({
+             content: '<h4 id="firstHeading" class="firstHeading">'+building.name+'</h4>'
+         });
 
-        navigator.geolocation.getCurrentPosition(function(pos) {
-                        console.log(JSON.stringify(pos));
-                        var currMarker = new google.maps.Marker({
-                            map: map,
-                            position: new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude),
-                            title: "You Are Here"
-                        });
-                        var currentWindow = new google.maps.InfoWindow({
-                            content: '<h4 id="firstHeading" class="firstHeading">You Are Here</h4>'
-                        });
+         var marker = new google.maps.Marker({
+             map: map,
+             position: new google.maps.LatLng(building.lat, building.long),
+             title: building.name
+         });
+         marker.addListener('click', function() {
+           infowindow.open(map, marker);
+         });
+         $scope.markers.push(marker);
+         //In case no geolocation
+           var ll = new google.maps.LatLng(building.lat, building.long);
+           map.panTo(ll);
+       if ($scope.geoEnabled === true) {
+           var options = {
+                           enableHighAccuracy: true
+                       };
 
-                        currMarker.addListener('click', function() {
-                          currentWindow.open(map, currMarker);
-                        });
-                        currentWindow.open(map, currMarker);
-                        $scope.markers.push(currMarker);
-                        $scope.currentPosition = currMarker.position;
-                        map.panTo(currMarker.position);
-                    },
-                    function(error) {
-                        alert('Unable to get location: ' + error.message);
-                    }, options);
-                }
+           navigator.geolocation.getCurrentPosition(function(pos) {
+                           var currMarker = new google.maps.Marker({
+                               map: map,
+                               position: new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude),
+                               title: "You Are Here"
+                           });
+                           var currentWindow = new google.maps.InfoWindow({
+                               content: '<h4 id="firstHeading" class="firstHeading">You Are Here</h4>'
+                           });
+
+                           currMarker.addListener('click', function() {
+                             currentWindow.open(map, currMarker);
+                           });
+                           currentWindow.open(map, currMarker);
+                           $scope.markers.push(currMarker);
+                           $scope.currentPosition = currMarker.position;
+                           map.panTo(currMarker.position);
+                       },
+                       function(error) {
+                           alert('Unable to get location: ' + error.message);
+                       }, options);
+                   }
+           document.activeElement.blur();
+           $select.search="";
+         };
+     });
+
+     $scope.$on('$locationChangeStart', function() {
+         while($scope.markers.length > 0) {
+           $scope.markers.pop().setMap(null);
+         }
+     });
+
+
+     }, function errorCallback(response) {
+         window.console.log(response);
+         window.console.log("ERROR");
+     });
+
+     $scope.disabled = undefined;
+
+     $scope.disable = function() {
+      $scope.disabled = true;
+     };
+     $scope.enable = function() {
+      $scope.disabled = false;
+     };
+
+     $scope.coordinates = function() {
+       return {
+        'margin':'0px 0px',
+       };
+     };
+});
+
+previewerApp.controller('ScheduleController', function($scope, $location, $http) {
+    $http({
+      method: 'GET',
+      url: httpRequestBase + '/schedules',
+    }).then(function successCallback(response) {
+        $scope.schedules = response.data;
+        $scope.schedule = $scope.schedules[0];
+        for (var i = 0; i < $scope.schedule.events.length; i++) {
+            $scope.schedule.events[i].id = i;
+    }
+      $scope.onSelected = function(schedule, $select) {
+        $scope.schedule = schedule;
+        for (var i = 0; i < $scope.schedule.events.length; i++) {
+            $scope.schedule.events[i].id = i;
+        }
         document.activeElement.blur();
         $select.search="";
       };
-  });
+      var numberOfPanels = $scope.schedule.events.length;
+      $scope.counts = Array.apply(1, {length: numberOfPanels}).map(Number.call, Number);
+    }, function errorCallback(response) {
+        window.console.log(response);
+        window.console.log("ERROR");
+    });
+});
 
-  $scope.$on('$locationChangeStart', function() {
-      while($scope.markers.length > 0) {
-        $scope.markers.pop().setMap(null);
+previewerApp.controller('ActivitiesController', function($scope, $http, $location) {
+  $http({
+    method: 'GET',
+    url: httpRequestBase + '/activities',
+  }).then(function successCallback(response) {
+      $scope.activities = response.data;
+      for(var i = 0; i < $scope.activities.length; i++) {
+          $scope.activities[i].id = i;
       }
+    var numberOfPanels = $scope.activities.length; //can be set dynamically
+    $scope.counts = Array.apply(1, {length: numberOfPanels}).map(Number.call, Number);
+  }, function errorCallback(response) {
+      window.console.log(response);
+      window.console.log("ERROR");
   });
-
-  $scope.coordinates = function() {
-    return {
-	    'margin':'0px 0px',
-    };
-  };
-  $scope.disabled = undefined;
-
-  $scope.enable = function() {
-   $scope.disabled = false;
- };
-
-  $scope.disable = function() {
-   $scope.disabled = true;
- };
-
-});
-
-previewerApp.controller('ScheduleController', function($scope, $location) {
-  $scope.schedules =
-    [
-    	{
-    		scheduleTitle: 'Aviation Preview',
-            scheduleDates: '03/1/2016-03/5/2016',
-    		events:	[
-    			{
-    				title: 'Check-in begins',
-    				datesAndTimes: 'Thursday (03/02/2016), 4:15-5:30 pm',
-        			location: 'HHH',
-    				description: 'Spend 1 hour finding out why students from all 50 states and over 20 countries choose LETU.',
-    			},
-    			{
-    				title: 'someTitle',
-    				datesAndTimes: 'Thursday (03/02/2016), 4:15-5:30 pm',
-        			location: 'someLocation',
-    				description: 'some description',
-    			}
-    		]
-    	},
-        {
-            scheduleTitle: 'Engineering Preview',
-            scheduleDates: '03/1/2016-03/5/2016',
-            events:	[
-                {
-                    title: 'Stuff',
-                    datesAndTimes: 'Thursday (03/02/2016), 4:15-5:30 pm',
-                    location: 'HHH',
-                    description: 'Spend 1 hour finding out why students from all 50 states and over 20 countries choose LETU.',
-                },
-                {
-                    title: 'Cool Engineering Stuff',
-                    datesAndTimes: 'Thursday (03/02/2016), 4:15-5:30 pm',
-                    location: 'someLocation',
-                    description: 'some description',
-                }
-         ]
-        }
-    ];
-
-  $scope.schedule = $scope.schedules[0];
-    for (var i = 0; i < $scope.schedule.events.length; i++) {
-        $scope.schedule.events[i].id = i;
-    }
-  $scope.onSelected = function(schedule, $select) {
-    $scope.schedule = schedule;
-    for (var i = 0; i < $scope.schedule.events.length; i++) {
-        $scope.schedule.events[i].id = i;
-    }
-    document.activeElement.blur();
-    $select.search="";
-  };
-  var numberOfPanels = $scope.schedule.events.length;
-  $scope.counts = Array.apply(1, {length: numberOfPanels}).map(Number.call, Number);
-  window.console.log($scope.counts);
-});
-
-previewerApp.controller('ActivitiesController', function($scope, $location) {
-    $scope.activities = [
-        {
-                title: "Rube Goldberg Competition",
-                date: "3-5 pm",
-                location: "<a href=\"#\maps\">Belcher Gym (Solheim)</a>",
-                description: "Come watch our Electronics Lab III students as they showcase their Rube Goldberg contraptions!"
-        },
-        {
-                title: "East Texas Symphonic Band",
-                date: "7:30-9 pm",
-                location: "Belcher Auditorium",
-                description: "Join us in the Belcher center for the East Texas Symphonic Band's spring concert."
-        },
-        {
-                title: "Student Projects",
-                date: "Any Time",
-                location: "Glaske",
-                description: "Join us in the Belcher center for the East Texas Symphonic Band's spring concert."
-        }
-    ];
-
-    for(var i = 0; i < $scope.activities.length; i++) {
-        $scope.activities[i].id = i;
-    }
-  var numberOfPanels = $scope.activities.length; //can be set dynamically
-  $scope.counts = Array.apply(1, {length: numberOfPanels}).map(Number.call, Number)
 });
 
 
@@ -337,27 +297,21 @@ previewerApp.controller('DiningController', function($scope, NgMap) {
 
 });
 
-previewerApp.controller('HelpController', function($scope, $location) {
-    $scope.questions = [
-        {
-            query: "How do I apply to become a student?",
-            answer: "You can apply to LeTourneau online <a target=\"_blank\" href=\"http://www.letu.edu/_Admissions/Trad_Resources/\">here.</a>",
-        },
-        {
-            query: "What should I expect from a class visit?",
-            answer: "The professor and students will welcome you, and you'll get to experience LeTourneau's small class sizes and interactive classes."
-        },
-        {
-            query: "Another question",
-            answer: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+previewerApp.controller('HelpController', function($scope, $http, $location) {
+    $http({
+      method: 'GET',
+      url: httpRequestBase + '/help',
+    }).then(function successCallback(response) {
+        $scope.questions = response.data;
+        var numberOfPanels = $scope.questions.length;
+        for(var i = 0; i < numberOfPanels; i++) {
+          $scope.questions[i].id = i;
         }
-    ];
-
-  var numberOfPanels = $scope.questions.length;
-  for(var i = 0; i < numberOfPanels; i++) {
-      $scope.questions[i].id = i;
-  }
-  $scope.counts = Array.apply(1, {length: numberOfPanels}).map(Number.call, Number);
+        $scope.counts = Array.apply(1, {length: numberOfPanels}).map(Number.call, Number);
+    }, function errorCallback(response) {
+        window.console.log(response);
+        window.console.log("ERROR");
+    });
 });
 
 previewerApp.filter('unsafe', function($sce) {
