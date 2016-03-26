@@ -59,8 +59,7 @@ You cannot have two terminals with the gulp command running at the same time.
 
 Lastly, if you want information/map data to actually show in the
 front-end, then you MUST run and follow the instructions in the ../TestServer
-directory (or write your own web server, following the API data formats
-specified in the ../Documentation/APIDataFormat.txt file) or in the [Test Server Setup] (#api-test-server-setup) section found below.
+directory or in the [Test Server Setup] (#api-test-server-setup) section found below (or write your own web server, following the API data formats specified in the ../Documentation/APIDataFormat.txt file).
 
 
 ## API Test Server Setup
@@ -77,12 +76,12 @@ To use this server, first install http and httpdispatcher:
 npm install http && npm install httpdispatcher
 
 
-Then, run:
+Then, in the TestServer directory run:
 node Server.js
 
 
 This should start a web server with the port set to 8080. The served data is 
-according to the information in Documentation/APIDataFormats.txt.
+according to the format in Documentation/APIDataFormats.txt.
 
 
 
