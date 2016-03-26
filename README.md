@@ -9,6 +9,8 @@ Documentation: The SRS and SDS documents and other project documents
 
 DiaFiles: The diagrams for the project.
 
+TestServer: An example/test API for the project.
+
 
 ## Front-end Setup
 Install NodeJS/npm (may come installed in the same package)
