@@ -14,11 +14,18 @@ npm install -g bower && npm install -g gulp
 npm install && bower install && composer update
 bower update
 
-If any questions are asked as to which version of Angular to install, use 1.4.x.
+FOR BOTH:
+If any questions are asked during installation as to which version of Angular to install, use 1.4.x.
 
-This should generate all you need to run things.
+This should generate all you need to run the frontend.
 Then, run:
 gulp
 
 This should run a server in the terminal. In your browser, go to localhost:8000, and you should see the application.
 You cannot have two terminals with the gulp command running at the same time.
+
+Lastly, if you want information/map data to actually show in the
+front-end, then you MUST run and follow the instructions in the ../TestServer
+directory (or write your own web server, following the API data formats
+specified in the ../Documentation/APIDataFormat.txt file).
+

@@ -1,4 +1,4 @@
-# LETUPreviewerApp
+# LETU Previewer App
 
 The following folders contain the different parts of the project:
 
@@ -10,7 +10,7 @@ Documentation: The SRS and SDS documents and other project documents
 DiaFiles: The diagrams for the project.
 
 
-## Machine Setup
+## Front-end Setup
 Install NodeJS/npm (may come installed in the same package)
 
 
@@ -43,16 +43,22 @@ npm install && bower install && composer update
 
 bower update
 
+### For Both:
+
+
 This should generate all you need to run things.
 Then, run:
 
 
 gulp
 
-This should open a server. In your browser, go to localhost:8000, and you should see the application.
-Be careful not to have two instances of gulp running with the current code--errors will probably occur.
+
+This should run a server in the terminal. In your browser, go to localhost:8000, and you should see the application.
+You cannot have two terminals with the gulp command running at the same time.
 
 
-
-
+Lastly, if you want information/map data to actually show in the
+front-end, then you MUST run and follow the instructions in the ../TestServer
+directory (or write your own web server, following the API data formats
+specified in the ../Documentation/APIDataFormat.txt file).
 

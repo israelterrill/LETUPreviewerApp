@@ -1,5 +1,12 @@
+PURPOSE:
+This server serves as a test API for the application. Start this after running
+gulp from the SourceCode directory after following the instructions in
+Setup.txt.
+ 
 OPERATION:
-To use this server, first install http and httpdispatcher
+To use this server, first install http and httpdispatcher:
+
+
 npm install http && npm install httpdispatcher
 
 
