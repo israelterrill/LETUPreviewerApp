@@ -3,3 +3,5 @@ SourceCode/components
 SourceCode/node_modules
 SourceCode/vendor
 SourceCode/www
+C#TestBackend/PreviewerAppAPI/bin
+C#TestBackend/PreviewerAppAPI/obj
