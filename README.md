@@ -63,7 +63,7 @@ front-end, then you MUST run and follow the instructions in the ../TestServer
 directory or in the [Test Server Setup] (#api-test-server-setup) section found below (or write your own web server, following the API data formats specified in the ../Documentation/APIDataFormat.txt file).
 
 
-## API Test Server Setup
+## API Node Test Server Setup
 
 
 This server serves as a test API for the application. Start this after running
@@ -81,9 +81,13 @@ Then, in the TestServer directory run:
 node Server.js
 
 
-This should start a web server with the port set to 8080. The served data is 
+This should start a web server with the port set to 44623. The served data is 
 according to the format in Documentation/APIDataFormats.txt.
 
 
+## API C# Test Server Setup
 
+
+Alternatively, you can just open the C# Test Server in Visual Studio and click the run button at the top to build and run the project.
+If you have problems with the front-end not finding the API, you may need to adjust the base address/port variable in the front end source code's src/js/app.js file to match the port that the browser brings up when you run the Visual Studio project.
 
