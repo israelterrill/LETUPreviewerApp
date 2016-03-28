@@ -17,7 +17,7 @@ var previewerApp = angular.module('PreviewerApp', [
 });
 
 //CHANGE THIS TO CORRECT BASE!
-var httpRequestBase = 'http://localhost:8080';
+var httpRequestBase = 'http://localhost:44623/api';
 
 previewerApp.controller('MainController', function($scope, $location) {
 
@@ -75,7 +75,7 @@ previewerApp.controller('MapsController', function($scope, $http, NgMap) {
 
  $http({
    method: 'GET',
-   url: httpRequestBase + '/maps',
+   url: httpRequestBase + '/googlemapsdata',
  }).then(function successCallback(response) {
      $scope.buildings = response.data;
      $scope.building = {
@@ -115,7 +115,7 @@ previewerApp.controller('MapsController', function($scope, $http, NgMap) {
                    var defaultBuilding = $scope.buildings[0];
                    window.console.log(map);
                    window.console.log(defaultBuilding);
-                   var pos = new google.maps.LatLng(defaultBuilding.lat, defaultBuilding.long);
+                   var pos = new google.maps.LatLng(defaultBuilding.Lat, defaultBuilding.Long);
                    map.panTo(pos);
            }, options);
 
@@ -125,20 +125,20 @@ previewerApp.controller('MapsController', function($scope, $http, NgMap) {
          }
 
          var infowindow = new google.maps.InfoWindow({
-             content: '<h4 id="firstHeading" class="firstHeading">'+building.name+'</h4>'
+             content: '<h4 id="firstHeading" class="firstHeading">'+building.Name+'</h4>'
          });
 
          var marker = new google.maps.Marker({
              map: map,
-             position: new google.maps.LatLng(building.lat, building.long),
-             title: building.name
+             position: new google.maps.LatLng(building.Lat, building.Long),
+             title: building.Name
          });
          marker.addListener('click', function() {
            infowindow.open(map, marker);
          });
          $scope.markers.push(marker);
          //In case no geolocation
-           var ll = new google.maps.LatLng(building.lat, building.long);
+           var ll = new google.maps.LatLng(building.Lat, building.Long);
            map.panTo(ll);
        if ($scope.geoEnabled === true) {
            var options = {
@@ -207,22 +207,22 @@ previewerApp.controller('ScheduleController', function($scope, $location, $http)
     }).then(function successCallback(response) {
         $scope.schedules = response.data;
         $scope.schedule = $scope.schedules[0];
-        for (var i = 0; i < $scope.schedule.events.length; i++) {
-            $scope.schedule.events[i].id = i;
+        for (var i = 0; i < $scope.schedule.Events.length; i++) {
+            $scope.schedule.Events[i].id = i;
     }
       $scope.onSelected = function(schedule, $select) {
         $scope.schedule = schedule;
-        for (var i = 0; i < $scope.schedule.events.length; i++) {
-            $scope.schedule.events[i].id = i;
+        for (var i = 0; i < $scope.schedule.Events.length; i++) {
+            $scope.schedule.Events[i].id = i;
         }
         document.activeElement.blur();
         $select.search="";
       };
-      var numberOfPanels = $scope.schedule.events.length;
+      var numberOfPanels = $scope.schedule.Events.length;
       $scope.counts = Array.apply(1, {length: numberOfPanels}).map(Number.call, Number);
     }, function errorCallback(response) {
         window.console.log(response);
-        window.console.log("ERROR");
+    window.console.log("ERROR");
     });
 });
 
@@ -300,7 +300,7 @@ previewerApp.controller('DiningController', function($scope, NgMap) {
 previewerApp.controller('HelpController', function($scope, $http, $location) {
     $http({
       method: 'GET',
-      url: httpRequestBase + '/help',
+      url: httpRequestBase + '/questions',
     }).then(function successCallback(response) {
         $scope.questions = response.data;
         var numberOfPanels = $scope.questions.length;

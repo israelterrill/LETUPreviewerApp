@@ -12,29 +12,29 @@
 
           <div class="panel-body">
             <ui-select ng-model="model.selected" ng-change="onSelected($select.selected, $select)" theme="select2" ng-disabled="disabled" style="width: 50%;margin-bottom: 10px;margin-left: -15px;" title="Choose an event">
-              <ui-select-match placeholder="Select Event...">{{$select.selected.scheduleTitle}}</ui-select-match>
-              <ui-select-choices repeat="schedule in schedules | propsFilter: {scheduleTitle: $select.search, scheduleDates: $select.search}">
-                <div ng-bind-html="schedule.scheduleTitle | highlight: $select.search"></div>
+              <ui-select-match placeholder="Select Event...">{{$select.selected.ScheduleTitle}}</ui-select-match>
+              <ui-select-choices repeat="schedule in schedules | propsFilter: {ScheduleTitle: $select.search, ScheduleDates: $select.search}">
+                <div ng-bind-html="schedule.ScheduleTitle | highlight: $select.search"></div>
                 <small>
-                  Dates: <span ng-bind-html="''+schedule.scheduleDates| highlight: $select.search"></span>
+                  Dates: <span ng-bind-html="''+schedule.ScheduleDates| highlight: $select.search"></span>
                 </small>
               </ui-select-choices>
             </ui-select>
           </div>
 
-         <div class="panel panel-default" ng-repeat="event in schedule.events">
-            <div class="panel-heading" ui-set="{'myAccordion': event.id}">
+         <div class="panel panel-default" ng-repeat="Event in schedule.Events">
+            <div class="panel-heading" ui-set="{'myAccordion': Event.id}">
 
               <h4 class="panel-title">
-                  {{event.title}}
+                  {{Event.Title}}
               </h4>
             </div>
-            
-            <div ui-if="myAccordion == {{event.id}}">
+
+            <div ui-if="myAccordion == {{Event.id}}">
               <div class="panel-body">
-                {{event.datesAndTimes}}</br>
-                <p ng-bind-html="event.location | unsafe"></p>
-                <p ng-bind-html="event.description | unsafe"></p>
+                {{Event.DatesAndTimes}}</br>
+                <p ng-bind-html="Event.Location | unsafe"></p>
+                <p ng-bind-html="Event.Description | unsafe"></p>
               </div>
             </div>
 

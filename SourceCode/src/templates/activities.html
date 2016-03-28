@@ -11,24 +11,24 @@
           ui-state='myAccordion'
           ui-default='0'>
 
-          <div class="panel panel-default" ng-repeat="activity in activities">
-            <div class="panel-heading" ui-set="{'myAccordion': {{ activity.id }} }">
+          <div class="panel panel-default" ng-repeat="Activity in activities">
+            <div class="panel-heading" ui-set="{'myAccordion': {{ Activity.id }} }">
 
               <h4 class="panel-title">
-                  {{activity.title}}
+                  {{Activity.Title}}
               </h4>
             </div>
 
-            <div ui-if="myAccordion == {{ activity.id }}">
+            <div ui-if="myAccordion == {{ Activity.id }}">
               <div class="panel-body">
               <table><tr>
                 <td style="padding-right:10px; vertical-align:top;">
-                  <img ng-src="{{ activity.imageLink }}" style="width:50px;height:50px;"/>
+                  <img ng-src="{{ Activity.ImageLink }}" style="width:50px;height:50px;"/>
                 </td>
                 <td>
-                    {{ activity.dates }}</br>
-                    <span ng-bind-html="activity.location | unsafe"></span>
-                    <p ng-bind-html="activity.description | unsafe"></p>
+                    {{ Activity.DatesAndTimes }}</br>
+                    <span ng-bind-html="Activity.Location | unsafe"></span>
+                    <p ng-bind-html="Activity.Description | unsafe"></p>
                   </td>
                 </tr></table>
               </div>

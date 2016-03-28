@@ -21,11 +21,11 @@
             <div ui-if="myAccordion == 0">
               <div class="panel-body">
                 <ui-select ng-model="model.selected" ng-change="onSelected($select.selected, $select)" theme="select2" ng-disabled="disabled" style="width: 50%;margin-bottom: 10px;" title="Choose a building">
-                  <ui-select-match placeholder="Find building...">{{$select.selected.name}}</ui-select-match>
-                  <ui-select-choices repeat="building in buildings| propsFilter: {name: $select.search, code: $select.search}">
-                    <div ng-bind-html="building.name | highlight: $select.search"></div>
+                  <ui-select-match placeholder="Find building...">{{$select.selected.Name}}</ui-select-match>
+                  <ui-select-choices repeat="building in buildings| propsFilter: {Name: $select.search, Code: $select.search}">
+                    <div ng-bind-html="building.Name | highlight: $select.search"></div>
                     <small>
-                      Building Code: <span ng-bind-html="''+building.code| highlight: $select.search"></span>
+                      Building Code: <span ng-bind-html="''+building.Code| highlight: $select.search"></span>
                     </small>
                   </ui-select-choices>
                 </ui-select>
