@@ -3,8 +3,8 @@ API FORMATS
 MAPS FORMAT
 
 [
-   { name: 'Building Name', code: 'Initials', lat: 'latitudeCoord', long:'longitudeCoord'},
-   { name: 'Heath Hardwick Hall', code: 'HHH', lat: '32.467455', long: '-94.726533'},
+   { Name: 'Building Name', Code: 'Initials', Lat: 'latitudeCoord', Long:'longitudeCoord'},
+   { Name: 'Heath Hardwick Hall', Code: 'HHH', Lat: '32.467455', Long: '-94.726533'},
 ...
 ]
 
@@ -14,20 +14,20 @@ SCHEDULE FORMAT
 [
 	//Schedule Object
 	{
-		scheduleTitle: 'Aviation Preview',
-		scheduleDates: 'MM/DD/YYYY-MM/DD/YYYY',
-		events:	[
+		ScheduleTitle: 'Aviation Preview',
+		ScheduleDates: 'MM/DD/YYYY-MM/DD/YYYY',
+		Events:	[
 			{ 
-				title: 'someTitle',
-				datesAndTimes: 'Any format like "Thursday" or "MM/DD/YYYY"',
-				location: 'someLocation',
-				description: 'some description'
+				Title: 'someTitle',
+				DatesAndTimes: 'Any format like "Thursday" or "MM/DD/YYYY"',
+				Location: 'someLocation',
+				Description: 'some description'
 			}, 
 			{ 
-				title: 'someTitle',
-				datesAndTimes: 'Any format like "Thursday" or "MM/DD/YYYY"',
-				location: 'someLocation',
-				description: 'some description'
+				Title: 'someTitle',
+				DatesAndTimes: 'Any format like "Thursday" or "MM/DD/YYYY"',
+				Location: 'someLocation',
+				Description: 'some description'
 			}
 		]
 	},
@@ -35,22 +35,22 @@ SCHEDULE FORMAT
 ]
 
 
-EVENTS FORMAT
+ACTIVITIES FORMAT
 
 [
 	{
-		title: "EventTitle",
-		date: "date and time",
-		location: "location name and maybe link to maps",
-		description: "a short description of the event",
-		imageLink: "some image URL"
+		Title: "EventTitle",
+		DatesAndTimes: "date and time",
+		Location: "location name and maybe link to maps",
+		Description: "a short description of the event",
+		ImageLink: "some image URL"
 	},
 	{
-		title: "Rube Goldberg Competition",
-		date: "3-5 pm",
-		location: "<a href=\"#\maps\">Belcher Gym (Solheim)</a>",
-		description: "Come watch our Electronics Lab III students as they showcase their Rube Goldberg contraptions!"
-		imageLink: "https://c2.staticflickr.com/2/1182/534059168_88325d465a_z.jpg?zz=1"	
+		Title: "Rube Goldberg Competition",
+		Date: "3-5 pm",
+		Location: "<a href=\"#\maps\">Belcher Gym (Solheim)</a>",
+		Description: "Come watch our Electronics Lab III students as they showcase their Rube Goldberg contraptions!"
+		ImageLink: "https://c2.staticflickr.com/2/1182/534059168_88325d465a_z.jpg?zz=1"	
 }
 ]
 
@@ -59,12 +59,12 @@ QUESTION FORMAT
 
 [
         {
-            question: "question",
-            answer: "The answer to the question",
+            Question: "question",
+            Answer: "The answer to the question",
         },
         {
-            question: "How do I apply to become a student?",
-            answer: "You can apply to LeTourneau online <a target=\"_blank\" href=\"http://www.letu.edu/_Admissions/Trad_Resources/\">here.</a>",
+            Question: "How do I apply to become a student?",
+            Answer: "You can apply to LeTourneau online <a target=\"_blank\" href=\"http://www.letu.edu/_Admissions/Trad_Resources/\">here.</a>",
         }
 ...
 ]
