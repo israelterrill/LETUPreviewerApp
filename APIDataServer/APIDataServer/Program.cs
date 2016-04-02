@@ -15,6 +15,12 @@ namespace APIDataServer
         private static Question[] Questions = null;
         private static Activity[] Activities = null;
 
+        private const string JSON_DATA_DIR = @"C:\Users\mccan\Documents\Code\LETUPreviewerApp\APIDataServer\";
+        private const string SCHEDULES_FILE = JSON_DATA_DIR + "schedule.json";
+        private const string MAPDATA_FILE = JSON_DATA_DIR + "mapdata.json";
+        private const string QUESTIONS_FILE = JSON_DATA_DIR + "questions.json";
+        private const string ACTIVITIES_FILE = JSON_DATA_DIR + "activities.json";
+
         static void Main(string[] args)
         {
             ImportData();
@@ -31,10 +37,10 @@ namespace APIDataServer
         {
             try
             {
-                Schedules = JsonConvert.DeserializeObject<Schedule[]>(File.ReadAllText(@"..\..\..\schedule.json"));
-                MapData = JsonConvert.DeserializeObject<Map[]>(File.ReadAllText(@"..\..\..\mapdata.json"));
-                Questions = JsonConvert.DeserializeObject<Question[]>(File.ReadAllText(@"..\..\..\questions.json"));
-                Activities = JsonConvert.DeserializeObject<Activity[]>(File.ReadAllText(@"..\..\..\activities.json"));
+                Schedules = JsonConvert.DeserializeObject<Schedule[]>(File.ReadAllText(SCHEDULES_FILE));
+                MapData = JsonConvert.DeserializeObject<Map[]>(File.ReadAllText(MAPDATA_FILE));
+                Questions = JsonConvert.DeserializeObject<Question[]>(File.ReadAllText(QUESTIONS_FILE));
+                Activities = JsonConvert.DeserializeObject<Activity[]>(File.ReadAllText(ACTIVITIES_FILE));
             }
             catch (Exception ex)
             {
