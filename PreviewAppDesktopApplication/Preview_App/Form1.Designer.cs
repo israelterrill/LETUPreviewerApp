@@ -30,17 +30,17 @@
         {
             this.Schedule = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.dataGridView2 = new System.Windows.Forms.DataGridView();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button5 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
             this.button7 = new System.Windows.Forms.Button();
             this.button8 = new System.Windows.Forms.Button();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.button5 = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.dataGridView2 = new System.Windows.Forms.DataGridView();
             this.Schedule.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -75,6 +75,55 @@
             this.tabPage1.Text = "Activities";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // button4
+            // 
+            this.button4.AutoSize = true;
+            this.button4.Font = new System.Drawing.Font("Calibri", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button4.Location = new System.Drawing.Point(357, 351);
+            this.button4.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(92, 36);
+            this.button4.TabIndex = 22;
+            this.button4.Text = "Import";
+            this.button4.UseVisualStyleBackColor = true;
+            // 
+            // button6
+            // 
+            this.button6.AutoSize = true;
+            this.button6.Font = new System.Drawing.Font("Calibri", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button6.Location = new System.Drawing.Point(261, 351);
+            this.button6.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(92, 36);
+            this.button6.TabIndex = 21;
+            this.button6.Text = "Export";
+            this.button6.UseVisualStyleBackColor = true;
+            // 
+            // button7
+            // 
+            this.button7.AutoSize = true;
+            this.button7.Font = new System.Drawing.Font("Calibri", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button7.Location = new System.Drawing.Point(48, 351);
+            this.button7.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(92, 36);
+            this.button7.TabIndex = 20;
+            this.button7.Text = "Add";
+            this.button7.UseVisualStyleBackColor = true;
+            this.button7.Click += new System.EventHandler(this.button7_Click);
+            // 
+            // button8
+            // 
+            this.button8.AutoSize = true;
+            this.button8.Font = new System.Drawing.Font("Calibri", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button8.Location = new System.Drawing.Point(154, 351);
+            this.button8.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.button8.Name = "button8";
+            this.button8.Size = new System.Drawing.Size(92, 36);
+            this.button8.TabIndex = 19;
+            this.button8.Text = "Remove";
+            this.button8.UseVisualStyleBackColor = true;
+            // 
             // dataGridView1
             // 
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -99,13 +148,17 @@
             this.tabPage2.Text = "Schedule";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // dataGridView2
+            // button5
             // 
-            this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView2.Location = new System.Drawing.Point(0, 0);
-            this.dataGridView2.Name = "dataGridView2";
-            this.dataGridView2.Size = new System.Drawing.Size(500, 324);
-            this.dataGridView2.TabIndex = 8;
+            this.button5.AutoSize = true;
+            this.button5.Font = new System.Drawing.Font("Calibri", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button5.Location = new System.Drawing.Point(381, 352);
+            this.button5.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(92, 36);
+            this.button5.TabIndex = 18;
+            this.button5.Text = "Import";
+            this.button5.UseVisualStyleBackColor = true;
             // 
             // button3
             // 
@@ -143,65 +196,13 @@
             this.button2.Text = "Remove";
             this.button2.UseVisualStyleBackColor = true;
             // 
-            // button5
+            // dataGridView2
             // 
-            this.button5.AutoSize = true;
-            this.button5.Font = new System.Drawing.Font("Calibri", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button5.Location = new System.Drawing.Point(381, 352);
-            this.button5.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(92, 36);
-            this.button5.TabIndex = 18;
-            this.button5.Text = "Import";
-            this.button5.UseVisualStyleBackColor = true;
-            // 
-            // button4
-            // 
-            this.button4.AutoSize = true;
-            this.button4.Font = new System.Drawing.Font("Calibri", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button4.Location = new System.Drawing.Point(357, 351);
-            this.button4.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(92, 36);
-            this.button4.TabIndex = 22;
-            this.button4.Text = "Import";
-            this.button4.UseVisualStyleBackColor = true;
-            // 
-            // button6
-            // 
-            this.button6.AutoSize = true;
-            this.button6.Font = new System.Drawing.Font("Calibri", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button6.Location = new System.Drawing.Point(261, 351);
-            this.button6.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(92, 36);
-            this.button6.TabIndex = 21;
-            this.button6.Text = "Export";
-            this.button6.UseVisualStyleBackColor = true;
-            // 
-            // button7
-            // 
-            this.button7.AutoSize = true;
-            this.button7.Font = new System.Drawing.Font("Calibri", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button7.Location = new System.Drawing.Point(48, 351);
-            this.button7.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(92, 36);
-            this.button7.TabIndex = 20;
-            this.button7.Text = "Add";
-            this.button7.UseVisualStyleBackColor = true;
-            // 
-            // button8
-            // 
-            this.button8.AutoSize = true;
-            this.button8.Font = new System.Drawing.Font("Calibri", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button8.Location = new System.Drawing.Point(154, 351);
-            this.button8.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(92, 36);
-            this.button8.TabIndex = 19;
-            this.button8.Text = "Remove";
-            this.button8.UseVisualStyleBackColor = true;
+            this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView2.Location = new System.Drawing.Point(0, 0);
+            this.dataGridView2.Name = "dataGridView2";
+            this.dataGridView2.Size = new System.Drawing.Size(500, 324);
+            this.dataGridView2.TabIndex = 8;
             // 
             // Form1
             // 
