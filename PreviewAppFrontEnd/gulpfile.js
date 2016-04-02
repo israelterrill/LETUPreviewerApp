@@ -279,12 +279,18 @@ gulp.task('copy5', ['js'], function () {
     .pipe(gulp.dest('./www/js'));
 });
 
+gulp.task('copy6', ['js'], function () {
+  return gulp
+    .src('./bower_components/angular-pinch-zoom/dist/ng-pinch-zoom.min.js')
+    .pipe(gulp.dest('./www/js'));
+});
+
 /*======================================
 =            Build Sequence            =
 ======================================*/
 
 gulp.task('build', function(done) {
-  var tasks = ['html', 'fonts', 'images', 'less', 'js', 'copy1','copy2', 'copy3', 'copy4','copy5'];
+  var tasks = ['html', 'fonts', 'images', 'less', 'js', 'copy1','copy2', 'copy3', 'copy4','copy5', 'copy6'];
   seq('clean', tasks, done);
 });
 

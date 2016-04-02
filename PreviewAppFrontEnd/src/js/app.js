@@ -1,10 +1,10 @@
 var previewerApp = angular.module('PreviewerApp', [
   'ngRoute',
   'mobile-angular-ui',
-  'PreviewerApp.controllers.Main',
   'ngMap',
   'ngSanitize',
-  'ui.select'
+  'ui.select',
+  'ngPinchZoom'
 ])
 
 .config(function($routeProvider) {
@@ -72,7 +72,8 @@ previewerApp.controller('HomeController', function($scope, $location) {
 });
 
 previewerApp.controller('MapsController', function($scope, $http, NgMap) {
-
+    $scope.config = {}; // use defaults
+    $scope.model = {}; // always pass empty object
  $http({
    method: 'GET',
    url: httpRequestBase + '/googlemapsdata',
