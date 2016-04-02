@@ -6,8 +6,13 @@ using System.Threading.Tasks;
 
 namespace DataClasses
 {
-    class Activity : Event
+    public class Activity : Event
     {
         public string ImageLink;
+
+        public static Activity FromJson(string xmlStr)
+        {
+            return null;
+        }
     }
 }

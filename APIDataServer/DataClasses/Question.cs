@@ -6,9 +6,14 @@ using System.Threading.Tasks;
 
 namespace DataClasses
 {
-    class Question
+    public class Question
     {
         public string Query;
         public string Answer;
+
+        public static Question FromJson(string xmlStr)
+        {
+            return null;
+        }
     }
 }

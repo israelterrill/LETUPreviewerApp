@@ -1,0 +1,38 @@
+[
+    	{
+    		ScheduleTitle: 'Aviation Preview',
+            ScheduleDates: '03/1/2016-03/5/2016',
+    		Events:	[
+    			{
+    				Title: 'Check-in begins',
+    				Date: 'Thursday (03/02/2016), 4:15-5:30 pm',
+        			Location: 'HHH',
+    				Description: 'Spend 1 hour finding out why students from all 50 states and over 20 countries choose LETU.',
+    			},
+    			{
+    				Title: 'someTitle',
+    				Date: 'Thursday (03/02/2016), 4:15-5:30 pm',
+        			Location: 'someLocation',
+    				Description: 'some description',
+    			}
+    		]
+    	},
+        {
+            ScheduleTitle: 'Engineering Preview',
+            ScheduleDates: '03/1/2016-03/5/2016',
+            Events:	[
+                {
+                    Title: 'Stuff',
+                    Date: 'Thursday (03/02/2016), 4:15-5:30 pm',
+                    Location: 'HHH',
+                    Description: 'Spend 1 hour finding out why students from all 50 states and over 20 countries choose LETU.',
+                },
+                {
+                    Title: 'Cool Engineering Stuff',
+                    Date: 'Thursday (03/02/2016), 4:15-5:30 pm',
+                    Location: 'someLocation',
+                    Description: 'some description',
+                }
+         ]
+        }
+    ]

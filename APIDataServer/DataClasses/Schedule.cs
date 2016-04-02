@@ -6,10 +6,15 @@ using System.Threading.Tasks;
 
 namespace DataClasses
 {
-    class Schedule
+    public class Schedule
     {
         public string ScheduleTitle;
         public string ScheduleDates;
         public Event[] Events;
+
+        public static Schedule FromJson(string xmlStr)
+        {
+            return null;
+        }
     }
 }

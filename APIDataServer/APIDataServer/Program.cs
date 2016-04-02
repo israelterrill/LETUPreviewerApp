@@ -1,71 +1,78 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
+using System.Linq;
+using DataClasses;
+using Newtonsoft.Json;
 
 namespace APIDataServer
 {
     class Program
     {
         private const int LISTEN_PORT = 44623;
+        private static Schedule[] Schedules = null;
+        private static Map[] MapData = null;
+        private static Question[] Questions = null;
+        private static Activity[] Activities = null;
 
         static void Main(string[] args)
         {
-            IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());
-            IPAddress ipAddress = ipHostInfo.AddressList[0];
-            IPEndPoint localEndPoint = new IPEndPoint(ipAddress, LISTEN_PORT);
+            ImportData();
 
-            Socket listener = new Socket(AddressFamily.InterNetwork,SocketType.Stream, ProtocolType.Tcp);
+            WebServer ws = new WebServer(HandleRequest, "http://localhost:" + LISTEN_PORT + "/api/");
+            ws.Run();
+            while (true)
+            {
+                System.Threading.Thread.Sleep(10);
+            }
+        }
 
+        private static void ImportData()
+        {
             try
             {
-                listener.Bind(localEndPoint);
-                listener.Listen(10);
-
-                while (true)
-                {
-                    Console.WriteLine("Waiting for a connection...");
-                    Socket handler = listener.Accept();
-                    Task.Factory.StartNew(() => HandleConnection(handler));
-                }
+                Schedules = JsonConvert.DeserializeObject<Schedule[]>(File.ReadAllText(@"..\..\..\schedule.json"));
+                MapData = JsonConvert.DeserializeObject<Map[]>(File.ReadAllText(@"..\..\..\mapdata.json"));
+                Questions = JsonConvert.DeserializeObject<Question[]>(File.ReadAllText(@"..\..\..\questions.json"));
+                Activities = JsonConvert.DeserializeObject<Activity[]>(File.ReadAllText(@"..\..\..\activities.json"));
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-            }
-            finally
-            {
-                listener.Close();
+                Console.WriteLine(ex.StackTrace);
             }
         }
-
-        private static void HandleConnection(Socket handler)
+        
+        private static string HandleRequest(HttpListenerRequest request)
         {
-            string data = null;
+            var response = "[{\"error\": \"Not supported\"}]";
+            var requestStr = request.RawUrl.ToLower();
+            
+#if DEBUG
+            Console.WriteLine(requestStr);
+#endif
 
-            while (true)
+            var reqParts = requestStr.Split('/').Skip(1).ToArray();
+
+            if (reqParts.Length>1 && reqParts[0].Equals("api"))
             {
-                var bytes = new byte[1024];
-                int bytesRec = handler.Receive(bytes);
-                data += Encoding.ASCII.GetString(bytes, 0, bytesRec);
-                if (data.IndexOf("<EOF>") > -1)
+                var dataType = reqParts[1];
+                switch (dataType)
                 {
-                    break;
+                    case "questions":
+                        response = JsonConvert.SerializeObject(Questions);
+                        break;
+                    case "schedules":
+                        response = JsonConvert.SerializeObject(Schedules);
+                        break;
+                    case "activities":
+                        response = JsonConvert.SerializeObject(Activities);
+                        break;
+                    case "mapdata":
+                        response = JsonConvert.SerializeObject(MapData);
+                        break;
                 }
             }
-
-            handler.Send(Encoding.ASCII.GetBytes(HandleRequest(data)));
-
-            handler.Shutdown(SocketShutdown.Both);
-            handler.Close();
-        }
-
-        private static string HandleRequest(string requestStr)
-        {
-            var response = string.Empty;
 
             return response;
         }
