@@ -80,7 +80,6 @@ README.txt or the [Front-end Setup](#front-end-setup) section above.
 
 To use this server, first install http and httpdispatcher:
 
-
 npm install http && npm install httpdispatcher
 
 
@@ -98,3 +97,26 @@ according to the format in Documentation/APIDataFormats.txt.
 Alternatively, you can just open the C# Test Server in Visual Studio and click the run button at the top to build and run the project.
 If you have problems with the front-end not finding the API, you may need to adjust the base address/port variable in the front end source code's src/js/app.js file to match the port that the browser brings up when you run the Visual Studio project.
 
+
+## API Data Server Setup
+
+
+This server serves as a HTTP data API for the application. Build APIDataServer.sln. Once built, run "APIDataServer.exe". Make sure "DataClasses.dll" is in the same folder as "APIDataServer.exe."
+
+
+## API Usage
+
+
+API Server can be queried for various data types. Usage is: 
+
+http://\<apiserverhost\>:44623/api/\<datatype\>/
+
+Valid Datatypes:
+
+-Questions
+
+-Activities
+
+-MapData
+
+-Schedules
