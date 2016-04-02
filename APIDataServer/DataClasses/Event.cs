@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace DataClasses
+﻿namespace DataClasses
 {
     public class Event
     {

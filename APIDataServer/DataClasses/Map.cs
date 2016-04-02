@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DataClasses
+﻿namespace DataClasses
 {
     public class Map
     {
@@ -12,5 +6,6 @@ namespace DataClasses
         public string Code;
         public double Lat;
         public double Long;
+        public string ImageLink;
     }
 }

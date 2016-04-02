@@ -1,8 +1,0 @@
-[
-   { Name: 'Heath Hardwick Hall', Code: 'HHH', Lat: '32.467455', Long: '-94.726533'},
-   { Name: 'Thomas Hall', Code: 'THOM', Lat: '32.468040', Long: '-94.724982'},
-   { Name: 'Longview Hall', Code: 'LH', Lat: '32.467663', Long: '-94.727333'},
-   { Name: 'Glaske',  Code: 'GLSK', Lat: '32.464961', Long: '-94.727397'},
-   { Name: 'Machine Tool and Design Lab', Code: 'MTDL', Lat: '32.465211', Long: '-94.725745'},
-   { Name: 'Computer Science Projects Lab', Code: 'CSPL', Lat: '32.465236', Long: '-94.725321'},
-]

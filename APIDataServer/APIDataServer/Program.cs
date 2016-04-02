@@ -15,11 +15,12 @@ namespace APIDataServer
         private static Question[] Questions = null;
         private static Activity[] Activities = null;
 
-        private const string JSON_DATA_DIR = @"C:\Users\mccan\Documents\Code\LETUPreviewerApp\APIDataServer\";
-        private const string SCHEDULES_FILE = JSON_DATA_DIR + "schedule.json";
-        private const string MAPDATA_FILE = JSON_DATA_DIR + "mapdata.json";
-        private const string QUESTIONS_FILE = JSON_DATA_DIR + "questions.json";
-        private const string ACTIVITIES_FILE = JSON_DATA_DIR + "activities.json";
+        private const string JSON_DATA_DIR = @"..\..\..\Data\";
+        private const string DATA_FORMAT = "json";
+        private const string SCHEDULES_FILE = JSON_DATA_DIR + "schedule." + DATA_FORMAT;
+        private const string MAPDATA_FILE = JSON_DATA_DIR + "mapdata." + DATA_FORMAT;
+        private const string QUESTIONS_FILE = JSON_DATA_DIR + "questions." + DATA_FORMAT;
+        private const string ACTIVITIES_FILE = JSON_DATA_DIR + "activities." + DATA_FORMAT;
 
         static void Main(string[] args)
         {
@@ -48,19 +49,19 @@ namespace APIDataServer
                 Console.WriteLine(ex.StackTrace);
             }
         }
-        
+
         private static string HandleRequest(HttpListenerRequest request)
         {
             var response = "[{\"error\": \"Not supported\"}]";
             var requestStr = request.RawUrl.ToLower();
-            
+
 #if DEBUG
             Console.WriteLine(requestStr);
 #endif
 
             var reqParts = requestStr.Split('/').Skip(1).ToArray();
 
-            if (reqParts.Length>1 && reqParts[0].Equals("api"))
+            if (reqParts.Length > 1 && reqParts[0].Equals("api"))
             {
                 var dataType = reqParts[1];
                 switch (dataType)
