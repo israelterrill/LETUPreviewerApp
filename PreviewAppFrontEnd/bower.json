@@ -10,7 +10,8 @@
     "bootstrap": "3.x",
     "ngmap": "^1.16.7",
     "angular-sanitize": "^1.5.0",
-    "select2": "^4.0.1"
+    "select2": "^4.0.1",
+    "angular-pinch-zoom": "^0.2.1"
   },
   "resolutions": {
     "angular": "1.4.9"
