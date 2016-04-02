@@ -52,7 +52,8 @@ namespace APIDataServer
 
         private static string HandleRequest(HttpListenerRequest request)
         {
-            var response = "[{\"error\": \"Not supported\"}]";
+            //var response = "[{\"error\": \"Not supported\"}]";
+            var response = JsonConvert.SerializeObject(new { error = "Not supported" });
             var requestStr = request.RawUrl.ToLower();
 
 #if DEBUG
@@ -63,20 +64,52 @@ namespace APIDataServer
 
             if (reqParts.Length > 1 && reqParts[0].Equals("api"))
             {
+                var skip = 0;
+                var take = -1;
+                if (reqParts.Length >= 3)
+                {
+                    foreach (var kvp in reqParts[2].Split('&'))
+                    {
+                        if (!kvp.Contains("=")) continue;
+                        var kvpParts = kvp.Split('=');
+                        var key = kvpParts[0];
+                        var value = kvpParts[1];
+                        switch (key)
+                        {
+                            case "skip":
+                                if (!Int32.TryParse(value, out skip) || skip < 0)
+                                    return JsonConvert.SerializeObject(new { error = "invalid value for key 'skip'" });
+                                break;
+                            case "take":
+                                if (!Int32.TryParse(value, out take) || take < 1)
+                                    return JsonConvert.SerializeObject(new { error = "invalid value for key 'take'" });
+                                break;
+                        }
+                    }
+                }
+
                 var dataType = reqParts[1];
                 switch (dataType)
                 {
                     case "questions":
-                        response = JsonConvert.SerializeObject(Questions);
+                        var subQuestions = Questions.Skip(skip);
+                        if (take > 0) subQuestions = subQuestions.Take(take);
+                        response = JsonConvert.SerializeObject(subQuestions.ToArray());
                         break;
                     case "schedules":
-                        response = JsonConvert.SerializeObject(Schedules);
+                        var subSchedules= Schedules.Skip(skip);
+                        if (take > 0) subSchedules = subSchedules.Take(take);
+                        response = JsonConvert.SerializeObject(subSchedules.ToArray());
                         break;
                     case "activities":
-                        response = JsonConvert.SerializeObject(Activities);
+                        var subActivities = Activities.Skip(skip);
+                        if (take > 0) subActivities = subActivities.Take(take);
+                        response = JsonConvert.SerializeObject(subActivities.ToArray());
                         break;
                     case "mapdata":
-                        response = JsonConvert.SerializeObject(MapData);
+                        var subMapData= MapData.Skip(skip);
+                        if (take > 0) subMapData = subMapData.Take(take);
+                        response = JsonConvert.SerializeObject(subMapData.ToArray());
                         break;
                 }
             }

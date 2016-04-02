@@ -109,14 +109,32 @@ This server serves as a HTTP data API for the application. Build APIDataServer.s
 
 API Server can be queried for various data types. Usage is: 
 
-http://\<apiserverhost\>:44623/api/\<datatype\>/
+http://\<apiserverhost\>:44623/api/\<datatype\>/[key=value[&key2=value2]]
 
 Valid Datatypes:
 
--Questions
+-Questions: list of FAQs
 
--Activities
+-Activities: list of open optional activities on campus
 
--MapData
+-MapData: list of map data entries for campus buildings
 
--Schedules
+-Schedules: list of schedules for preview events
+
+
+Valid Keys
+
+-Skip (integer > 0): only retrieve entries after entry number <value>
+
+-Take (integer > 0): only retrieve <value> entries. If 'skip' value is also provided, take applies after skip
+
+
+Examples:
+
+http://\<apiserverhost\>:44623/api/activities
+
+http://\<apiserverhost\>:44623/api/schedules/skip=1
+
+http://\<apiserverhost\>:44623/api/questions/take=2
+
+http://\<apiserverhost\>:44623/api/mapdata/take=3&skip=2
