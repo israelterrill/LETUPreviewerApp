@@ -6,3 +6,8 @@ PreviewAppFrontEnd/www
 C#TestBackend/PreviewerAppAPI/bin
 C#TestBackend/PreviewerAppAPI/obj
 C#TestBackend/.vs
+APIDataServer/APIDataServer/bin
+APIDataServer/APIDataServer/obj
+APIDataServer/DataClasses/bin
+APIDataServer/DataClasses/obj
+*.suo
