@@ -1,8 +1,8 @@
-SourceCode/bower_components
-SourceCode/components
-SourceCode/node_modules
-SourceCode/vendor
-SourceCode/www
+PreviewAppFrontEnd/bower_components
+PreviewAppFrontEnd/components
+PreviewAppFrontEnd/node_modules
+PreviewAppFrontEnd/vendor
+PreviewAppFrontEnd/www
 C#TestBackend/PreviewerAppAPI/bin
 C#TestBackend/PreviewerAppAPI/obj
 C#TestBackend/.vs
