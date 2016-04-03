@@ -1,71 +1,118 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
+using System.Linq;
+using DataClasses;
+using Newtonsoft.Json;
 
 namespace APIDataServer
 {
     class Program
     {
         private const int LISTEN_PORT = 44623;
+        private static Schedule[] Schedules = null;
+        private static Map[] MapData = null;
+        private static Question[] Questions = null;
+        private static Activity[] Activities = null;
+
+        private const string JSON_DATA_DIR = @"..\..\..\Data\";
+        private const string DATA_FORMAT = "json";
+        private const string SCHEDULES_FILE = JSON_DATA_DIR + "schedule." + DATA_FORMAT;
+        private const string MAPDATA_FILE = JSON_DATA_DIR + "mapdata." + DATA_FORMAT;
+        private const string QUESTIONS_FILE = JSON_DATA_DIR + "questions." + DATA_FORMAT;
+        private const string ACTIVITIES_FILE = JSON_DATA_DIR + "activities." + DATA_FORMAT;
 
         static void Main(string[] args)
         {
-            IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());
-            IPAddress ipAddress = ipHostInfo.AddressList[0];
-            IPEndPoint localEndPoint = new IPEndPoint(ipAddress, LISTEN_PORT);
+            ImportData();
 
-            Socket listener = new Socket(AddressFamily.InterNetwork,SocketType.Stream, ProtocolType.Tcp);
+            WebServer ws = new WebServer(HandleRequest, "http://localhost:" + LISTEN_PORT + "/api/");
+            ws.Run();
+            while (true)
+            {
+                System.Threading.Thread.Sleep(10);
+            }
+        }
 
+        private static void ImportData()
+        {
             try
             {
-                listener.Bind(localEndPoint);
-                listener.Listen(10);
-
-                while (true)
-                {
-                    Console.WriteLine("Waiting for a connection...");
-                    Socket handler = listener.Accept();
-                    Task.Factory.StartNew(() => HandleConnection(handler));
-                }
+                Schedules = JsonConvert.DeserializeObject<Schedule[]>(File.ReadAllText(SCHEDULES_FILE));
+                MapData = JsonConvert.DeserializeObject<Map[]>(File.ReadAllText(MAPDATA_FILE));
+                Questions = JsonConvert.DeserializeObject<Question[]>(File.ReadAllText(QUESTIONS_FILE));
+                Activities = JsonConvert.DeserializeObject<Activity[]>(File.ReadAllText(ACTIVITIES_FILE));
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-            }
-            finally
-            {
-                listener.Close();
+                Console.WriteLine(ex.StackTrace);
             }
         }
 
-        private static void HandleConnection(Socket handler)
+        private static string HandleRequest(HttpListenerRequest request)
         {
-            string data = null;
+            //var response = "[{\"error\": \"Not supported\"}]";
+            var response = JsonConvert.SerializeObject(new { error = "Not supported" });
+            var requestStr = request.RawUrl.ToLower();
 
-            while (true)
+#if DEBUG
+            Console.WriteLine(requestStr);
+#endif
+
+            var reqParts = requestStr.Split('/').Skip(1).ToArray();
+
+            if (reqParts.Length > 1 && reqParts[0].Equals("api"))
             {
-                var bytes = new byte[1024];
-                int bytesRec = handler.Receive(bytes);
-                data += Encoding.ASCII.GetString(bytes, 0, bytesRec);
-                if (data.IndexOf("<EOF>") > -1)
+                var skip = 0;
+                var take = -1;
+                if (reqParts.Length >= 3)
                 {
-                    break;
+                    foreach (var kvp in reqParts[2].Split('&'))
+                    {
+                        if (!kvp.Contains("=")) continue;
+                        var kvpParts = kvp.Split('=');
+                        var key = kvpParts[0];
+                        var value = kvpParts[1];
+                        switch (key)
+                        {
+                            case "skip":
+                                if (!Int32.TryParse(value, out skip) || skip < 0)
+                                    return JsonConvert.SerializeObject(new { error = "invalid value for key 'skip'" });
+                                break;
+                            case "take":
+                                if (!Int32.TryParse(value, out take) || take < 1)
+                                    return JsonConvert.SerializeObject(new { error = "invalid value for key 'take'" });
+                                break;
+                        }
+                    }
+                }
+
+                var dataType = reqParts[1];
+                switch (dataType)
+                {
+                    case "questions":
+                        var subQuestions = Questions.Skip(skip);
+                        if (take > 0) subQuestions = subQuestions.Take(take);
+                        response = JsonConvert.SerializeObject(subQuestions.ToArray());
+                        break;
+                    case "schedules":
+                        var subSchedules= Schedules.Skip(skip);
+                        if (take > 0) subSchedules = subSchedules.Take(take);
+                        response = JsonConvert.SerializeObject(subSchedules.ToArray());
+                        break;
+                    case "activities":
+                        var subActivities = Activities.Skip(skip);
+                        if (take > 0) subActivities = subActivities.Take(take);
+                        response = JsonConvert.SerializeObject(subActivities.ToArray());
+                        break;
+                    case "mapdata":
+                        var subMapData= MapData.Skip(skip);
+                        if (take > 0) subMapData = subMapData.Take(take);
+                        response = JsonConvert.SerializeObject(subMapData.ToArray());
+                        break;
                 }
             }
-
-            handler.Send(Encoding.ASCII.GetBytes(HandleRequest(data)));
-
-            handler.Shutdown(SocketShutdown.Both);
-            handler.Close();
-        }
-
-        private static string HandleRequest(string requestStr)
-        {
-            var response = string.Empty;
 
             return response;
         }

@@ -1,0 +1,8 @@
+[
+   { Name: 'Heath Hardwick Hall', Code: 'HHH', Lat: '32.467455', Long: '-94.726533', ImageLink: '/images/heathhardwickhall.jpg'},
+   { Name: 'Thomas Hall', Code: 'THOM', Lat: '32.468040', Long: '-94.724982', ImageLink: '/images/thomashall.jpg'},
+   { Name: 'Longview Hall', Code: 'LH', Lat: '32.467663', Long: '-94.727333', ImageLink: '/images/longviewhall.jpg'},
+   { Name: 'Glaske',  Code: 'GLSK', Lat: '32.464961', Long: '-94.727397', ImageLink: '/images/glaske.jpg'},
+   { Name: 'Machine Tool and Design Lab', Code: 'MTDL', Lat: '32.465211', Long: '-94.725745', ImageLink: '/images/mtdl.jpg'},
+   { Name: 'Computer Science Projects Lab', Code: 'CSPL', Lat: '32.465236', Long: '-94.725321', ImageLink: '/images/cspl.jpg'},
+]
