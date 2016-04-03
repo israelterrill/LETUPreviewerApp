@@ -10,4 +10,7 @@ APIDataServer/APIDataServer/bin
 APIDataServer/APIDataServer/obj
 APIDataServer/DataClasses/bin
 APIDataServer/DataClasses/obj
+DesktopApplication/Preview_App/bin
+DesktopApplication/Preview_App/obj
+DesktopApplication/.vs
 *.suo
