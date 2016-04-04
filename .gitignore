@@ -12,5 +12,6 @@ APIDataServer/DataClasses/bin
 APIDataServer/DataClasses/obj
 DesktopApplication/Preview_App/bin
 DesktopApplication/Preview_App/obj
+DesktopApplication/Preview_App/packages
 DesktopApplication/.vs
 *.suo
