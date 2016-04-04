@@ -121,6 +121,7 @@ previewerApp.controller('MapsController', function($scope, $http, NgMap) {
            }, options);
 
        $scope.onSelected = function(building, $select) {
+         $scope.building = building;
          while($scope.markers.length > 0) {
              $scope.markers.pop().setMap(null);
          }

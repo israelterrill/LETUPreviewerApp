@@ -47,8 +47,7 @@
             <div ui-if="myAccordion == 1">
               <div class="panel-body">
                 <div id="building-map-viewer">
-                    <img src="images/LongviewHall.png" width="100%" height="100%" alt="" ng-pinch-zoom styles="transform-origin: 0px; 0px; 0px;">
-                <!--      <img ng-style="coordinates()" src="images/glaske-partial.png" />-->
+                    <img ng-src="{{ building.ImageLink || 'images/image_not_available.svg' }}" width="100%" height="100%" alt="" ng-pinch-zoom styles="transform-origin: 0px; 0px; 0px;">
                 </div>
               </div>
             </div>
