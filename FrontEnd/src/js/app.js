@@ -76,7 +76,7 @@ previewerApp.controller('MapsController', function($scope, $http, NgMap) {
     $scope.model = {}; // always pass empty object
  $http({
    method: 'GET',
-   url: httpRequestBase + '/googlemapsdata',
+   url: httpRequestBase + '/mapdata',
  }).then(function successCallback(response) {
      $scope.buildings = response.data;
      $scope.building = {

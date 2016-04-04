@@ -3,10 +3,10 @@
 The following folders contain the different parts of the project:
 
 
-PreviewerAppFrontEnd: The front end source code and all associated images and resources. The source code will have to be built according to the "Setup.txt" file (this file is in the source code archives). This source code is written in AngularJS.
+FrontEnd: The front end source code and all associated images and resources. The source code will have to be built according to the "Setup.txt" file (this file is in the source code archives). This source code is written in AngularJS.
 
 
-PreviewerAppDesktopApplication: The desktop application code for this project.
+DesktopApplication: The desktop application code for this project.
 
 
 NodeTestServer: A test server written in NodeJS.
@@ -27,7 +27,7 @@ Install PHP
 
 Install Composer (not using npm; follow the directions on the website: https://getcomposer.org/doc/00-intro.md)
 
-Then, cd to PreviewerAppFrontEnd directory which should be just above the /src directory, and run the following:
+Then, cd to FrontEnd directory which should be just above the /src directory, and run the following:
 
 ### Linux:
 
@@ -74,7 +74,7 @@ directory or in the [Test Server Setup] (#api-test-server-setup) section found b
 
 
 This server serves as a test API for the application. Start this after running
-gulp from the PreviewerAppFrontEnd directory after following the instructions in
+gulp from the FrontEnd directory after following the instructions in
 README.txt or the [Front-end Setup](#front-end-setup) section above.
 
 

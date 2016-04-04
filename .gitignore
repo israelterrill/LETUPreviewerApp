@@ -1,8 +1,8 @@
-PreviewAppFrontEnd/bower_components
-PreviewAppFrontEnd/components
-PreviewAppFrontEnd/node_modules
-PreviewAppFrontEnd/vendor
-PreviewAppFrontEnd/www
+FrontEnd/bower_components
+FrontEnd/components
+FrontEnd/node_modules
+FrontEnd/vendor
+FrontEnd/www
 C#TestBackend/PreviewerAppAPI/bin
 C#TestBackend/PreviewerAppAPI/obj
 C#TestBackend/.vs
@@ -10,4 +10,7 @@ APIDataServer/APIDataServer/bin
 APIDataServer/APIDataServer/obj
 APIDataServer/DataClasses/bin
 APIDataServer/DataClasses/obj
+DesktopApplication/Preview_App/bin
+DesktopApplication/Preview_App/obj
+DesktopApplication/.vs
 *.suo
