@@ -26,7 +26,7 @@ namespace APIDataServer
         {
             ImportData();
 
-            WebServer ws = new WebServer(HandleRequest, "http://localhost:" + LISTEN_PORT + "/api/");
+            WebServer ws = new WebServer(HandleRequest, "http://*:" + LISTEN_PORT + "/api/");
             ws.Run();
             while (true)
             {
