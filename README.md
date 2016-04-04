@@ -95,7 +95,9 @@ Alternatively, you can just open the C# Test Server in Visual Studio and click t
 If you have problems with the front-end not finding the API, you may need to adjust the base address/port variable in the front end source code's src/js/app.js file to match the port that the browser brings up when you run the Visual Studio project.
 
 
-## API Data Server Setup
+## API Data Server 
+
+###Setup
 
 
 This server serves as a HTTP data API for the application. Build APIDataServer.sln. Once built, run "APIDataServer.exe". Make sure "DataClasses.dll" and "Newtonsoft.Json.dll" are in the same folder as "APIDataServer.exe."
@@ -108,14 +110,14 @@ netsh advfirewall firewall add rule name="APIDataServer" dir=in action=allow loc
 ```
 
 
-## API Usage
+### API Usage
 
 
 API Server can be queried for various data types. Usage is: 
 
 http://\<apiserverhost\>:44623/api/\<datatype\>/[key=value[&key2=value2]]
 
-Valid Datatypes:
+####Valid Datatypes:
 
 -Questions: list of FAQs
 
@@ -126,14 +128,14 @@ Valid Datatypes:
 -Schedules: list of schedules for preview events
 
 
-Valid Keys
+####Valid Keys
 
 -Skip (integer > 0): only retrieve entries after entry number <value>
 
 -Take (integer > 0): only retrieve <value> entries. If 'skip' value is also provided, take applies after skip
 
 
-Examples:
+####Examples:
 
 http://\<apiserverhost\>:44623/api/activities
 
