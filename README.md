@@ -31,23 +31,18 @@ Then, cd to FrontEnd directory which should be just above the /src directory, an
 
 ### Linux:
 
-
+```
 sudo npm install -g bower && sudo npm install -g gulp
-
-
 sudo npm install && bower install && composer update
-
-
 bower update
+```
 
 ### Windows:
 
-
+```
 npm install -g bower && npm install -g gulp
-
-
 npm install && bower install && composer update
-
+```
 
 bower update
 
@@ -57,9 +52,9 @@ bower update
 This should generate all you need to run things.
 Then, run:
 
-
+```
 gulp
-
+```
 
 This should run a server in the terminal. In your browser, go to localhost:8000, and you should see the application.
 You cannot have two terminals with the gulp command running at the same time.
@@ -80,12 +75,14 @@ README.txt or the [Front-end Setup](#front-end-setup) section above.
 
 To use this server, first install http and httpdispatcher:
 
+```
 npm install http && npm install httpdispatcher
-
+```
 
 Then, in the TestServer directory run:
+```
 node Server.js
-
+```
 
 This should start a web server with the port set to 44623. The served data is 
 according to the format in Documentation/APIDataFormats.txt.
@@ -106,8 +103,8 @@ This server serves as a HTTP data API for the application. Build APIDataServer.s
 Additionally, it may be necessary to create firewall rules allowing inbound traffic to the port used by APIDataServer.exe. Use the following commands in an administrator console:
 
 ```
-netsh advfirewall firewall add rule name="LETU Preview App" dir=in action=allow localport=44623 protocol=udp
-netsh advfirewall firewall add rule name="LETU Preview App" dir=in action=allow localport=44623 protocol=tcp
+netsh advfirewall firewall add rule name="APIDataServer" dir=in action=allow localport=44623 protocol=udp
+netsh advfirewall firewall add rule name="APIDataServer" dir=in action=allow localport=44623 protocol=tcp
 ```
 
 
