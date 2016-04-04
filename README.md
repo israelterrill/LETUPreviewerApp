@@ -99,7 +99,7 @@ If you have problems with the front-end not finding the API, you may need to adj
 ###Setup
 
 
-This server serves as a HTTP data API for the application. Build APIDataServer.sln. Once built, run "APIDataServer.exe". Make sure "DataClasses.dll" and "Newtonsoft.Json.dll" are in the same folder as "APIDataServer.exe."
+This server serves as a HTTP data API for the application. Build APIDataServer.sln. Once built, run "APIDataServer.exe". Make sure "DataClasses.dll" and "Newtonsoft.Json.dll" are in the same folder as "APIDataServer.exe." It may be necessary to run command in an administrator prompt.
 
 Additionally, it may be necessary to create firewall rules allowing inbound traffic to the port used by APIDataServer.exe. Use the following commands in an administrator console:
 
@@ -108,6 +108,7 @@ netsh advfirewall firewall add rule name="APIDataServer" dir=in action=allow loc
 netsh advfirewall firewall add rule name="APIDataServer" dir=in action=allow localport=44623 protocol=tcp
 ```
 
+Note: If using Visual Studio to run the server (i.e. clicking start in Visual Studio), be sure to open Visual Studio in administrator mode.
 
 ### API Usage
 
