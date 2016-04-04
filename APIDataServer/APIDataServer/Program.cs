@@ -52,6 +52,7 @@ namespace APIDataServer
 
         private static string HandleRequest(HttpListenerRequest request)
         {
+            
             //var response = "[{\"error\": \"Not supported\"}]";
             var response = JsonConvert.SerializeObject(new { error = "Not supported" });
             var requestStr = request.RawUrl.ToLower();
@@ -113,7 +114,7 @@ namespace APIDataServer
                         break;
                 }
             }
-
+            
             return response;
         }
     }
