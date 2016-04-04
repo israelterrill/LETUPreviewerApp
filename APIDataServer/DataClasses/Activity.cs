@@ -8,8 +8,7 @@ namespace DataClasses
 {
     public class Activity : Event
     {
-        public string ImageLink;
-
+        public string ImageLink { get; set; }
         public static Activity FromJson(string xmlStr)
         {
             return null;

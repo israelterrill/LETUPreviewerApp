@@ -2,8 +2,8 @@
 {
     public class Schedule
     {
-        public string ScheduleTitle;
-        public string ScheduleDates;
-        public Event[] Events = null;
+        public string ScheduleTitle { get; set; }
+        public string ScheduleDates { get; set; }
+        public Event[] Events { get; set; }
     }
 }
