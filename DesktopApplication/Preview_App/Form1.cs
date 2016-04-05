@@ -78,11 +78,16 @@ namespace Preview_App
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             //Add modify activity code here for activities
+            //Edit
         }
 
         private void dataGridView2_CellContentClick_1(object sender, DataGridViewCellEventArgs e)
         {
             //Add view/modify code here for schedule
+            //another form 
+            //Shows dates
+            //Shows Schedule title
+            //Shows Events (list)
         }
     }
 }

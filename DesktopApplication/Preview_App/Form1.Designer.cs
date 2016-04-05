@@ -49,10 +49,10 @@
             this.button3 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
-            this.scheduleBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.scheduleTitleDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.scheduleDatesDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.scheduleBindingSource1 = new System.Windows.Forms.BindingSource(this.components);
+            this.scheduleBindingSource = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.activityBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.activityBindingSource1)).BeginInit();
             this.Schedule.SuspendLayout();
@@ -60,8 +60,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.scheduleBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.scheduleBindingSource1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.scheduleBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // activityBindingSource
@@ -175,7 +175,7 @@
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.Size = new System.Drawing.Size(675, 324);
             this.dataGridView1.TabIndex = 4;
-            this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
+            this.dataGridView1.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             // 
             // imageLinkDataGridViewTextBoxColumn
             // 
@@ -296,11 +296,7 @@
             this.dataGridView2.Name = "dataGridView2";
             this.dataGridView2.Size = new System.Drawing.Size(675, 324);
             this.dataGridView2.TabIndex = 8;
-            this.dataGridView2.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView2_CellContentClick_1);
-            // 
-            // scheduleBindingSource
-            // 
-            this.scheduleBindingSource.DataSource = typeof(DataClasses.Schedule);
+            this.dataGridView2.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView2_CellContentClick_1);
             // 
             // scheduleTitleDataGridViewTextBoxColumn
             // 
@@ -320,6 +316,10 @@
             // 
             this.scheduleBindingSource1.DataSource = typeof(DataClasses.Schedule);
             // 
+            // scheduleBindingSource
+            // 
+            this.scheduleBindingSource.DataSource = typeof(DataClasses.Schedule);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -338,8 +338,8 @@
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.scheduleBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.scheduleBindingSource1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.scheduleBindingSource)).EndInit();
             this.ResumeLayout(false);
 
         }
