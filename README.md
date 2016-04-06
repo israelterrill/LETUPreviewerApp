@@ -46,7 +46,7 @@ gulp
 This should run a server in the terminal and serve the webpage. In your browser, go to localhost:8000, and you should see the application.
 You cannot have two terminals with the gulp command running at the same time.
 
-Lastly, if you want information/map data to actually show in the front-end, then you must set up the [APIDataServer] (#api-data-server) (or write your own web server, following the API data formats specified in the ../Documentation/APIDataFormat.txt file).
+Lastly, if you want information/map data to actually show in the front-end, then you must set up the [APIDataServer] (#api-data-server) (or write your own web server, following the API data formats specified in the [API Data Formats Page] (https://github.com/israelterrill/LETUPreviewerApp/blob/master/APIDataFormats.md)).
 
 
 ## API Data Server 
@@ -99,3 +99,6 @@ http://\<apiserverhost\>:44623/api/schedules/skip=1
 http://\<apiserverhost\>:44623/api/questions/take=2
 
 http://\<apiserverhost\>:44623/api/mapdata/take=3&skip=2
+
+####Returned Data
+To see the returned data formats, see the [API Data Formats Page] (https://github.com/israelterrill/LETUPreviewerApp/blob/master/APIDataFormats.md).
