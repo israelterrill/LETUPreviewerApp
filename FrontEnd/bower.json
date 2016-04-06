@@ -3,15 +3,16 @@
   "version": "0.0.0",
   "private": true,
   "dependencies": {
-    "angular": "1.4.x",
+    "angular": "1.5.x",
     "angular-route": "1.x",
     "mobile-angular-ui": "1.2.x",
-    "font-awesome": "4.2",
+    "font-awesome": "4.5",
     "bootstrap": "3.x",
-    "ngmap": "^1.16.7",
+    "ngmap": "^1.17.3",
     "angular-sanitize": "^1.5.0",
-    "select2": "^4.0.1",
-    "angular-pinch-zoom": "^0.2.1"
+    "angular-pinch-zoom": "^0.2.1",
+    "ui-select": "angular-ui-select#^0.16.1",
+    "angular-google-maps": "^2.3.2"
   },
   "resolutions": {
     "angular": "1.4.9"

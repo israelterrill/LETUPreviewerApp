@@ -11,7 +11,7 @@ sudo bower update
 
 WINDOWS:
 npm install -g bower && npm install -g gulp
-npm install && bower install && composer update
+npm install && bower install
 bower update
 
 FOR BOTH:
@@ -28,4 +28,3 @@ Lastly, if you want information/map data to actually show in the
 front-end, then you MUST run and follow the instructions in the ../TestServer
 directory (or write your own web server, following the API data formats
 specified in the ../Documentation/APIDataFormat.txt file).
-

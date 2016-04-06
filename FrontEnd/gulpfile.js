@@ -254,16 +254,17 @@ gulp.task('weinre', function() {
 gulp.task('copy-js', ['js'], function () {
   return gulp
     .src([
-        './bower_components/ngmap/build/scripts/ng-map.min.js',
-        './components/ui-select/dist/select.min.js',
+        './bower_components/ui-select/dist/select.min.js',
         './bower_components/angular-sanitize/angular-sanitize.min.js',
-        './bower_components/angular-pinch-zoom/dist/ng-pinch-zoom.min.js'
+        './bower_components/angular-pinch-zoom/dist/ng-pinch-zoom.min.js',
+        './bower_components/angular/angular.min.js',
+        './bower_components/ngmap/build/scripts/ng-map.min.js',
     ]).pipe(gulp.dest('./www/js'));
 });
 
 gulp.task('copy-css', ['js'], function () {
   return gulp
-    .src('./components/ui-select/dist/select.min.css')
+    .src('./bower_components/ui-select/dist/select.min.css')
     .pipe(gulp.dest('./www/css'));
 });
 

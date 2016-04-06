@@ -8,16 +8,17 @@ var previewerApp = angular.module('PreviewerApp', [
 ])
 
 .config(function($routeProvider) {
-  $routeProvider.when('/', {templateUrl:'home.html', controller: 'HomeController'})
-  .when('/maps', {templateUrl:'maps.html', reloadOnSearch: false})
-  .when('/schedule', {templateUrl:'schedule.html', reloadOnSearch: false})
-  .when('/activities', {templateUrl:'activities.html', reloadOnSearch: false})
-  .when('/dining', {templateUrl:'dining.html', reloadOnSearch: false})
-  .when('/help', {templateUrl:'help.html', reloadOnSearch: false});
-});
+      $routeProvider.when('/', {templateUrl:'home.html', controller: 'HomeController'})
+      .when('/maps', {templateUrl:'maps.html', reloadOnSearch: false})
+      .when('/schedule', {templateUrl:'schedule.html', reloadOnSearch: false})
+      .when('/activities', {templateUrl:'activities.html', reloadOnSearch: false})
+      .when('/dining', {templateUrl:'dining.html', reloadOnSearch: false})
+      .when('/help', {templateUrl:'help.html', reloadOnSearch: false});
+
+  });
 
 //CHANGE THIS TO CORRECT BASE!
-var httpRequestBase = 'http://localhost:44623/api';
+var httpRequestBase = 'http://10.31.150.68:44623/api';
 
 previewerApp.controller('MainController', function($scope, $location) {
 
@@ -121,6 +122,9 @@ previewerApp.controller('MapsController', function($scope, $http, NgMap) {
            }, options);
 
        $scope.onSelected = function(building, $select) {
+
+       document.activeElement.blur();
+       $select.search="";
          $scope.building = building;
          while($scope.markers.length > 0) {
              $scope.markers.pop().setMap(null);
@@ -169,6 +173,7 @@ previewerApp.controller('MapsController', function($scope, $http, NgMap) {
                            alert('Unable to get location: ' + error.message);
                        }, options);
                    }
+
            document.activeElement.blur();
            $select.search="";
          };
@@ -246,42 +251,27 @@ previewerApp.controller('ActivitiesController', function($scope, $http, $locatio
 });
 
 
-previewerApp.controller('DiningController', function($scope, NgMap) {
-  $scope.markers=[];
-  NgMap.getMap().then(function(map) {
-    map.getStreetView().setVisible(false);
-    var infowindow1 = new google.maps.InfoWindow({
-        content: '<h1 id="firstHeading" class="firstHeading">Corner Cafe</h1>'
-    });
-    var marker1 = new google.maps.Marker({
+previewerApp.controller('DiningController', function($scope) {
+  $scope.map = { center: { latitude: 45, longitude: -73 }, zoom: 8 };
+  Ngmap.getMap().then(function(map) {
+    //map.getStreetView().setVisible(false);
+    var marker1 = {
+        id: 0,
         map: map,
         position: new google.maps.LatLng(32.465237, -94.723749),
         title: 'Corner Cafe'
-    });
+    };
 
-    var infowindow2 = new google.maps.InfoWindow({
-        content: '<h1 id="firstHeading" class="firstHeading">The Hive</h1>'
-    });
     var marker2 = new google.maps.Marker({
+        id: 1,
         map: map,
         position: new google.maps.LatLng(32.466310, -94.726485),
         title: 'The Hive'
     });
-
-    $scope.markers.push(marker1);
-    marker1.addListener('click', function() {
-      infowindow1.open(map, marker1);
-    });
-    $scope.markers.push(marker2);
-    marker2.addListener('click', function() {
-      infowindow2.open(map, marker2);
-    });
   });
 
   $scope.$on('$locationChangeStart', function() {
-      while($scope.markers.length > 0) {
-        $scope.markers.pop().setMap(null);
-      }
+      //Add change code
   });
 
   $scope.titles = [
