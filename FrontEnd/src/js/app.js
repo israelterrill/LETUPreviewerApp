@@ -17,8 +17,7 @@ var previewerApp = angular.module('PreviewerApp', [
 
   });
 
-//CHANGE THIS TO CORRECT BASE!
-var httpRequestBase = 'http://10.31.150.68:44623/api';
+var httpRequestBase = 'http://10.39.27.95:44623/api';
 
 previewerApp.controller('MainController', function($scope, $location) {
 
@@ -190,21 +189,6 @@ previewerApp.controller('MapsController', function($scope, $http, NgMap) {
          window.console.log(response);
          window.console.log("ERROR");
      });
-
-     $scope.disabled = undefined;
-
-     $scope.disable = function() {
-      $scope.disabled = true;
-     };
-     $scope.enable = function() {
-      $scope.disabled = false;
-     };
-
-     $scope.coordinates = function() {
-       return {
-        'margin':'0px 0px',
-       };
-     };
 });
 
 previewerApp.controller('ScheduleController', function($scope, $location, $http) {

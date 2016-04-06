@@ -11,10 +11,6 @@
     "ngmap": "^1.17.3",
     "angular-sanitize": "^1.5.0",
     "angular-pinch-zoom": "^0.2.1",
-    "ui-select": "angular-ui-select#^0.16.1",
-    "angular-google-maps": "^2.3.2"
-  },
-  "resolutions": {
-    "angular": "1.4.9"
+    "ui-select": "angular-ui-select#^0.16.1"
   }
 }
