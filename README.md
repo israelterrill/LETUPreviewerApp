@@ -102,3 +102,26 @@ http://\<apiserverhost\>:44623/api/mapdata/take=3&skip=2
 
 ####Returned Data
 To see the returned data formats, see the [API Data Formats Page] (https://github.com/israelterrill/LETUPreviewerApp/blob/master/APIDataFormats.md).
+
+
+####TODO (*high priority):
+
+#####Desktop Application: 
+
+*Add schedule view capability
+
+Adjust file operations so save/export filename denotes schedule title and dates and only events are included in the schedule CSV
+
+Add support for single schedule export
+
+#####API:
+
+Add all buildings coordinates to data files
+
+Adjust file operations so save/export filename denotes schedule title and dates, so only events are included in the CSV
+
+Add CSV import capability
+
+#####Front-End
+
+Fix mobile map glitch where keyboard does not go down when building selected
