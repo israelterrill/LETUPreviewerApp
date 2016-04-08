@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using ServiceStack.Text;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
@@ -10,14 +11,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Microsoft.VisualBasic.FileIO;
 
 namespace Preview_App
 {
        public partial class Form1 : Form
         {
 
-        List<Schedule> schedules;
-        List<Activity> activities;
+        BindingList<Schedule> schedules;
+        BindingList<Activity> activities;
         public Form1()
         {
             InitializeComponent();
@@ -42,52 +44,213 @@ namespace Preview_App
             this.dataGridView2.AutoResizeColumns();
         }
 
-        private List<Activity> getActivityEntries()
+        private BindingList<Activity> getActivityEntries()
         {
             JArray activitiesJson = JArray.Parse(File.ReadAllText(@"../../../../APIDataServer/Data/activities.json"));
-            activities = activitiesJson.ToObject<List<Activity>>();
+            activities = activitiesJson.ToObject<BindingList<Activity>>();
             return activities;
         }
 
-        private List<Schedule> getScheduleEntries()
+        private BindingList<Schedule> getScheduleEntries()
         {
             JArray schedulesJson = JArray.Parse(File.ReadAllText(@"../../../../APIDataServer/Data/schedule.json"));
-            schedules = schedulesJson.ToObject<List<Schedule>>();
+            schedules = schedulesJson.ToObject<BindingList<Schedule>>();
             foreach (Schedule schedule in schedules)
                 System.Diagnostics.Trace.WriteLine(schedule.Events[0]);
             return schedules;
         }
 
-        private void dataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
-
         private void button7_Click(object sender, EventArgs e)
         {
-            Form2 addForm = new Form2();
-            addForm.Show();
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-            Form2 addForm = new Form2();
-            addForm.Show();
-        }
-
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-            //Add modify activity code here for activities
-            //Edit
+            Form2 addForm = new Form2(activities);
+            addForm.ShowDialog();
         }
 
         private void dataGridView2_CellContentClick_1(object sender, DataGridViewCellEventArgs e)
         {
-            //Add view/modify code here for schedule
-            //another form 
-            //Shows dates
-            //Shows Schedule title
-            //Shows Events (list)
+            Form3 scheduleViewForm = new Form3(e.RowIndex, schedules);
+            scheduleViewForm.Show();
+        }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            Save();
+        }
+
+        private void button10_Click(object sender, EventArgs e)
+        {
+            Save();
+        }
+
+        private void Save()
+        {
+            foreach (var schedule in schedules)
+            {
+                using (FileStream fs = (System.IO.FileStream)File.Create(@"../../../../DataFiles/" + schedule.ScheduleTitle + ".csv"))
+                {
+                    string myString = string.Format("{0}\n{1}\n", schedule.ScheduleTitle, schedule.ScheduleDates);
+                    var byteString = myString.ToUtf8Bytes();
+                    fs.Write(byteString, 0, byteString.Length);
+                    CsvSerializer.SerializeToStream(schedules.ElementAt(0).Events, fs);
+                }
+            }
+        }
+
+        private void ClearSchedule ()
+        {
+            schedules = new BindingList<Schedule>();
+        }
+
+        private void ImportSchedule()
+        {
+            //Do not support entering commas in Excel!
+            OpenFileDialog fileDialog = new OpenFileDialog();
+            DialogResult result = fileDialog.ShowDialog();
+            String title = null;
+            String dates = null;
+            List<Event> events = new List<Event>();
+            if (result == DialogResult.OK)
+            {
+                using (FileStream fs = (System.IO.FileStream)fileDialog.OpenFile())
+                {
+                    TextFieldParser parser = new TextFieldParser(fs);
+
+                    parser.HasFieldsEnclosedInQuotes = true;
+                    parser.SetDelimiters(",");
+
+                    title = parser.ReadLine();
+                    dates = parser.ReadLine();
+
+                    parser.ReadLine();
+
+                    parser.Delimiters = new[] { "," };
+                    parser.HasFieldsEnclosedInQuotes = true;
+                    while (!parser.EndOfData)
+                    {
+                        string[] line = parser.ReadFields();
+                        events.Add(new Event
+                        {
+                            Title = line[0],
+                            Date = line[1],
+                            Location = line[2],
+                            Description = line[3]
+                        });
+                    }
+                }
+
+            }
+
+            schedules.Add(new Schedule
+            {
+                ScheduleTitle = title,
+                ScheduleDates = dates,
+                Events = events
+            });
+            dataGridView2.DataSource = null;
+            dataGridView2.DataSource = schedules;
+        }
+
+        private void ExportSchedules()
+        {
+            FolderBrowserDialog folderDialog = new FolderBrowserDialog();
+            DialogResult result = folderDialog.ShowDialog();
+            System.Diagnostics.Trace.WriteLine(folderDialog.SelectedPath.ToString());
+            if (result == DialogResult.OK) {
+                foreach (var schedule in schedules) {
+                    using (FileStream fs = (System.IO.FileStream)File.Create(folderDialog.SelectedPath +"\\" +  schedule.ScheduleTitle + ".csv"))
+                    {
+                        string myString = string.Format("{0}\n{1}\n", schedule.ScheduleTitle, schedule.ScheduleDates);
+                        var byteString = myString.ToUtf8Bytes();
+                        fs.Write(byteString, 0, byteString.Length);
+                        CsvSerializer.SerializeToStream(schedule.Events, fs);
+                    }
+                }
+            }
+        }
+
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            //Activity Import
+            OpenFileDialog fileDialog = new OpenFileDialog();
+            DialogResult result = fileDialog.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                using (FileStream fs = (System.IO.FileStream)fileDialog.OpenFile())
+                {
+                    TextFieldParser parser = new TextFieldParser(fs);
+
+                    parser.HasFieldsEnclosedInQuotes = true;
+                    parser.SetDelimiters(",");
+
+                    parser.ReadLine();
+
+                    parser.Delimiters = new[] { "," };
+                    parser.HasFieldsEnclosedInQuotes = true;
+                    while (!parser.EndOfData)
+                    {
+                        string[] line = parser.ReadFields();
+                        String ImageLink =  (line.Length == 5)? line[4] : "";
+                        activities.Add(new Activity
+                        {
+                               Title = line[1],
+                               Date = line[2],
+                               Location = line[3],
+                               Description = line[4],
+                               ImageLink = line[0]
+                        });
+                    }
+                }
+
+            }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            ExportSchedules();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            ImportSchedule();
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog fileDialog = new SaveFileDialog();
+            DialogResult result = fileDialog.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                using (FileStream fs = (System.IO.FileStream)fileDialog.OpenFile())
+                {
+                    CsvSerializer.SerializeToStream(activities, fs);
+                }
+            }
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            foreach (DataGridViewRow item in this.dataGridView1.SelectedRows)
+            {
+                dataGridView1.Rows.RemoveAt(item.Index);
+            }
+
+            dataGridView1.Update();
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+
+            foreach (DataGridViewRow item in this.dataGridView2.SelectedRows)
+            {
+                dataGridView2.Rows.RemoveAt(item.Index);
+            }
+        }
+
+        private void button3_Click_1(object sender, EventArgs e)
+        {
+            Form5 getMainScheduleInfo = new Form5(schedules);
+            getMainScheduleInfo.ShowDialog();
         }
     }
 }
