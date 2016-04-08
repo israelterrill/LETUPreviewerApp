@@ -110,8 +110,6 @@ To see the returned data formats, see the [API Data Formats Page] (https://githu
 
 Adjust file operations so save/export filename denotes schedule title and dates and only events are included in the schedule CSV
 
-Add support for single schedule export
-
 #####API:
 
 Add all buildings coordinates to data files
