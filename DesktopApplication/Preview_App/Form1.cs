@@ -253,5 +253,31 @@ namespace Preview_App
             dataGridView4.Refresh();
         }
 
+        private void button3_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog folderDialog = new FolderBrowserDialog();
+            DialogResult result = folderDialog.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                var selectedCells = dataGridView2.SelectedCells;
+                List<Schedule> usedElements = new List<Schedule>();
+                for (int i = 0; i < selectedCells.Count; i++)
+                {
+                    var schedule = schedules.ElementAt(selectedCells[i].RowIndex);
+
+                    if (!usedElements.Contains(schedule))
+                    {
+                        using (FileStream fs = (FileStream)File.Create(folderDialog.SelectedPath + "\\" + schedule.ScheduleTitle + ".csv"))
+                        {
+                            string myString = string.Format("{0}\n{1}\n", schedule.ScheduleTitle, schedule.ScheduleDates);
+                            var byteString = myString.ToUtf8Bytes();
+                            fs.Write(byteString, 0, byteString.Length);
+                            CsvSerializer.SerializeToStream(schedule.Events, fs);
+                        }
+                        usedElements.Add(schedule);
+                    }
+                }
+            }
+        }
     }
 }

@@ -59,6 +59,7 @@
             this.scheduleBindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.activityBindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.scheduleBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.button3 = new System.Windows.Forms.Button();
             this.Schedule.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -220,6 +221,7 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.button3);
             this.tabPage2.Controls.Add(this.dataGridView4);
             this.tabPage2.Controls.Add(this.button10);
             this.tabPage2.Controls.Add(this.button1);
@@ -288,7 +290,7 @@
             this.button10.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.button10.AutoSize = true;
             this.button10.Font = new System.Drawing.Font("Calibri", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button10.Location = new System.Drawing.Point(461, 363);
+            this.button10.Location = new System.Drawing.Point(543, 366);
             this.button10.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.button10.Name = "button10";
             this.button10.Size = new System.Drawing.Size(93, 41);
@@ -302,7 +304,7 @@
             this.button1.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.button1.AutoSize = true;
             this.button1.Font = new System.Drawing.Font("Calibri", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(353, 363);
+            this.button1.Location = new System.Drawing.Point(437, 366);
             this.button1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(93, 41);
@@ -316,7 +318,7 @@
             this.button2.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.button2.AutoSize = true;
             this.button2.Font = new System.Drawing.Font("Calibri", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button2.Location = new System.Drawing.Point(241, 363);
+            this.button2.Location = new System.Drawing.Point(168, 366);
             this.button2.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(93, 41);
@@ -330,7 +332,7 @@
             this.button5.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.button5.AutoSize = true;
             this.button5.Font = new System.Drawing.Font("Calibri", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button5.Location = new System.Drawing.Point(130, 363);
+            this.button5.Location = new System.Drawing.Point(62, 366);
             this.button5.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(93, 41);
@@ -380,6 +382,20 @@
             // scheduleBindingSource
             // 
             this.scheduleBindingSource.DataSource = typeof(DataClasses.Schedule);
+            // 
+            // button3
+            // 
+            this.button3.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.button3.AutoSize = true;
+            this.button3.Font = new System.Drawing.Font("Calibri", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button3.Location = new System.Drawing.Point(274, 366);
+            this.button3.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(150, 41);
+            this.button3.TabIndex = 30;
+            this.button3.Text = "Export Selected";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // Form1
             // 
@@ -438,6 +454,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn5;
         private System.Windows.Forms.BindingSource eventBindingSource;
+        private System.Windows.Forms.Button button3;
     }
 }
 
