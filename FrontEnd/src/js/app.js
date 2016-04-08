@@ -17,7 +17,7 @@ var previewerApp = angular.module('PreviewerApp', [
 
   });
 
-var httpRequestBase = 'http://10.39.27.95:44623/api';
+var httpRequestBase = 'http://localhost:44623/api';
 
 previewerApp.controller('MainController', function($scope, $location) {
 
@@ -235,43 +235,59 @@ previewerApp.controller('ActivitiesController', function($scope, $http, $locatio
 });
 
 
-previewerApp.controller('DiningController', function($scope) {
-  $scope.map = { center: { latitude: 45, longitude: -73 }, zoom: 8 };
-  Ngmap.getMap().then(function(map) {
-    //map.getStreetView().setVisible(false);
-    var marker1 = {
-        id: 0,
-        map: map,
-        position: new google.maps.LatLng(32.465237, -94.723749),
-        title: 'Corner Cafe'
-    };
+previewerApp.controller('DiningController', function($scope, NgMap) {
+    $scope.markers=[];
+    NgMap.getMap().then(function(map) {
+          map.getStreetView().setVisible(false);
+          var infowindow1 = new google.maps.InfoWindow({
+              content: '<h4 id="firstHeading" class="firstHeading">Corner Cafe</h4>'
+          });
+          var marker1 = new google.maps.Marker({
+              map: map,
+              position: new google.maps.LatLng(32.465237, -94.723749),
+              title: 'Corner Cafe'
+          });
 
-    var marker2 = new google.maps.Marker({
-        id: 1,
-        map: map,
-        position: new google.maps.LatLng(32.466310, -94.726485),
-        title: 'The Hive'
-    });
-  });
+          var infowindow2 = new google.maps.InfoWindow({
+              content: '<h4 id="firstHeading" class="firstHeading">The Hive</h4>'
+          });
+          var marker2 = new google.maps.Marker({
+              map: map,
+              position: new google.maps.LatLng(32.466310, -94.726485),
+              title: 'The Hive'
+          });
 
-  $scope.$on('$locationChangeStart', function() {
-      //Add change code
-  });
+          $scope.markers.push(marker1);
+          marker1.addListener('click', function() {
+            infowindow1.open(map, marker1);
+          });
+          $scope.markers.push(marker2);
+          marker2.addListener('click', function() {
+            infowindow2.open(map, marker2);
+          });
+        });
 
-  $scope.titles = [
-    "Menu",
-    "Hours",
-  ];
 
-  $scope.content = [
-    "<a href=\"http:\/\/letu.cafebonappetit.com\" target=\"_blank\">Click here</a> to view today's menu.",
-    "<b>Sunday</b><ul><li>Breakfast:<br>Cafe 8 - 9:15 am<br></li><li>Lunch:<br>Cafe 11:30 am - 1:30 pm</li></ul><b>Monday, Wednesday, Friday:</b><ul><li>Breakfast:<br>Cafe 6:30 - 9:30 am<br>Hive 6:30 - 11:30 am</li><li>Lunch:<br>Cafe 11:30 am - 1:30 pm<br>Hive 11:30 am - 3 pm</li><li>Midday:<br>Hive 3 - 6:30 pm</li><li>Dinner:<br>Cafe 4:45 - 7 pm<br>Hive 6:30 - 11 pm</li></ul><b>Tuesday, Thursday:</b><ul><li>Breakfast:<br>Cafe 6:30 - 9:30 am<br>Hive 6:30 - 10:50 am</li><li>Lunch:<br>Cafe 10:50 am - 1:30 pm<br>Hive 11:30 am - 3 pm</li><li>Midday:<br>Hive 3 - 6:30 pm</li><li>Dinner:<br>Cafe 4:45 - 7 pm<br>Hive 6:30 - 11 pm</li></ul><b>Saturday:</b><ul><li>Brunch:<br>Cafe 11:30 am - 1:30 pm</li><li>Dinner:<br>Cafe 4:45 - 6 pm<br>Hive 5:30 - 11 pm</li></ul>",
-  ];
+        $scope.$on('$locationChangeStart', function() {
+            while($scope.markers.length > 0) {
+              $scope.markers.pop().setMap(null);
+            }
+        });
 
-  var numberOfPanels = 2;
-  $scope.counts = Array.apply(1, {length: numberOfPanels}).map(Number.call, Number);
+        $scope.titles = [
+          "Menu",
+          "Hours",
+        ];
 
+        $scope.content = [
+          "<a href=\"http:\/\/letu.cafebonappetit.com\" target=\"_blank\">Click here</a> to view today's menu.",
+          "<b>Sunday</b><ul><li>Breakfast:<br>Cafe 8 - 9:15 am<br></li><li>Lunch:<br>Cafe 11:30 am - 1:30 pm</li></ul><b>Monday, Wednesday, Friday:</b><ul><li>Breakfast:<br>Cafe 6:30 - 9:30 am<br>Hive 6:30 - 11:30 am</li><li>Lunch:<br>Cafe 11:30 am - 1:30 pm<br>Hive 11:30 am - 3 pm</li><li>Midday:<br>Hive 3 - 6:30 pm</li><li>Dinner:<br>Cafe 4:45 - 7 pm<br>Hive 6:30 - 11 pm</li></ul><b>Tuesday, Thursday:</b><ul><li>Breakfast:<br>Cafe 6:30 - 9:30 am<br>Hive 6:30 - 10:50 am</li><li>Lunch:<br>Cafe 10:50 am - 1:30 pm<br>Hive 11:30 am - 3 pm</li><li>Midday:<br>Hive 3 - 6:30 pm</li><li>Dinner:<br>Cafe 4:45 - 7 pm<br>Hive 6:30 - 11 pm</li></ul><b>Saturday:</b><ul><li>Brunch:<br>Cafe 11:30 am - 1:30 pm</li><li>Dinner:<br>Cafe 4:45 - 6 pm<br>Hive 5:30 - 11 pm</li></ul>",
+        ];
+
+        var numberOfPanels = 2;
+        $scope.counts = Array.apply(1, {length: numberOfPanels}).map(Number.call, Number);
 });
+
 
 previewerApp.controller('HelpController', function($scope, $http, $location) {
     $http({
