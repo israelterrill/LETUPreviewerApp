@@ -65,44 +65,7 @@ netsh advfirewall firewall add rule name="APIDataServer" dir=in action=allow loc
 
 Note: If using Visual Studio to run the server (i.e. clicking start in Visual Studio), be sure to open Visual Studio in administrator mode.
 
-### API Usage
-
-
-API Server can be queried for various data types. Usage is: 
-
-http://\<apiserverhost\>:44623/api/\<datatype\>/[key=value[&key2=value2]]
-
-####Valid Datatypes:
-
--Questions: list of FAQs
-
--Activities: list of open optional activities on campus
-
--MapData: list of map data entries for campus buildings
-
--Schedules: list of schedules for preview events
-
-
-####Valid Keys
-
--Skip (integer > 0): only retrieve entries after entry number <value>
-
--Take (integer > 0): only retrieve <value> entries. If 'skip' value is also provided, take applies after skip
-
-
-####Examples:
-
-http://\<apiserverhost\>:44623/api/activities
-
-http://\<apiserverhost\>:44623/api/schedules/skip=1
-
-http://\<apiserverhost\>:44623/api/questions/take=2
-
-http://\<apiserverhost\>:44623/api/mapdata/take=3&skip=2
-
-####Returned Data
-To see the returned data formats, see the [API Data Formats Page] (https://github.com/israelterrill/LETUPreviewerApp/blob/master/APIDataFormats.md).
-
+For information on API usage, see the [API page] (https://github.com/israelterrill/LETUPreviewerApp/blob/master/API.md).
 
 ####TODO (*high priority):
 
