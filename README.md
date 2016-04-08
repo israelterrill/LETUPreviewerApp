@@ -108,8 +108,6 @@ To see the returned data formats, see the [API Data Formats Page] (https://githu
 
 #####Desktop Application: 
 
-*Add schedule view capability
-
 Adjust file operations so save/export filename denotes schedule title and dates and only events are included in the schedule CSV
 
 Add support for single schedule export
