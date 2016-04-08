@@ -60,17 +60,6 @@ namespace Preview_App
             return schedules;
         }
 
-        private void button7_Click(object sender, EventArgs e)
-        {
-            Form2 addForm = new Form2(activities);
-            addForm.ShowDialog();
-        }
-
-        private void dataGridView2_CellContentClick_1(object sender, DataGridViewCellEventArgs e)
-        {
-            Form3 scheduleViewForm = new Form3(e.RowIndex, schedules);
-            scheduleViewForm.Show();
-        }
 
         private void button9_Click(object sender, EventArgs e)
         {
@@ -108,7 +97,7 @@ namespace Preview_App
             DialogResult result = fileDialog.ShowDialog();
             String title = null;
             String dates = null;
-            List<Event> events = new List<Event>();
+            BindingList<Event> events = new BindingList<Event>();
             if (result == DialogResult.OK)
             {
                 using (FileStream fs = (System.IO.FileStream)fileDialog.OpenFile())
@@ -247,10 +236,22 @@ namespace Preview_App
             }
         }
 
-        private void button3_Click_1(object sender, EventArgs e)
+        private void dataGridView1_DefaultValuesNeeded(object sender, System.Windows.Forms.DataGridViewRowEventArgs e)
         {
-            Form5 getMainScheduleInfo = new Form5(schedules);
-            getMainScheduleInfo.ShowDialog();
+            schedules.ElementAtOrDefault(e.Row.Index).Events = new BindingList<Event>();
         }
+
+        private void dataGridView2_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            dataGridView2.CommitEdit(DataGridViewDataErrorContexts.Commit);
+            if (schedules.Last().Events == null)
+                schedules.Last().Events = new BindingList<Event>();
+            dataGridView4.CommitEdit(DataGridViewDataErrorContexts.Commit);
+            if(e.RowIndex >= 0)
+                dataGridView4.DataSource = schedules.ElementAt(e.RowIndex).Events;
+            dataGridView4.Update();
+            dataGridView4.Refresh();
+        }
+
     }
 }
