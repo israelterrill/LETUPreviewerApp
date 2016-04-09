@@ -81,6 +81,8 @@ Adjust file operations so save/export filename denotes schedule title and dates,
 
 Add CSV import capability
 
+Add capability for WebAPI to check for file changes in case of file/schedule updates
+
 #####Front-End
 
 Fix mobile map glitch where keyboard does not go down when building selected
