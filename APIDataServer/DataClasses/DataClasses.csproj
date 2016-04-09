@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="Activity.cs" />
     <Compile Include="Event.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="Map.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Question.cs" />
