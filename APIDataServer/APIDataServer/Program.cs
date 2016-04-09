@@ -10,18 +10,23 @@ namespace APIDataServer
     class Program
     {
         private const int LISTEN_PORT = 44623;
-        private static Schedule[] Schedules = null;
-        private static Map[] MapData = null;
-        private static Question[] Questions = null;
-        private static Activity[] Activities = null;
 
-        private const string DATA_DIR = @"..\..\..\Data\";
         private const string DATA_FORMAT = "csv";
+        private const string DATA_DIR = @"..\..\..\Data\";
         private const string SCHEDULES_FILE = DATA_DIR + "schedule." + DATA_FORMAT;
         private const string MAPDATA_FILE = DATA_DIR + "mapdata." + DATA_FORMAT;
         private const string QUESTIONS_FILE = DATA_DIR + "questions." + DATA_FORMAT;
         private const string ACTIVITIES_FILE = DATA_DIR + "activities." + DATA_FORMAT;
 
+        private static Schedule[] Schedules = null;
+        private static Map[] MapData = null;
+        private static Question[] Questions = null;
+        private static Activity[] Activities = null;
+
+        /// <summary>
+        /// Main function. args is an array of strings from command line
+        /// </summary>
+        /// <param name="args"></param>
         static void Main(string[] args)
         {
             ImportData();
@@ -34,6 +39,9 @@ namespace APIDataServer
             }
         }
 
+        /// <summary>
+        /// Imports existing data file(s) contents for processing and serving requests
+        /// </summary>
         private static void ImportData()
         {
             if (Directory.Exists(DATA_DIR))
@@ -64,6 +72,11 @@ namespace APIDataServer
             }
         }
 
+        /// <summary>
+        /// Web Server Request Handler
+        /// </summary>
+        /// <param name="request">HTTP request string</param>
+        /// <returns>JSON string with requested data</returns>
         private static string HandleRequest(HttpListenerRequest request)
         {
 

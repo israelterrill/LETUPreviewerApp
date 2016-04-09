@@ -12,6 +12,11 @@ namespace DataClasses
         public double Long;
         public string ImageLink;
 
+        /// <summary>
+        /// Creates a new Map instance from CSV text
+        /// </summary>
+        /// <param name="csvStr">CSV text</param>
+        /// <returns>instance of Map</returns>
         public static Map FromCsv(string csvStr)
         {
             var parts = csvStr.Split(',');
@@ -25,12 +30,21 @@ namespace DataClasses
             };
         }
 
+        /// <summary>
+        /// Creates an array of Map instances from a CSV file contents
+        /// </summary>
+        /// <param name="targetPath">target CSV file path</param>
+        /// <returns>Map array</returns>
         public static Map[] FromCsvMulti(string targetPath)
         {
             return (from line in File.ReadAllLines(targetPath)
                     select FromCsv(line)).ToArray();
         }
 
+        /// <summary>
+        /// Serializes instance to CSV text
+        /// </summary>
+        /// <returns>CSV text</returns>
         public string ToCsv()
         {
             return string.Format("{0},{1},{2},{3},{4}",

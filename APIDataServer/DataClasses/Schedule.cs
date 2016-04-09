@@ -8,11 +8,20 @@ namespace DataClasses
 {
     public class Schedule
     {
+        /// <summary>
+        /// Schedule data file naming standard
+        /// </summary>
         public const string FILE_PATTERN = "(?<title>[^_]+)_(?<dates>.*)";
+
         public string ScheduleTitle { get; set; }
         public string ScheduleDates { get; set; }
         public BindingList<Event> Events { get; set; }
 
+        /// <summary>
+        /// Creates a new Activity instance from CSV text
+        /// </summary>
+        /// <param name="csvStr">CSV text</param>
+        /// <returns>instance of Activity</returns>
         public static Schedule FromCsv(string targetPath)
         {
             var fileName = Path.GetFileNameWithoutExtension(targetPath);
@@ -28,6 +37,11 @@ namespace DataClasses
             };
         }
 
+        /// <summary>
+        /// Creates an array of Schedule instances from a CSV file contents
+        /// </summary>
+        /// <param name="targetPath">target CSV file path</param>
+        /// <returns>Schedule array</returns>
         public static Schedule[] FromCsvMulti(string targetDir)
         {
             var rgxScheduleFile = new Regex(FILE_PATTERN);
@@ -36,6 +50,10 @@ namespace DataClasses
                     select FromCsv(file)).ToArray();
         }
 
+        /// <summary>
+        /// Serializes instance to CSV text
+        /// </summary>
+        /// <returns>CSV text</returns>
         public void ToCsv(string targetDir)
         {
             if (!Directory.Exists(targetDir)) throw new DirectoryNotFoundException();
