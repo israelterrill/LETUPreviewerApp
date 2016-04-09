@@ -11,8 +11,8 @@ namespace DataClasses
         /// <summary>
         /// Schedule data file naming standard
         /// </summary>
-        public const string FILE_PATTERN = "(?<title>[^_]+)_(?<dates>.*)";
-
+        public const string FILE_PATTERN = @"(?<title>[^_]+)_(?<dates>.*)\.csv";
+		
         public string ScheduleTitle { get; set; }
         public string ScheduleDates { get; set; }
         public BindingList<Event> Events { get; set; }
@@ -24,7 +24,7 @@ namespace DataClasses
         /// <returns>instance of Activity</returns>
         public static Schedule FromCsv(string targetPath)
         {
-            var fileName = Path.GetFileNameWithoutExtension(targetPath);
+            var fileName = Path.GetFileName(targetPath);
             var rgxFileName = new Regex(FILE_PATTERN);
             if (!rgxFileName.IsMatch(fileName)) throw new FormatException(string.Format("Target file '{0}' does not conform to file name standards.", targetPath));
             var match = rgxFileName.Match(fileName);
@@ -46,7 +46,7 @@ namespace DataClasses
         {
             var rgxScheduleFile = new Regex(FILE_PATTERN);
             return (from file in Directory.GetFiles(targetDir)
-                    where rgxScheduleFile.IsMatch(Path.GetFileNameWithoutExtension(file))
+                    where rgxScheduleFile.IsMatch(Path.GetFileName(file))
                     select FromCsv(file)).ToArray();
         }
 
