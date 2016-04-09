@@ -75,7 +75,7 @@ namespace Preview_App
         {
             foreach (var schedule in schedules)
             {
-                using (FileStream fs = (System.IO.FileStream)File.Create(@"../../../../DataFiles/" + schedule.ScheduleTitle + ".csv"))
+                using (FileStream fs = (FileStream)File.Create(@"../../../../DataFiles/" + "Schedule_" + schedule.ScheduleTitle +".csv"))
                 {
                     string myString = string.Format("{0}\n{1}\n", schedule.ScheduleTitle, schedule.ScheduleDates);
                     var byteString = myString.ToUtf8Bytes();
@@ -146,7 +146,7 @@ namespace Preview_App
             System.Diagnostics.Trace.WriteLine(folderDialog.SelectedPath.ToString());
             if (result == DialogResult.OK) {
                 foreach (var schedule in schedules) {
-                    using (FileStream fs = (System.IO.FileStream)File.Create(folderDialog.SelectedPath +"\\" +  schedule.ScheduleTitle + ".csv"))
+                    using (FileStream fs = (System.IO.FileStream)File.Create(folderDialog.SelectedPath +"\\" + "Schedule_" + schedule.ScheduleTitle + ".csv"))
                     {
                         string myString = string.Format("{0}\n{1}\n", schedule.ScheduleTitle, schedule.ScheduleDates);
                         var byteString = myString.ToUtf8Bytes();
@@ -210,7 +210,7 @@ namespace Preview_App
             DialogResult result = fileDialog.ShowDialog();
             if (result == DialogResult.OK)
             {
-                using (FileStream fs = (System.IO.FileStream)fileDialog.OpenFile())
+                using (FileStream fs = (FileStream)fileDialog.OpenFile())
                 {
                     CsvSerializer.SerializeToStream(activities, fs);
                 }
@@ -236,7 +236,7 @@ namespace Preview_App
             }
         }
 
-        private void dataGridView1_DefaultValuesNeeded(object sender, System.Windows.Forms.DataGridViewRowEventArgs e)
+        private void dataGridView1_DefaultValuesNeeded(object sender, DataGridViewRowEventArgs e)
         {
             schedules.ElementAtOrDefault(e.Row.Index).Events = new BindingList<Event>();
         }
@@ -255,6 +255,7 @@ namespace Preview_App
 
         private void button3_Click(object sender, EventArgs e)
         {
+            //Export Currently Selected
             FolderBrowserDialog folderDialog = new FolderBrowserDialog();
             DialogResult result = folderDialog.ShowDialog();
             if (result == DialogResult.OK)
@@ -267,7 +268,7 @@ namespace Preview_App
 
                     if (!usedElements.Contains(schedule))
                     {
-                        using (FileStream fs = (FileStream)File.Create(folderDialog.SelectedPath + "\\" + schedule.ScheduleTitle + ".csv"))
+                        using (FileStream fs = (FileStream)File.Create(folderDialog.SelectedPath + "\\" + "Schedule_" + schedule.ScheduleTitle + ".csv"))
                         {
                             string myString = string.Format("{0}\n{1}\n", schedule.ScheduleTitle, schedule.ScheduleDates);
                             var byteString = myString.ToUtf8Bytes();
