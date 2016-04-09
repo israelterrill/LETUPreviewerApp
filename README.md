@@ -67,7 +67,7 @@ Note: If using Visual Studio to run the server (i.e. clicking start in Visual St
 
 For information on API usage, see the [API page] (https://github.com/israelterrill/LETUPreviewerApp/blob/master/API.md).
 
-####TODO (*high priority):
+##TODO (*high priority):
 
 #####Desktop Application: 
 
