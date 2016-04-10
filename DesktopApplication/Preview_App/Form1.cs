@@ -4,12 +4,9 @@ using System.Collections.Generic;
 using ServiceStack.Text;
 using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.IO;
 using DataClasses;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.VisualBasic.FileIO;
 
@@ -75,7 +72,7 @@ namespace Preview_App
         {
             foreach (var schedule in schedules)
             {
-                using (FileStream fs = (FileStream)File.Create(@"../../../../DataFiles/" + "Schedule_" + schedule.ScheduleTitle +".csv"))
+                using (FileStream fs = (FileStream)File.Create(@"../../../../DataFiles/" + GetSafeFilename(schedule.ScheduleTitle + "_" + schedule.ScheduleDates) +".csv"))
                 {
                     string myString = string.Format("{0}\n{1}\n", schedule.ScheduleTitle, schedule.ScheduleDates);
                     var byteString = myString.ToUtf8Bytes();
@@ -94,49 +91,60 @@ namespace Preview_App
         {
             //Do not support entering commas in Excel!
             OpenFileDialog fileDialog = new OpenFileDialog();
+            fileDialog.Multiselect = true;
             DialogResult result = fileDialog.ShowDialog();
             String title = null;
             String dates = null;
             BindingList<Event> events = new BindingList<Event>();
             if (result == DialogResult.OK)
             {
-                using (FileStream fs = (System.IO.FileStream)fileDialog.OpenFile())
+                foreach (var filename in fileDialog.FileNames)
                 {
-                    TextFieldParser parser = new TextFieldParser(fs);
-
-                    parser.HasFieldsEnclosedInQuotes = true;
-                    parser.SetDelimiters(",");
-
-                    title = parser.ReadLine();
-                    dates = parser.ReadLine();
-
-                    parser.ReadLine();
-
-                    parser.Delimiters = new[] { "," };
-                    parser.HasFieldsEnclosedInQuotes = true;
-                    while (!parser.EndOfData)
+                    using (FileStream fs = (System.IO.FileStream)fileDialog.OpenFile())
                     {
-                        string[] line = parser.ReadFields();
-                        events.Add(new Event
+                        TextFieldParser parser = new TextFieldParser(fs);
+
+                        parser.HasFieldsEnclosedInQuotes = true;
+                        parser.SetDelimiters(",");
+
+                        title = parser.ReadLine();
+                        dates = parser.ReadLine();
+
+                        parser.ReadLine();
+
+                        parser.Delimiters = new[] { "," };
+                        parser.HasFieldsEnclosedInQuotes = true;
+                        while (!parser.EndOfData)
                         {
-                            Title = line[0],
-                            Date = line[1],
-                            Location = line[2],
-                            Description = line[3]
-                        });
+                            string[] line = parser.ReadFields();
+                            events.Add(new Event
+                            {
+                                Title = line[0],
+                                Date = line[1],
+                                Location = line[2],
+                                Description = line[3]
+                            });
+                        }
                     }
+
+                    var fileParts = fileDialog.FileName.Split('_');
+                    schedules.Add(new Schedule
+                    {
+                        ScheduleTitle = Path.GetFileName(fileParts[0]),
+                        ScheduleDates = Path.GetFileNameWithoutExtension(fileParts[1]),
+                        Events = events
+                    });
+                    dataGridView2.DataSource = null;
+                    dataGridView2.DataSource = schedules;
                 }
-
             }
+        }
 
-            schedules.Add(new Schedule
-            {
-                ScheduleTitle = title,
-                ScheduleDates = dates,
-                Events = events
-            });
-            dataGridView2.DataSource = null;
-            dataGridView2.DataSource = schedules;
+        public static string GetSafeFilename(string filename)
+        {
+
+            return string.Join("-", filename.Split(Path.GetInvalidFileNameChars()));
+
         }
 
         private void ExportSchedules()
@@ -144,13 +152,12 @@ namespace Preview_App
             FolderBrowserDialog folderDialog = new FolderBrowserDialog();
             DialogResult result = folderDialog.ShowDialog();
             System.Diagnostics.Trace.WriteLine(folderDialog.SelectedPath.ToString());
+
             if (result == DialogResult.OK) {
                 foreach (var schedule in schedules) {
-                    using (FileStream fs = (System.IO.FileStream)File.Create(folderDialog.SelectedPath +"\\" + "Schedule_" + schedule.ScheduleTitle + ".csv"))
+                    string filename = folderDialog.SelectedPath +"\\" + GetSafeFilename(schedule.ScheduleTitle + "_" + schedule.ScheduleDates) + ".csv";
+                    using (FileStream fs = (FileStream)File.Create(filename))
                     {
-                        string myString = string.Format("{0}\n{1}\n", schedule.ScheduleTitle, schedule.ScheduleDates);
-                        var byteString = myString.ToUtf8Bytes();
-                        fs.Write(byteString, 0, byteString.Length);
                         CsvSerializer.SerializeToStream(schedule.Events, fs);
                     }
                 }
@@ -162,32 +169,36 @@ namespace Preview_App
         {
             //Activity Import
             OpenFileDialog fileDialog = new OpenFileDialog();
+            fileDialog.Multiselect = true;
             DialogResult result = fileDialog.ShowDialog();
             if (result == DialogResult.OK)
             {
-                using (FileStream fs = (System.IO.FileStream)fileDialog.OpenFile())
+                foreach (var filename in fileDialog.FileNames)
                 {
-                    TextFieldParser parser = new TextFieldParser(fs);
-
-                    parser.HasFieldsEnclosedInQuotes = true;
-                    parser.SetDelimiters(",");
-
-                    parser.ReadLine();
-
-                    parser.Delimiters = new[] { "," };
-                    parser.HasFieldsEnclosedInQuotes = true;
-                    while (!parser.EndOfData)
+                    using (FileStream fs = File.Create(filename))
                     {
-                        string[] line = parser.ReadFields();
-                        String ImageLink =  (line.Length == 5)? line[4] : "";
-                        activities.Add(new Activity
+                        TextFieldParser parser = new TextFieldParser(fs);
+
+                        parser.HasFieldsEnclosedInQuotes = true;
+                        parser.SetDelimiters(",");
+
+                        parser.ReadLine();
+
+                        parser.Delimiters = new[] { "," };
+                        parser.HasFieldsEnclosedInQuotes = true;
+                        while (!parser.EndOfData)
                         {
-                               Title = line[1],
-                               Date = line[2],
-                               Location = line[3],
-                               Description = line[4],
-                               ImageLink = line[0]
-                        });
+                            string[] line = parser.ReadFields();
+                            String ImageLink = (line.Length == 5) ? line[4] : "";
+                            activities.Add(new Activity
+                            {
+                                Title = line[1],
+                                Date = line[2],
+                                Location = line[3],
+                                Description = line[4],
+                                ImageLink = line[0]
+                            });
+                        }
                     }
                 }
 
@@ -268,11 +279,10 @@ namespace Preview_App
 
                     if (!usedElements.Contains(schedule))
                     {
-                        using (FileStream fs = (FileStream)File.Create(folderDialog.SelectedPath + "\\" + "Schedule_" + schedule.ScheduleTitle + ".csv"))
+                        string filename = folderDialog.SelectedPath +"\\" + GetSafeFilename(schedule.ScheduleTitle + "_" + schedule.ScheduleDates) + ".csv";
+                        using (FileStream fs = (FileStream)File.Create(filename))
                         {
-                            string myString = string.Format("{0}\n{1}\n", schedule.ScheduleTitle, schedule.ScheduleDates);
-                            var byteString = myString.ToUtf8Bytes();
-                            fs.Write(byteString, 0, byteString.Length);
+                            System.Diagnostics.Trace.WriteLine(filename);
                             CsvSerializer.SerializeToStream(schedule.Events, fs);
                         }
                         usedElements.Add(schedule);
