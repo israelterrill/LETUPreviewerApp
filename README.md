@@ -67,7 +67,7 @@ Note: If using Visual Studio to run the server (i.e. clicking start in Visual St
 
 For information on API usage, see the [API page] (https://github.com/israelterrill/LETUPreviewerApp/blob/master/API.md).
 
-####TODO (*high priority):
+##TODO (*high priority):
 
 #####Desktop Application: 
 
@@ -77,10 +77,15 @@ Adjust file operations so save/export filename denotes schedule title and dates 
 
 Add all buildings coordinates to data files
 
-Adjust file operations so save/export filename denotes schedule title and dates, so only events are included in the CSV
+~~Adjust file operations so save/export filename denotes schedule title and dates, so only events are included in the CSV~~*
 
-Add CSV import capability
+~~Add CSV import capability~~*
+
+Add capability for WebAPI to check for file changes in case of file/schedule updates
 
 #####Front-End
 
 Fix mobile map glitch where keyboard does not go down when building selected
+
+
+**Implemented, but untested. Remove from list when tested.*
