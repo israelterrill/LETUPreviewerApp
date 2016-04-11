@@ -17,10 +17,11 @@ namespace Preview_App
             private string DATA_DIRECTORY = @"../../../../APIDataServer/Data/";
 
             BindingList<Schedule> schedules;
-            BindingList<Activity> activities;
+            BindingList<Activity> activities; 
             public Form1()
             {
                 InitializeComponent();
+                this.activities = new BindingList<Activity>();
                 this.Load += new System.EventHandler(ActivityTab_Load);
                 this.Load += new System.EventHandler(ScheduleTab_Load);
                 dataGridView2.UserDeletingRow += DataGridView2_UserDeletingRow;
@@ -46,8 +47,11 @@ namespace Preview_App
 
             private BindingList<Activity> getActivityEntries()
             {
-                JArray activitiesJson = JArray.Parse(File.ReadAllText(DATA_DIRECTORY + "activities.json"));
-                activities = activitiesJson.ToObject<BindingList<Activity>>();
+                string filename = DATA_DIRECTORY + "Data_Activities.csv";
+                if (File.Exists(filename))
+                {
+                    ImportActivities(filename);
+                }
                 return activities;
             }
 
@@ -62,19 +66,27 @@ namespace Preview_App
 
             private void button9_Click(object sender, EventArgs e)
             {
-                Save();
+                SaveActivities();
             }
 
             private void button10_Click(object sender, EventArgs e)
             {
-                Save();
+                SaveSchedules();
             }
 
-            private void Save()
+            private void SaveActivities()
+            {
+                using (FileStream fs = (FileStream)File.Create(DATA_DIRECTORY + "Data_Activities.csv"))
+                {
+                    CsvSerializer.SerializeToStream(activities, fs);
+                }
+            }
+
+            private void SaveSchedules()
             {
                 foreach (var schedule in schedules)
                 {
-                    using (FileStream fs = (FileStream)File.Create(DATA_DIRECTORY + GetSafeFilename(schedule.ScheduleTitle + "_" + schedule.ScheduleDates) +".csv"))
+                    using (FileStream fs = (FileStream)File.Create(DATA_DIRECTORY + "Schedule_" + GetSafeFilename(schedule.ScheduleTitle + "_" + schedule.ScheduleDates) +".csv"))
                     {
                         string myString = string.Format("{0}\n{1}\n", schedule.ScheduleTitle, schedule.ScheduleDates);
                         var byteString = myString.ToUtf8Bytes();
@@ -156,7 +168,7 @@ namespace Preview_App
 
                 if (result == DialogResult.OK) {
                     foreach (var schedule in schedules) {
-                        string filename = folderDialog.SelectedPath +"\\" + GetSafeFilename(schedule.ScheduleTitle + "_" + schedule.ScheduleDates) + ".csv";
+                        string filename = folderDialog.SelectedPath +"\\Schedule_" + GetSafeFilename(schedule.ScheduleTitle + "_" + schedule.ScheduleDates) + ".csv";
                         using (FileStream fs = (FileStream)File.Create(filename))
                         {
                             CsvSerializer.SerializeToStream(schedule.Events, fs);
@@ -168,7 +180,7 @@ namespace Preview_App
 
             private void button4_Click(object sender, EventArgs e)
             {
-                //Activity Import
+                //Activity Import Button
                 OpenFileDialog fileDialog = new OpenFileDialog();
                 fileDialog.Multiselect = true;
                 DialogResult result = fileDialog.ShowDialog();
@@ -176,31 +188,7 @@ namespace Preview_App
                 {
                     foreach (var filename in fileDialog.FileNames)
                     {
-                        using (FileStream fs = File.Create(filename))
-                        {
-                            TextFieldParser parser = new TextFieldParser(fs);
-
-                            parser.HasFieldsEnclosedInQuotes = true;
-                            parser.SetDelimiters(",");
-
-                            parser.ReadLine();
-
-                            parser.Delimiters = new[] { "," };
-                            parser.HasFieldsEnclosedInQuotes = true;
-                            while (!parser.EndOfData)
-                            {
-                                string[] line = parser.ReadFields();
-                                String ImageLink = (line.Length == 5) ? line[4] : "";
-                                activities.Add(new Activity
-                                {
-                                    Title = line[1],
-                                    Date = line[2],
-                                    Location = line[3],
-                                    Description = line[4],
-                                    ImageLink = line[0]
-                                });
-                            }
-                        }
+                        ImportActivities(filename);
                     }
 
                 }
@@ -218,6 +206,7 @@ namespace Preview_App
 
             private void button6_Click(object sender, EventArgs e)
             {
+                //Activity Export
                 SaveFileDialog fileDialog = new SaveFileDialog();
                 DialogResult result = fileDialog.ShowDialog();
                 if (result == DialogResult.OK)
@@ -251,10 +240,6 @@ namespace Preview_App
                     dataGridView2.Rows.RemoveAt(item.Index);
                 }
 
-                foreach (var schedule in schedules)
-                {
-                System.Diagnostics.Trace.WriteLine(schedule.ScheduleTitle);
-                }
                 dataGridView1.Update();
                 dataGridView1.Refresh();
             }
@@ -291,7 +276,7 @@ namespace Preview_App
 
                         if (!usedElements.Contains(schedule))
                         {
-                            string filename = folderDialog.SelectedPath +"\\" + GetSafeFilename(schedule.ScheduleTitle + "_" + schedule.ScheduleDates) + ".csv";
+                            string filename = folderDialog.SelectedPath +"\\Schedule_" + GetSafeFilename(schedule.ScheduleTitle + "_" + schedule.ScheduleDates) + ".csv";
                             using (FileStream fs = (FileStream)File.Create(filename))
                             {
                                 CsvSerializer.SerializeToStream(schedule.Events, fs);
@@ -313,7 +298,7 @@ namespace Preview_App
 
             private void DeleteScheduleFileInDataDirectory (Schedule schedule)
             {
-                string filename = DATA_DIRECTORY + GetSafeFilename(schedule.ScheduleTitle + "_" + schedule.ScheduleDates) + ".csv";
+                string filename = DATA_DIRECTORY + "Schedule_" + GetSafeFilename(schedule.ScheduleTitle + "_" + schedule.ScheduleDates) + ".csv";
                 if (File.Exists(filename))
                 {
                     File.Delete(filename);
@@ -321,6 +306,35 @@ namespace Preview_App
 
                 dataGridView2.Update();
                 dataGridView2.Refresh();
-        }
+            }
+
+            private void ImportActivities(String filename)
+            {
+                    using (FileStream fs = File.OpenRead(filename))
+                    {
+                        TextFieldParser parser = new TextFieldParser(fs);
+
+                        parser.HasFieldsEnclosedInQuotes = true;
+                        parser.SetDelimiters(",");
+
+                        parser.ReadLine();
+
+                        parser.Delimiters = new[] { "," };
+                        parser.HasFieldsEnclosedInQuotes = true;
+                        while (!parser.EndOfData)
+                        {
+                            string[] line = parser.ReadFields();
+                            String ImageLink = (line.Length == 5) ? line[4] : "";
+                            activities.Add(new Activity
+                            {
+                                Title = line[1],
+                                Date = line[2],
+                                Location = line[3],
+                                Description = line[4],
+                                ImageLink = line[0]
+                            });
+                        }
+                    }
+            }
     }
 }
