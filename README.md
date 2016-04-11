@@ -71,11 +71,15 @@ For information on API usage, see the [API page] (https://github.com/israelterri
 
 #####Desktop Application: 
 
-Adjust file operations so save/export filename denotes schedule title and dates and only events are included in the schedule CSV
+Add Schedule prefix to beginning of schedule filenames
+
+Implement delete schedule (and file) functionality for files in data directory
 
 #####API:
 
-Add all buildings coordinates to data files
+Add all building coordinates to data files
+
+Add support for Schedule prefix in  api
 
 ~~Adjust file operations so save/export filename denotes schedule title and dates, so only events are included in the CSV~~*
 
