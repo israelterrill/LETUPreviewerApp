@@ -9,14 +9,17 @@ using DataClasses;
 using System.Linq;
 using System.Windows.Forms;
 using Microsoft.VisualBasic.FileIO;
+using System.Text.RegularExpressions;
+
 
 namespace Preview_App
 {
        public partial class Form1 : Form
         {
             private string DATA_DIRECTORY = @"../../../../APIDataServer/Data/";
+            public const string FILE_PATTERN = @"^Schedule(?<title>[^_]+)_(?<dates>.*)\.csv$";
 
-            BindingList<Schedule> schedules;
+        BindingList<Schedule> schedules;
             BindingList<Activity> activities; 
             public Form1()
             {
@@ -57,8 +60,9 @@ namespace Preview_App
 
             private BindingList<Schedule> getScheduleEntries()
             {
-                //ADD  a GET for all schedules in data directory--need regex to get files in directory
-                JArray schedulesJson = JArray.Parse(File.ReadAllText(DATA_DIRECTORY + "schedule.json"));
+            //ADD  a GET for all schedules in data directory--need regex to get files in directory
+            
+            JArray schedulesJson = JArray.Parse(File.ReadAllText(DATA_DIRECTORY + "schedule.json"));
                 schedules = schedulesJson.ToObject<BindingList<Schedule>>();
                 return schedules;
             }

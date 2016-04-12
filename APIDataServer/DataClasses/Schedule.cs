@@ -58,7 +58,7 @@ namespace DataClasses
         {
             if (!Directory.Exists(targetDir)) throw new DirectoryNotFoundException();
             var csvStr = string.Join(Environment.NewLine, Events.Select(ev => ev.ToCsv()).ToArray());
-            File.WriteAllText(Path.Combine(targetDir, string.Format("{0}_{1}", ScheduleTitle, ScheduleDates)), csvStr);
+            File.WriteAllText(Path.Combine(targetDir, string.Format("Schedule{0}_{1}", ScheduleTitle, ScheduleDates)), csvStr);
         }
     }
 }
