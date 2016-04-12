@@ -1,7 +1,7 @@
 [
     	{
     		ScheduleTitle: 'Aviation Preview',
-            ScheduleDates: '03/1/2016-03/5/2016',
+            ScheduleDates: '03-1-2016_03-5-2016',
     		Events:	[
     			{
     				Title: 'Check-in begins',
@@ -19,7 +19,7 @@
     	},
         {
             ScheduleTitle: 'Engineering Preview',
-            ScheduleDates: '03/1/2016-03/5/2016',
+            ScheduleDates: '03-1-2016_03-5-2016',
             Events:	[
                 {
                     Title: 'Stuff',

@@ -22,19 +22,22 @@ namespace DataClasses
         /// </summary>
         /// <param name="csvStr">CSV text</param>
         /// <returns>instance of Activity</returns>
-        public static Schedule FromCsv(string targetPath)
+        public static Schedule FromCsv(string targetPath,bool hasHeader=true)
         {
             var fileName = Path.GetFileName(targetPath);
             var rgxFileName = new Regex(FILE_PATTERN);
             if (!rgxFileName.IsMatch(fileName)) throw new FormatException(string.Format("Target file '{0}' does not conform to file name standards.", targetPath));
             var match = rgxFileName.Match(fileName);
-            return new Schedule
+            var result = new Schedule
             {
                 ScheduleTitle = match.Groups["title"].Value,
                 ScheduleDates = match.Groups["dates"].Value,
-                Events = new BindingList<Event>((from line in File.ReadAllLines(targetPath)
-                                                 select Event.FromCsv(line)).ToList())
             };
+            var contents = File.ReadAllLines(targetPath);
+            var header = contents.First();
+            result.Events = new BindingList<Event>((from line in contents
+                select hasHeader ? Event.FromCsv(line,header) : Event.FromCsv(line)).ToList());
+            return result;
         }
 
         /// <summary>
@@ -42,12 +45,12 @@ namespace DataClasses
         /// </summary>
         /// <param name="targetPath">target CSV file path</param>
         /// <returns>Schedule array</returns>
-        public static Schedule[] FromCsvMulti(string targetDir)
+        public static Schedule[] FromCsvMulti(string targetDir,bool hasHeader=true)
         {
             var rgxScheduleFile = new Regex(FILE_PATTERN);
             return (from file in Directory.GetFiles(targetDir)
                     where rgxScheduleFile.IsMatch(Path.GetFileName(file))
-                    select FromCsv(file)).ToArray();
+                    select FromCsv(file,hasHeader)).ToArray();
         }
 
         /// <summary>
@@ -58,7 +61,7 @@ namespace DataClasses
         {
             if (!Directory.Exists(targetDir)) throw new DirectoryNotFoundException();
             var csvStr = string.Join(Environment.NewLine, Events.Select(ev => ev.ToCsv()).ToArray());
-            File.WriteAllText(Path.Combine(targetDir, string.Format("Schedule{0}_{1}", ScheduleTitle, ScheduleDates)), csvStr);
+            File.WriteAllText(Path.Combine(targetDir, string.Format("Schedule{0}_{1}.csv", ScheduleTitle, ScheduleDates)), Event.DEFAULT_CSV_HEADER + Environment.NewLine + csvStr);
         }
     }
 }

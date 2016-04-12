@@ -6,6 +6,8 @@ namespace DataClasses
 {
     public class Map
     {
+        public const string DEFAULT_CSV_HEADER = "Name,Code,Lat,Long,ImageLink";
+
         public string Name;
         public string Code;
         public double Lat;
@@ -17,17 +19,35 @@ namespace DataClasses
         /// </summary>
         /// <param name="csvStr">CSV text</param>
         /// <returns>instance of Map</returns>
-        public static Map FromCsv(string csvStr)
+        public static Map FromCsv(string csvStr,string hdr = DEFAULT_CSV_HEADER)
         {
             var parts = csvStr.Split(',');
-            return new Map
+            var header = hdr.Split(',');
+            var result = new Map();
+            for (int i = 0; i < header.Length; i++)
             {
-                Name = parts[0],
-                Code = parts[1],
-                Lat = Double.Parse(parts[2]),
-                Long = Double.Parse(parts[3]),
-                ImageLink = parts[4],
-            };
+                switch (header[i].ToUpper())
+                {
+                    case "NAME":
+                        result.Name = parts[i];
+                        break;
+                    case "CODE":
+                        result.Code = parts[i];
+                        break;
+                    case "LAT":
+                        if (!Double.TryParse(parts[i],out result.Lat))
+                            throw new FormatException(string.Format("'{0}' is not a valid latitude value.",parts[i]));
+                        break;
+                    case "LONG":
+                        if (!Double.TryParse(parts[i], out result.Long))
+                            throw new FormatException(string.Format("'{0}' is not a valid longitude value.",parts[i]));
+                        break;
+                    case "IMAGELINK":
+                        result.ImageLink = parts[i];
+                        break;
+                }
+            }
+            return result;
         }
 
         /// <summary>
@@ -35,10 +55,13 @@ namespace DataClasses
         /// </summary>
         /// <param name="targetPath">target CSV file path</param>
         /// <returns>Map array</returns>
-        public static Map[] FromCsvMulti(string targetPath)
+        public static Map[] FromCsvMulti(string targetPath,bool hasHeader = true)
         {
-            return (from line in File.ReadAllLines(targetPath)
-                    select FromCsv(line)).ToArray();
+            var contents = File.ReadAllLines(targetPath);
+            var header = contents.First();
+            return (from line in contents
+                    where !hasHeader || !line.Equals(header)
+                    select hasHeader ? FromCsv(line,header) : FromCsv(line)).ToArray();
         }
 
         /// <summary>

@@ -5,6 +5,8 @@ namespace DataClasses
 {
     public class Question
     {
+        public const string DEFAULT_CSV_HEADER = "Query,Answer";
+
         public string Query;
         public string Answer;
 
@@ -13,14 +15,24 @@ namespace DataClasses
         /// </summary>
         /// <param name="csvStr">CSV text</param>
         /// <returns>instance of Question</returns>
-        public static Question FromCsv(string csvStr)
+        public static Question FromCsv(string csvStr, string hdr = DEFAULT_CSV_HEADER)
         {
             var parts = csvStr.Split(',');
-            return new Question
+            var header = hdr.Split(',');
+            var result = new Question();
+            for (int i = 0; i < header.Length; i++)
             {
-                Query = parts[0].Replace("\"", ""),
-                Answer = parts[1].Replace("\"", ""),
-            };
+                switch (header[i].ToUpper())
+                {
+                    case "QUERY":
+                        result.Query = parts[i];
+                        break;
+                    case "ANSWER":
+                        result.Answer = parts[i];
+                        break;
+                }
+            }
+            return result;
         }
 
         /// <summary>
@@ -28,10 +40,13 @@ namespace DataClasses
         /// </summary>
         /// <param name="targetPath">target CSV file path</param>
         /// <returns>Question array</returns>
-        public static Question[] FromCsvMulti(string targetPath)
+        public static Question[] FromCsvMulti(string targetPath, bool hasHeader = true)
         {
-            return (from line in File.ReadAllLines(targetPath)
-                    select FromCsv(line)).ToArray();
+            var contents = File.ReadAllLines(targetPath);
+            var header = contents.First();
+            return (from line in contents
+                    where !hasHeader || !line.Equals(header)
+                    select hasHeader ? FromCsv(line, header) : FromCsv(line)).ToArray();
         }
 
         /// <summary>

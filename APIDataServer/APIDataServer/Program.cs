@@ -57,10 +57,10 @@ namespace APIDataServer
                             Activities = JsonConvert.DeserializeObject<Activity[]>(File.ReadAllText(ACTIVITIES_FILE));
                             break;
                         case "csv":
-                            Schedules = Schedule.FromCsvMulti(DATA_DIR);
-                            MapData = Map.FromCsvMulti(MAPDATA_FILE);
-                            Questions = Question.FromCsvMulti(QUESTIONS_FILE);
-                            Activities = Activity.FromCsvMulti(ACTIVITIES_FILE);
+                            Schedules = Schedule.FromCsvMulti(DATA_DIR,true);
+                            MapData = Map.FromCsvMulti(MAPDATA_FILE,true);
+                            Questions = Question.FromCsvMulti(QUESTIONS_FILE,true);
+                            Activities = Activity.FromCsvMulti(ACTIVITIES_FILE,true);
                             break;
                     }
                 }
