@@ -11,7 +11,7 @@ namespace DataClasses
         /// <summary>
         /// Schedule data file naming standard
         /// </summary>
-        public const string FILE_PATTERN = @"(?<title>[^_]+)_(?<dates>.*)\.csv";
+        public const string FILE_PATTERN = @"^Schedule(?<title>[^_]+)_(?<dates>.*)\.csv$";
 		
         public string ScheduleTitle { get; set; }
         public string ScheduleDates { get; set; }

@@ -71,10 +71,6 @@ For information on API usage, see the [API page] (https://github.com/israelterri
 
 #####Desktop Application: 
 
-Add Schedule prefix to beginning of schedule filenames
-
-Implement delete schedule (and file) functionality for files in data directory
-
 #####API:
 
 Add all building coordinates to data files
