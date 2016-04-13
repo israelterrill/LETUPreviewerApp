@@ -53,7 +53,7 @@ namespace Preview_App
 
             private BindingList<Activity> getActivityEntries()
             {
-                string filename = DATA_DIRECTORY + "Data_Activities.csv";
+                string filename = DATA_DIRECTORY + "activities.csv";
                 var fullPath = Path.GetFullPath(filename);
                 if (File.Exists(fullPath))
                 {
