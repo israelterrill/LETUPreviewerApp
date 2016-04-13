@@ -5,6 +5,8 @@ namespace DataClasses
 {
     public class Event
     {
+        public const string DEFAULT_CSV_HEADER = "Title,Date,Description,Location";
+
         public string Title { get; set; }
         public string Date { get; set; }
         public string Location { get; set; }
@@ -16,16 +18,30 @@ namespace DataClasses
         /// </summary>
         /// <param name="csvStr">CSV text</param>
         /// <returns>instance of Event</returns>
-        public static Event FromCsv(string csvStr)
+        public static Event FromCsv(string csvStr,string hdr=DEFAULT_CSV_HEADER)
         {
             var parts = csvStr.Split(',');
-            return new Event
+            var header = hdr.Split(',');
+            var result = new Event();
+            for (int i = 0; i < header.Length; i++)
             {
-                Title = parts[0],
-                Date = parts[1],
-                Location = parts[2],
-                Description = parts[3].Replace("\"",""),
-            };
+                switch (header[i].ToUpper())
+                {
+                    case "TITLE":
+                        result.Title = parts[i];
+                        break;
+                    case "DATE":
+                        result.Date = parts[i];
+                        break;
+                    case "LOCATION":
+                        result.Location = parts[i];
+                        break;
+                    case "DESCRIPTION":
+                        result.Description = parts[i].Replace("\"", "");
+                        break;
+                }
+            }
+            return result;
         }
 
         /// <summary>
@@ -33,10 +49,13 @@ namespace DataClasses
         /// </summary>
         /// <param name="targetPath">target CSV file path</param>
         /// <returns>Event array</returns>
-        public static Event[] FromCsvMulti(string targetPath)
+        public static Event[] FromCsvMulti(string targetPath,bool hasHeader=true)
         {
+            var contents = File.ReadAllLines(targetPath);
+            var header = contents.First();
             return (from line in File.ReadAllLines(targetPath)
-                    select FromCsv(line)).ToArray();
+                    where !hasHeader || !line.Equals(header)
+                    select hasHeader ? FromCsv(line,header) : FromCsv(line)).ToArray();
         }
 
         /// <summary>
