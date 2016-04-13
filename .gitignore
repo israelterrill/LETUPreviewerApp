@@ -15,4 +15,5 @@ DesktopApplication/Preview_App/obj
 DesktopApplication/packages
 DesktopApplication/.vs
 APIDataServer/Data
+APIDataServer/packages
 *.suo
