@@ -3,6 +3,9 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using ServiceStack.Text;
+using System.Data;
+using Microsoft.VisualBasic.FileIO;
 
 namespace DataClasses
 {
@@ -15,7 +18,17 @@ namespace DataClasses
 		
         public string ScheduleTitle { get; set; }
         public string ScheduleDates { get; set; }
-        public BindingList<Event> Events { get; set; }
+        private BindingList<Event> _events;
+        public BindingList<Event> Events 
+        {
+            get
+            {
+                if(_events == null)
+                    _events = new BindingList<Event>();
+                return _events;
+            }
+            set { _events = value; }
+        }
 
         /// <summary>
         /// Creates a new Activity instance from CSV text
@@ -57,8 +70,57 @@ namespace DataClasses
         public void ToCsv(string targetDir)
         {
             if (!Directory.Exists(targetDir)) throw new DirectoryNotFoundException();
-            var csvStr = string.Join(Environment.NewLine, Events.Select(ev => ev.ToCsv()).ToArray());
-            File.WriteAllText(Path.Combine(targetDir, string.Format("Schedule{0}_{1}", ScheduleTitle, ScheduleDates)), csvStr);
+            var fileName = Path.Combine(targetDir, GetSafeFileName(string.Format("Schedule{0}_{1}.csv", ScheduleTitle, ScheduleDates)));
+            using (FileStream fs = (FileStream)File.Create(fileName))
+            {
+                CsvSerializer.SerializeToStream(Events, fs);
+            }
         }
+
+        public static Schedule FromCsvFile(string targetPath)
+        {
+            BindingList<Event> events = new BindingList<Event>();
+            using (FileStream fs = File.OpenRead(targetPath))
+            {
+                TextFieldParser parser = new TextFieldParser(fs);
+
+                parser.HasFieldsEnclosedInQuotes = true;
+                parser.SetDelimiters(",");
+
+                parser.ReadLine();
+
+                parser.Delimiters = new[] { "," };
+                parser.HasFieldsEnclosedInQuotes = true;
+                System.Diagnostics.Trace.WriteLine(targetPath);
+                while (!parser.EndOfData)
+                {
+                    string[] line = parser.ReadFields();
+                    events.Add(new Event
+                    {
+                        Title = line[0],
+                        Date = line[1],
+                        Location = line[2],
+                        Description = line[3]
+                    });
+                }
+            }
+
+            var fileParts = Path.GetFileNameWithoutExtension(targetPath).Split('_');
+
+            return new Schedule
+            {
+                ScheduleTitle = fileParts[0].Substring(8),
+                ScheduleDates = fileParts[1],
+                Events = events
+            };
+        }
+
+        public static string GetSafeFileName(string filename)
+        {
+
+            return string.Join("-", filename.Split(Path.GetInvalidFileNameChars()));
+
+        }
+
     }
 }

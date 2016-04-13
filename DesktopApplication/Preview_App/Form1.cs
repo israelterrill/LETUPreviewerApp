@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
+using System.Text;
 using System.Collections.Generic;
 using ServiceStack.Text;
 using System.ComponentModel;
@@ -19,16 +20,15 @@ namespace Preview_App
             private string DATA_DIRECTORY = @"../../../../APIDataServer/Data/";
             public const string FILE_PATTERN = @"^Schedule(?<title>[^_]+)_(?<dates>.*)\.csv$";
 
-        BindingList<Schedule> schedules;
-            BindingList<Activity> activities; 
-            public Form1()
-            {
-                InitializeComponent();
-                this.activities = new BindingList<Activity>();
-                this.Load += new System.EventHandler(ActivityTab_Load);
-                this.Load += new System.EventHandler(ScheduleTab_Load);
-                dataGridView2.UserDeletingRow += DataGridView2_UserDeletingRow;
-
+        BindingList<Schedule> schedules = new BindingList<Schedule>();
+        BindingList<Activity> activities; 
+        public Form1()
+        {
+            InitializeComponent();
+            this.activities = new BindingList<Activity>();
+            this.Load += new EventHandler(ActivityTab_Load);
+            this.Load += new EventHandler(ScheduleTab_Load);
+            dataGridView2.UserDeletingRow += DataGridView2_UserDeletingRow;
         }
 
         private void ActivityTab_Load(object sender, EventArgs e)
@@ -44,27 +44,36 @@ namespace Preview_App
 
             private void ScheduleTab_Load(object sender, EventArgs e)
             {
-                this.dataGridView2.DataSource = getScheduleEntries();
+                getScheduleEntriesFromDataFolder();
+                this.dataGridView2.DataSource = schedules;
+                if (schedules.Count > 0)
+                    this.dataGridView4.DataSource = schedules.First().Events;
                 this.dataGridView2.AutoResizeColumns();
             }
 
             private BindingList<Activity> getActivityEntries()
             {
                 string filename = DATA_DIRECTORY + "Data_Activities.csv";
-                if (File.Exists(filename))
+                var fullPath = Path.GetFullPath(filename);
+                if (File.Exists(fullPath))
                 {
-                    ImportActivities(filename);
+                    ImportActivities(fullPath);
                 }
                 return activities;
             }
 
-            private BindingList<Schedule> getScheduleEntries()
+            private void getScheduleEntriesFromDataFolder()
             {
-            //ADD  a GET for all schedules in data directory--need regex to get files in directory
-            
-            JArray schedulesJson = JArray.Parse(File.ReadAllText(DATA_DIRECTORY + "schedule.json"));
-                schedules = schedulesJson.ToObject<BindingList<Schedule>>();
-                return schedules;
+                String[] files =  Directory.GetFiles(DATA_DIRECTORY);
+                List<string> fileNames = new List<string>(files);
+                var rgxFileName = new Regex(FILE_PATTERN);
+                var filteredFileNames = fileNames.Where(fileName => rgxFileName.IsMatch(Path.GetFileName(fileName)));
+
+                foreach(String fileName in filteredFileNames)
+                {
+                    System.Diagnostics.Trace.WriteLine(fileName);
+                    schedules.Add(DataClasses.Schedule.FromCsvFile(Path.GetFullPath(fileName)));
+                }
             }
 
 
@@ -90,13 +99,8 @@ namespace Preview_App
             {
                 foreach (var schedule in schedules)
                 {
-                    using (FileStream fs = (FileStream)File.Create(DATA_DIRECTORY + "Schedule_" + GetSafeFilename(schedule.ScheduleTitle + "_" + schedule.ScheduleDates) +".csv"))
-                    {
-                        string myString = string.Format("{0}\n{1}\n", schedule.ScheduleTitle, schedule.ScheduleDates);
-                        var byteString = myString.ToUtf8Bytes();
-                        fs.Write(byteString, 0, byteString.Length);
-                        CsvSerializer.SerializeToStream(schedules.ElementAt(0).Events, fs);
-                    }
+                    string fullPath = Path.GetFullPath(DATA_DIRECTORY);
+                    schedule.ToCsv(fullPath);
                 }
             }
 
@@ -107,53 +111,25 @@ namespace Preview_App
 
             private void ImportSchedule()
             {
-                //Do not support entering commas in Excel!
                 OpenFileDialog fileDialog = new OpenFileDialog();
                 fileDialog.Multiselect = true;
                 DialogResult result = fileDialog.ShowDialog();
-                String title = null;
-                String dates = null;
                 BindingList<Event> events = new BindingList<Event>();
                 if (result == DialogResult.OK)
                 {
                     foreach (var filename in fileDialog.FileNames)
                     {
-                        using (FileStream fs = (System.IO.FileStream)fileDialog.OpenFile())
-                        {
-                            TextFieldParser parser = new TextFieldParser(fs);
-
-                            parser.HasFieldsEnclosedInQuotes = true;
-                            parser.SetDelimiters(",");
-
-                            title = parser.ReadLine();
-                            dates = parser.ReadLine();
-
-                            parser.ReadLine();
-
-                            parser.Delimiters = new[] { "," };
-                            parser.HasFieldsEnclosedInQuotes = true;
-                            while (!parser.EndOfData)
-                            {
-                                string[] line = parser.ReadFields();
-                                events.Add(new Event
-                                {
-                                    Title = line[0],
-                                    Date = line[1],
-                                    Location = line[2],
-                                    Description = line[3]
-                                });
-                            }
-                        }
-
-                        var fileParts = fileDialog.FileName.Split('_');
-                        schedules.Add(new Schedule
-                        {
-                            ScheduleTitle = Path.GetFileName(fileParts[0]),
-                            ScheduleDates = Path.GetFileNameWithoutExtension(fileParts[1]),
-                            Events = events
-                        });
-                        dataGridView2.DataSource = null;
-                        dataGridView2.DataSource = schedules;
+                        schedules.Add(DataClasses.Schedule.FromCsvFile(filename));
+                    }
+                        
+                    dataGridView2.DataSource = schedules;
+                    dataGridView2.Update();
+                    dataGridView2.Refresh();
+                    if (schedules.Count > 0)
+                    {
+                        dataGridView4.DataSource = schedules.First().Events;
+                        dataGridView4.Update();
+                        dataGridView4.Refresh();
                     }
                 }
             }
@@ -172,11 +148,7 @@ namespace Preview_App
 
                 if (result == DialogResult.OK) {
                     foreach (var schedule in schedules) {
-                        string filename = folderDialog.SelectedPath +"\\Schedule_" + GetSafeFilename(schedule.ScheduleTitle + "_" + schedule.ScheduleDates) + ".csv";
-                        using (FileStream fs = (FileStream)File.Create(filename))
-                        {
-                            CsvSerializer.SerializeToStream(schedule.Events, fs);
-                        }
+                        schedule.ToCsv(folderDialog.SelectedPath);
                     }
                 }
             }
@@ -194,7 +166,8 @@ namespace Preview_App
                     {
                         ImportActivities(filename);
                     }
-
+                    dataGridView1.Update();
+                    dataGridView1.Refresh();
                 }
             }
 
@@ -237,15 +210,18 @@ namespace Preview_App
             private void button5_Click(object sender, EventArgs e)
             {
 
-                foreach (DataGridViewRow item in this.dataGridView2.SelectedRows)
+                if (schedules.Count > 0)
                 {
-                    Schedule schedule = schedules.ElementAt(item.Index);
-                    DeleteScheduleFileInDataDirectory(schedule);
-                    dataGridView2.Rows.RemoveAt(item.Index);
-                }
+                    foreach (DataGridViewRow item in this.dataGridView2.SelectedRows)
+                    {
+                        Schedule schedule = schedules.ElementAt(item.Index);
+                        DeleteScheduleFileInDataDirectory(schedule);
+                        dataGridView2.Rows.RemoveAt(item.Index);
+                    }
 
-                dataGridView1.Update();
-                dataGridView1.Refresh();
+                    dataGridView1.Update();
+                    dataGridView1.Refresh();
+                }
             }
 
             private void dataGridView1_DefaultValuesNeeded(object sender, DataGridViewRowEventArgs e)
@@ -255,14 +231,14 @@ namespace Preview_App
 
             private void dataGridView2_CellClick(object sender, DataGridViewCellEventArgs e)
             {
-                dataGridView2.CommitEdit(DataGridViewDataErrorContexts.Commit);
-                if (schedules.Last().Events == null)
-                    schedules.Last().Events = new BindingList<Event>();
-                dataGridView4.CommitEdit(DataGridViewDataErrorContexts.Commit);
-                if(e.RowIndex >= 0)
-                    dataGridView4.DataSource = schedules.ElementAt(e.RowIndex).Events;
-                dataGridView4.Update();
-                dataGridView4.Refresh();
+                    if (schedules.Count > 0) {
+                        if (e.RowIndex >= 0)
+                        {
+                            dataGridView4.DataSource = schedules.ElementAt(e.RowIndex).Events;
+                            dataGridView4.Update();
+                            dataGridView4.Refresh();
+                        }
+                    }
             }
 
             private void button3_Click(object sender, EventArgs e)
@@ -270,7 +246,7 @@ namespace Preview_App
                 //Export Currently Selected
                 FolderBrowserDialog folderDialog = new FolderBrowserDialog();
                 DialogResult result = folderDialog.ShowDialog();
-                if (result == DialogResult.OK)
+                if (result == DialogResult.OK && schedules.Count > 0)
                 {
                     var selectedCells = dataGridView2.SelectedCells;
                     List<Schedule> usedElements = new List<Schedule>();
@@ -280,11 +256,7 @@ namespace Preview_App
 
                         if (!usedElements.Contains(schedule))
                         {
-                            string filename = folderDialog.SelectedPath +"\\Schedule_" + GetSafeFilename(schedule.ScheduleTitle + "_" + schedule.ScheduleDates) + ".csv";
-                            using (FileStream fs = (FileStream)File.Create(filename))
-                            {
-                                CsvSerializer.SerializeToStream(schedule.Events, fs);
-                            }
+                            schedule.ToCsv(folderDialog.SelectedPath);
                             usedElements.Add(schedule);
                         }
                     }
@@ -302,7 +274,7 @@ namespace Preview_App
 
             private void DeleteScheduleFileInDataDirectory (Schedule schedule)
             {
-                string filename = DATA_DIRECTORY + "Schedule_" + GetSafeFilename(schedule.ScheduleTitle + "_" + schedule.ScheduleDates) + ".csv";
+                string filename = DATA_DIRECTORY + "Schedule" + GetSafeFilename(schedule.ScheduleTitle + "_" + schedule.ScheduleDates) + ".csv";
                 if (File.Exists(filename))
                 {
                     File.Delete(filename);
@@ -312,33 +284,14 @@ namespace Preview_App
                 dataGridView2.Refresh();
             }
 
-            private void ImportActivities(String filename)
+            private void ImportActivities(string filename)
             {
-                    using (FileStream fs = File.OpenRead(filename))
-                    {
-                        TextFieldParser parser = new TextFieldParser(fs);
-
-                        parser.HasFieldsEnclosedInQuotes = true;
-                        parser.SetDelimiters(",");
-
-                        parser.ReadLine();
-
-                        parser.Delimiters = new[] { "," };
-                        parser.HasFieldsEnclosedInQuotes = true;
-                        while (!parser.EndOfData)
-                        {
-                            string[] line = parser.ReadFields();
-                            String ImageLink = (line.Length == 5) ? line[4] : "";
-                            activities.Add(new Activity
-                            {
-                                Title = line[1],
-                                Date = line[2],
-                                Location = line[3],
-                                Description = line[4],
-                                ImageLink = line[0]
-                            });
-                        }
-                    }
+                BindingList<Activity> newActivities = Activity.FromCsvFile(filename);
+                foreach (var activity in newActivities)
+                {
+                    activities.Add(activity);
+                    System.Diagnostics.Trace.WriteLine(activity.Title);
+                }
             }
     }
 }

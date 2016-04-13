@@ -1,5 +1,7 @@
-﻿using System.IO;
+﻿using System.ComponentModel;
+using System.IO;
 using System.Linq;
+using Microsoft.VisualBasic.FileIO;
 
 namespace DataClasses
 {
@@ -39,5 +41,42 @@ namespace DataClasses
         {
             return string.Format("{0},{1}", base.ToCsv(), ImageLink);
         }
-}
+
+        public static BindingList<Activity> FromCsvFile(string targetPath)
+        {
+            BindingList<Activity> activities = new BindingList<Activity>();
+            if(File.Exists(targetPath)) { 
+                using (FileStream fs = File.OpenRead(targetPath))
+                {
+                    TextFieldParser parser = new TextFieldParser(fs);
+
+                    parser.HasFieldsEnclosedInQuotes = true;
+                    parser.SetDelimiters(",");
+
+                    parser.ReadLine();
+
+                    parser.Delimiters = new[] { "," };
+                    parser.HasFieldsEnclosedInQuotes = true;
+                    while (!parser.EndOfData)
+                    {
+                        string[] line = parser.ReadFields();
+                        string ImageLink = (line.Length == 5) ? line[4] : "";
+                        activities.Add(new Activity
+                        {
+                            Title = line[1],
+                            Date = line[2],
+                            Location = line[3],
+                            Description = line[4],
+                            ImageLink = line[0]
+                        });
+                    }
+                }
+            }
+            foreach(var activity in activities)
+            {
+                System.Diagnostics.Trace.WriteLine(activity);
+            }
+            return activities;
+        }
+    }
 }
