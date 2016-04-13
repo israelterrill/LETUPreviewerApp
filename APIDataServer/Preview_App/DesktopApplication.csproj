@@ -7,8 +7,8 @@
     <ProjectGuid>{3FD0B785-BB63-4507-B2D5-264702DB3997}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Preview_App</RootNamespace>
-    <AssemblyName>Preview_App</AssemblyName>
+    <RootNamespace>APIDataServer</RootNamespace>
+    <AssemblyName>DesktopApplication</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -74,10 +74,8 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
-    <None Include="DataClasses.Activity.datasource" />
-    <None Include="DataClasses.Event.datasource" />
-    <None Include="DataClasses.Schedule.datasource" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -91,12 +89,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\APIDataServer\DataClasses\DataClasses.csproj">
-      <Project>{8b5efc6c-8c23-4e46-bd70-07cdd69aaea8}</Project>
-      <Name>DataClasses</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="Microsoft.Office.Core">
@@ -121,7 +113,20 @@
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DataClasses\DataClasses.csproj">
+      <Project>{8b5efc6c-8c23-4e46-bd70-07cdd69aaea8}</Project>
+      <Name>DataClasses</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>if $(ConfigurationName) == Release (
+copy $(TargetPath) $(SolutionDir)Install\$(TargetFileName)
+copy "$(TargetDir)ServiceStack.Text.dll" "$(SolutionDir)Install\ServiceStack.Text.dll" 
+copy "$(TargetDir)Newtonsoft.Json.dll" "$(SolutionDir)Install\Newtonsoft.Json.dll"
+)</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

@@ -12,7 +12,11 @@ namespace APIDataServer
         private const int LISTEN_PORT = 44623;
 
         private const string DATA_FORMAT = "csv";
-        private const string DATA_DIR = @"..\..\..\Data\";
+#if DEBUG
+        private const string DATA_DIR = @"..\..\..\Install\Data\";
+#else
+        private const string DATA_DIR = @"Data\";
+#endif
         private const string SCHEDULES_FILE = DATA_DIR + "schedule." + DATA_FORMAT;
         private const string MAPDATA_FILE = DATA_DIR + "mapdata." + DATA_FORMAT;
         private const string QUESTIONS_FILE = DATA_DIR + "questions." + DATA_FORMAT;
@@ -57,10 +61,10 @@ namespace APIDataServer
                             Activities = JsonConvert.DeserializeObject<Activity[]>(File.ReadAllText(ACTIVITIES_FILE));
                             break;
                         case "csv":
-                            Schedules = Schedule.FromCsvMulti(DATA_DIR,true);
-                            MapData = Map.FromCsvMulti(MAPDATA_FILE,true);
-                            Questions = Question.FromCsvMulti(QUESTIONS_FILE,true);
-                            Activities = Activity.FromCsvMulti(ACTIVITIES_FILE,true);
+                            Schedules = Schedule.FromCsvMulti(DATA_DIR, true);
+                            MapData = Map.FromCsvMulti(MAPDATA_FILE, true);
+                            Questions = Question.FromCsvMulti(QUESTIONS_FILE, true);
+                            Activities = Activity.FromCsvMulti(ACTIVITIES_FILE, true);
                             break;
                     }
                 }

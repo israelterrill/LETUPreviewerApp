@@ -1,4 +1,4 @@
-﻿namespace Preview_App
+﻿namespace APIDataServer
 {
     partial class Form1
     {

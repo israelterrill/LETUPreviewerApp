@@ -7,7 +7,7 @@ namespace DataClasses
 {
     public class Activity : Event
     {
-        public new const string DEFAULT_CSV_HEADER = Event.DEFAULT_CSV_HEADER + ",ImageLink";
+        public new const string DEFAULT_CSV_HEADER = "ImageLink" + Event.DEFAULT_CSV_HEADER;
         public string ImageLink { get; set; }
 
         /// <summary>
@@ -67,42 +67,5 @@ namespace DataClasses
         {
             return string.Format("{0},{1}", base.ToCsv(), ImageLink);
         }
-
-        public static BindingList<Activity> FromCsvFile(string targetPath)
-        {
-            BindingList<Activity> activities = new BindingList<Activity>();
-            if(File.Exists(targetPath)) { 
-                using (FileStream fs = File.OpenRead(targetPath))
-                {
-                    TextFieldParser parser = new TextFieldParser(fs);
-
-                    parser.HasFieldsEnclosedInQuotes = true;
-                    parser.SetDelimiters(",");
-
-                    parser.ReadLine();
-
-                    parser.Delimiters = new[] { "," };
-                    parser.HasFieldsEnclosedInQuotes = true;
-                    while (!parser.EndOfData)
-                    {
-                        string[] line = parser.ReadFields();
-                        string ImageLink = (line.Length == 5) ? line[4] : "";
-                        activities.Add(new Activity
-                        {
-                            Title = line[1],
-                            Date = line[2],
-                            Location = line[3],
-                            Description = line[4],
-                            ImageLink = line[0]
-                        });
-                    }
-                }
-            }
-            foreach(var activity in activities)
-            {
-                System.Diagnostics.Trace.WriteLine(activity);
-            }
-            return activities;
-        }
-    }
+   }
 }

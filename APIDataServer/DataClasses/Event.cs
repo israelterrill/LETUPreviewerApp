@@ -5,7 +5,7 @@ namespace DataClasses
 {
     public class Event
     {
-        public const string DEFAULT_CSV_HEADER = "Title,Date,Description,Location";
+        public const string DEFAULT_CSV_HEADER = "Title,Date,Location,Description";
 
         public string Title { get; set; }
         public string Date { get; set; }

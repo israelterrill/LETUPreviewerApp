@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APIDataServer", "APIDataSer
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataClasses", "DataClasses\DataClasses.csproj", "{8B5EFC6C-8C23-4E46-BD70-07CDD69AAEA8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DesktopApplication", "Preview_App\DesktopApplication.csproj", "{3FD0B785-BB63-4507-B2D5-264702DB3997}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,10 +19,15 @@ Global
 		{25A1E1C8-324A-4EFD-8143-7368DBD10751}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{25A1E1C8-324A-4EFD-8143-7368DBD10751}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{25A1E1C8-324A-4EFD-8143-7368DBD10751}.Release|Any CPU.Build.0 = Release|Any CPU
+		{25A1E1C8-324A-4EFD-8143-7368DBD10751}.Release|Any CPU.Deploy.0 = Release|Any CPU
 		{8B5EFC6C-8C23-4E46-BD70-07CDD69AAEA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8B5EFC6C-8C23-4E46-BD70-07CDD69AAEA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8B5EFC6C-8C23-4E46-BD70-07CDD69AAEA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8B5EFC6C-8C23-4E46-BD70-07CDD69AAEA8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3FD0B785-BB63-4507-B2D5-264702DB3997}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FD0B785-BB63-4507-B2D5-264702DB3997}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FD0B785-BB63-4507-B2D5-264702DB3997}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FD0B785-BB63-4507-B2D5-264702DB3997}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
