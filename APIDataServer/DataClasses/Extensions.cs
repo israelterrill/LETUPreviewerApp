@@ -1,6 +1,8 @@
-﻿namespace DataClasses
+﻿using System.IO;
+
+namespace DataClasses
 {
-    static class Extensions
+    public static class Extensions
     {
         /// <summary>
         /// String extension method to encapsulate string in double quotes if it contains any commas
@@ -10,6 +12,11 @@
         public static string EscapeCommas(this string str)
         {
             return str.Contains(",") ? string.Format("\"{0}\"", str) : str;
+        }
+
+        public static string GetSafeFileName(this string filename)
+        {
+            return string.Join("-", filename.Split(Path.GetInvalidFileNameChars()));
         }
     }
 }

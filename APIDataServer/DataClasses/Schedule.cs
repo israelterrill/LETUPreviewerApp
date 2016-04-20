@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Data;
 
 namespace DataClasses
 {
@@ -72,15 +71,7 @@ namespace DataClasses
         {
             if (!Directory.Exists(targetDir)) throw new DirectoryNotFoundException();
             var csvStr = string.Join(Environment.NewLine, Events.Select(ev => ev.ToCsv()).ToArray());
-            File.WriteAllText(Path.Combine(targetDir, GetSafeFileName(string.Format("Schedule{0}_{1}.csv", ScheduleTitle, ScheduleDates))), Event.DEFAULT_CSV_HEADER + Environment.NewLine + csvStr);
+            File.WriteAllText(Path.Combine(targetDir, string.Format("Schedule{0}_{1}.csv", ScheduleTitle, ScheduleDates).GetSafeFileName()), Event.DEFAULT_CSV_HEADER + Environment.NewLine + csvStr);
         }
-
-        public static string GetSafeFileName(string filename)
-        {
-
-            return string.Join("-", filename.Split(Path.GetInvalidFileNameChars()));
-
-        }
-
     }
 }

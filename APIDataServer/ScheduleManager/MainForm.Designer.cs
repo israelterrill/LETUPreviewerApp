@@ -116,7 +116,7 @@
             this.btnSaveActivities.TabIndex = 23;
             this.btnSaveActivities.Text = "Save";
             this.btnSaveActivities.UseVisualStyleBackColor = true;
-            this.btnSaveActivities.Click += new System.EventHandler(this.btnSaveActivities_Click);
+            this.btnSaveActivities.Click += (s, e) => SaveActivities();
             // 
             // btnImportActivity
             // 
@@ -280,7 +280,7 @@
             this.btnSaveSchedules.TabIndex = 27;
             this.btnSaveSchedules.Text = "Save";
             this.btnSaveSchedules.UseVisualStyleBackColor = true;
-            this.btnSaveSchedules.Click += new System.EventHandler(this.btnSaveSchedules_Click);
+            this.btnSaveSchedules.Click += (s, e) => SaveSchedules();
             // 
             // btnImportSchedule
             // 
@@ -294,7 +294,7 @@
             this.btnImportSchedule.TabIndex = 26;
             this.btnImportSchedule.Text = "Import";
             this.btnImportSchedule.UseVisualStyleBackColor = true;
-            this.btnImportSchedule.Click += new System.EventHandler(this.btnImportSchedule_Click);
+            this.btnImportSchedule.Click += (s, e) => ImportSchedule();
             // 
             // btnExportSchedules
             // 
@@ -308,7 +308,7 @@
             this.btnExportSchedules.TabIndex = 25;
             this.btnExportSchedules.Text = "Export";
             this.btnExportSchedules.UseVisualStyleBackColor = true;
-            this.btnExportSchedules.Click += new System.EventHandler(this.btnExportSchedules_Click);
+            this.btnExportSchedules.Click += (s, e) => ExportSchedules();
             // 
             // btnRemoveSchedule
             // 
