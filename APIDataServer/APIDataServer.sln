@@ -1,13 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APIDataServer", "APIDataServer\APIDataServer.csproj", "{25A1E1C8-324A-4EFD-8143-7368DBD10751}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataClasses", "DataClasses\DataClasses.csproj", "{8B5EFC6C-8C23-4E46-BD70-07CDD69AAEA8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DesktopApplication", "Preview_App\DesktopApplication.csproj", "{3FD0B785-BB63-4507-B2D5-264702DB3997}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScheduleManager", "ScheduleManager\ScheduleManager.csproj", "{3FD0B785-BB63-4507-B2D5-264702DB3997}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
