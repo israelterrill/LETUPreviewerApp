@@ -73,12 +73,6 @@ For information on API usage, see the [API page] (https://github.com/israelterri
 
 #####API:
 
-Add all building coordinates to data files
-
-~~Adjust file operations so save/export filename denotes schedule title and dates, so only events are included in the CSV~~*
-
-~~Add CSV import capability~~*
-
 Add capability for WebAPI to check for file changes in case of file/schedule updates
 
 #####Front-End
@@ -86,6 +80,3 @@ Add capability for WebAPI to check for file changes in case of file/schedule upd
 Fix mobile map glitch where keyboard does not go down when building selected
 
 Fix the http calls so that image links for buildings are requested via http requests.
-
-
-**Implemented, but untested. Remove from list when tested.*
