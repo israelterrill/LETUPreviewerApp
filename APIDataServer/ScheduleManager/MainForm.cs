@@ -22,13 +22,13 @@ namespace APIDataServer
         private const string ACTIVITIES_PATH = DATA_DIR + @"\" + ACTIVITIES_FILE;
 
         BindingList<Schedule> schedules = new BindingList<Schedule>();
-        BindingList<Activity> activities;
+        BindingList<Activity> activities = new BindingList<Activity>();
 
-        private bool eventSelected = false;
+        private bool eventSelected;
+
         public MainForm()
         {
             InitializeComponent();
-            activities = new BindingList<Activity>();
             Load += ActivityTab_Load;
             Load += ScheduleTab_Load;
             dgvSchedules.UserDeletingRow += DgvSchedulesUserDeletingRow;
@@ -111,7 +111,6 @@ namespace APIDataServer
             foreach (var schedule in schedules) schedule.ToCsv(folderDialog.SelectedPath);
         }
 
-
         private void btnImportActivity_Click(object sender, EventArgs e)
         {
             //Activity Import Button
@@ -138,7 +137,8 @@ namespace APIDataServer
         private void btnRemoveActivity_Click(object sender, EventArgs e)
         {
             //Remove Activities
-            foreach (DataGridViewRow item in dgvActivities.SelectedRows) dgvActivities.Rows.RemoveAt(item.Index);
+            foreach (var item in dgvActivities.SelectedRows.Cast<DataGridViewRow>().OrderByDescending(r => r.Index)) 
+                dgvActivities.Rows.RemoveAt(item.Index);
 
             dgvActivities.Update();
             dgvActivities.Refresh();
@@ -150,7 +150,7 @@ namespace APIDataServer
             if (eventSelected)
             {
                 var schedule = schedules.ElementAt(dgvSchedules.SelectedRows.Cast<DataGridViewRow>().First().Index);
-                foreach (DataGridViewRow item in dgvEvents.SelectedRows)
+                foreach (var item in dgvEvents.SelectedRows.Cast<DataGridViewRow>().OrderByDescending(r=>r.Index))
                 {
                     DeleteEventFromScheduleFile(schedule, item.Index);
                 }
@@ -159,7 +159,7 @@ namespace APIDataServer
             }
             else
             {
-                foreach (DataGridViewRow item in dgvSchedules.SelectedRows)
+                foreach (var item in dgvSchedules.SelectedRows.Cast<DataGridViewRow>().OrderByDescending(r=>r.Index))
                 {
                     var schedule = schedules.ElementAt(item.Index);
                     DeleteScheduleFileInDataDirectory(schedule);
@@ -214,7 +214,7 @@ namespace APIDataServer
 
         private void DeleteScheduleFileInDataDirectory(Schedule schedule)
         {
-            var filename = Path.Combine(DATA_DIR,"Schedule" + (schedule.ScheduleTitle + "_" + schedule.ScheduleDates).GetSafeFileName() + ".csv");
+            var filename = Path.Combine(DATA_DIR, "Schedule" + (schedule.ScheduleTitle + "_" + schedule.ScheduleDates).GetSafeFileName() + ".csv");
             if (File.Exists(filename)) File.Delete(filename);
 
             dgvSchedules.Update();
@@ -235,6 +235,38 @@ namespace APIDataServer
         {
             var newActivities = new BindingList<Activity>(Activity.FromCsvMulti(filename));
             foreach (var activity in newActivities) activities.Add(activity);
+        }
+
+        private void btnClearActivities_Click(object sender, EventArgs e)
+        {
+            dgvActivities.Rows.Clear();
+            dgvActivities.Update();
+            dgvActivities.Refresh();
+        }
+
+        private void btnClearSchedule_Click(object sender, EventArgs e)
+        {
+            if (eventSelected)
+            {
+                var schedule = schedules.ElementAt(dgvSchedules.SelectedRows.Cast<DataGridViewRow>().First().Index);
+                schedule.Events.Clear();
+                schedule.ToCsv(DATA_DIR);
+                dgvEvents.Update();
+                dgvEvents.Refresh();
+            }
+            else if (
+                MessageBox.Show(
+                    @"Are you sure you want to remove all Schedules? This will delete the associated files as well.",
+                    @"Confirm Clear Selections", MessageBoxButtons.YesNoCancel) == DialogResult.Yes)
+            {
+                dgvSchedules.Rows.Clear();
+                foreach (
+                    var filePath in
+                        Directory.GetFiles(DATA_DIR)
+                            .Where(fi => Regex.IsMatch(Path.GetFileName(fi), Schedule.FILE_PATTERN)))
+                    File.Delete(filePath);
+                dgvEvents.DataSource = null;
+            }
         }
     }
 }
