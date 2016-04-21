@@ -1,4 +1,7 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.IO;
 
 namespace DataClasses
 {
@@ -17,6 +20,20 @@ namespace DataClasses
         public static string GetSafeFileName(this string filename)
         {
             return string.Join("-", filename.Split(Path.GetInvalidFileNameChars()));
+        }
+
+        public static IEnumerable<string> SplitCsv(this string csvStr)
+        {
+            var parts = new List<string>();
+            parts.Add(String.Empty);
+            var inQuotes = false;
+            foreach (var ch in csvStr.ToCharArray())
+            {
+                if (ch.Equals('"')) inQuotes = !inQuotes;
+                else if (!inQuotes && ch.Equals(',')) parts.Add(string.Empty);
+                else parts[parts.Count - 1] += ch;
+            }
+            return parts;
         }
     }
 }

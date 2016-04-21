@@ -46,6 +46,7 @@ namespace DataClasses
             var contents = File.ReadAllLines(targetPath);
             var header = contents.First();
             result.Events = new BindingList<Event>((from line in contents
+                                                    where !hasHeader || !line.Equals(header)
                 select hasHeader ? Event.FromCsv(line,header) : Event.FromCsv(line)).ToList());
             return result;
         }

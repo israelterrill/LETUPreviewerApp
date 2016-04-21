@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace DataClasses
@@ -20,7 +22,7 @@ namespace DataClasses
         /// <returns>instance of Event</returns>
         public static Event FromCsv(string csvStr,string hdr=DEFAULT_CSV_HEADER)
         {
-            var parts = csvStr.Split(',');
+            var parts = csvStr.SplitCsv().ToArray();
             var header = hdr.Split(',');
             var result = new Event();
             for (int i = 0; i < header.Length; i++)

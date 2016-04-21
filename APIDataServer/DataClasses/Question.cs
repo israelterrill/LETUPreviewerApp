@@ -17,7 +17,7 @@ namespace DataClasses
         /// <returns>instance of Question</returns>
         public static Question FromCsv(string csvStr, string hdr = DEFAULT_CSV_HEADER)
         {
-            var parts = csvStr.Split(',');
+            var parts = csvStr.SplitCsv().ToArray();
             var header = hdr.Split(',');
             var result = new Question();
             for (int i = 0; i < header.Length; i++)

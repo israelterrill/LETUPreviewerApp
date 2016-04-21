@@ -36,6 +36,11 @@
             this.btnExportActivity = new System.Windows.Forms.Button();
             this.btnRemoveActivity = new System.Windows.Forms.Button();
             this.dgvActivities = new System.Windows.Forms.DataGridView();
+            this.titleDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dateDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.locationDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.descriptionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.imageLinkDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.activityBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.tabPageSchedules = new System.Windows.Forms.TabPage();
             this.btnExportSelectedSchedules = new System.Windows.Forms.Button();
@@ -55,11 +60,6 @@
             this.scheduleBindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.activityBindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.scheduleBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.titleDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dateDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.locationDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.descriptionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.imageLinkDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabControl.SuspendLayout();
             this.tabPageActivities.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvActivities)).BeginInit();
@@ -116,7 +116,6 @@
             this.btnSaveActivities.TabIndex = 23;
             this.btnSaveActivities.Text = "Save";
             this.btnSaveActivities.UseVisualStyleBackColor = true;
-            this.btnSaveActivities.Click += (s, e) => SaveActivities();
             // 
             // btnImportActivity
             // 
@@ -183,6 +182,36 @@
             this.dgvActivities.Size = new System.Drawing.Size(703, 357);
             this.dgvActivities.TabIndex = 4;
             // 
+            // titleDataGridViewTextBoxColumn
+            // 
+            this.titleDataGridViewTextBoxColumn.DataPropertyName = "Title";
+            this.titleDataGridViewTextBoxColumn.HeaderText = "Title";
+            this.titleDataGridViewTextBoxColumn.Name = "titleDataGridViewTextBoxColumn";
+            // 
+            // dateDataGridViewTextBoxColumn
+            // 
+            this.dateDataGridViewTextBoxColumn.DataPropertyName = "Date";
+            this.dateDataGridViewTextBoxColumn.HeaderText = "Date";
+            this.dateDataGridViewTextBoxColumn.Name = "dateDataGridViewTextBoxColumn";
+            // 
+            // locationDataGridViewTextBoxColumn
+            // 
+            this.locationDataGridViewTextBoxColumn.DataPropertyName = "Location";
+            this.locationDataGridViewTextBoxColumn.HeaderText = "Location";
+            this.locationDataGridViewTextBoxColumn.Name = "locationDataGridViewTextBoxColumn";
+            // 
+            // descriptionDataGridViewTextBoxColumn
+            // 
+            this.descriptionDataGridViewTextBoxColumn.DataPropertyName = "Description";
+            this.descriptionDataGridViewTextBoxColumn.HeaderText = "Description";
+            this.descriptionDataGridViewTextBoxColumn.Name = "descriptionDataGridViewTextBoxColumn";
+            // 
+            // imageLinkDataGridViewTextBoxColumn
+            // 
+            this.imageLinkDataGridViewTextBoxColumn.DataPropertyName = "ImageLink";
+            this.imageLinkDataGridViewTextBoxColumn.HeaderText = "ImageLink";
+            this.imageLinkDataGridViewTextBoxColumn.Name = "imageLinkDataGridViewTextBoxColumn";
+            // 
             // activityBindingSource
             // 
             this.activityBindingSource.DataSource = typeof(DataClasses.Activity);
@@ -237,6 +266,7 @@
             this.dgvEvents.DataSource = this.eventBindingSource;
             this.dgvEvents.Location = new System.Drawing.Point(0, 167);
             this.dgvEvents.Name = "dgvEvents";
+            this.dgvEvents.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvEvents.Size = new System.Drawing.Size(703, 184);
             this.dgvEvents.TabIndex = 29;
             // 
@@ -280,7 +310,6 @@
             this.btnSaveSchedules.TabIndex = 27;
             this.btnSaveSchedules.Text = "Save";
             this.btnSaveSchedules.UseVisualStyleBackColor = true;
-            this.btnSaveSchedules.Click += (s, e) => SaveSchedules();
             // 
             // btnImportSchedule
             // 
@@ -294,7 +323,6 @@
             this.btnImportSchedule.TabIndex = 26;
             this.btnImportSchedule.Text = "Import";
             this.btnImportSchedule.UseVisualStyleBackColor = true;
-            this.btnImportSchedule.Click += (s, e) => ImportSchedule();
             // 
             // btnExportSchedules
             // 
@@ -308,7 +336,6 @@
             this.btnExportSchedules.TabIndex = 25;
             this.btnExportSchedules.Text = "Export";
             this.btnExportSchedules.UseVisualStyleBackColor = true;
-            this.btnExportSchedules.Click += (s, e) => ExportSchedules();
             // 
             // btnRemoveSchedule
             // 
@@ -341,7 +368,6 @@
             this.dgvSchedules.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvSchedules.Size = new System.Drawing.Size(699, 161);
             this.dgvSchedules.TabIndex = 8;
-            this.dgvSchedules.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvSchedules_CellClick);
             // 
             // scheduleTitleDataGridViewTextBoxColumn
             // 
@@ -367,36 +393,6 @@
             // 
             this.scheduleBindingSource.DataSource = typeof(DataClasses.Schedule);
             // 
-            // titleDataGridViewTextBoxColumn
-            // 
-            this.titleDataGridViewTextBoxColumn.DataPropertyName = "Title";
-            this.titleDataGridViewTextBoxColumn.HeaderText = "Title";
-            this.titleDataGridViewTextBoxColumn.Name = "titleDataGridViewTextBoxColumn";
-            // 
-            // dateDataGridViewTextBoxColumn
-            // 
-            this.dateDataGridViewTextBoxColumn.DataPropertyName = "Date";
-            this.dateDataGridViewTextBoxColumn.HeaderText = "Date";
-            this.dateDataGridViewTextBoxColumn.Name = "dateDataGridViewTextBoxColumn";
-            // 
-            // locationDataGridViewTextBoxColumn
-            // 
-            this.locationDataGridViewTextBoxColumn.DataPropertyName = "Location";
-            this.locationDataGridViewTextBoxColumn.HeaderText = "Location";
-            this.locationDataGridViewTextBoxColumn.Name = "locationDataGridViewTextBoxColumn";
-            // 
-            // descriptionDataGridViewTextBoxColumn
-            // 
-            this.descriptionDataGridViewTextBoxColumn.DataPropertyName = "Description";
-            this.descriptionDataGridViewTextBoxColumn.HeaderText = "Description";
-            this.descriptionDataGridViewTextBoxColumn.Name = "descriptionDataGridViewTextBoxColumn";
-            // 
-            // imageLinkDataGridViewTextBoxColumn
-            // 
-            this.imageLinkDataGridViewTextBoxColumn.DataPropertyName = "ImageLink";
-            this.imageLinkDataGridViewTextBoxColumn.HeaderText = "ImageLink";
-            this.imageLinkDataGridViewTextBoxColumn.Name = "imageLinkDataGridViewTextBoxColumn";
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -405,7 +401,7 @@
             this.Controls.Add(this.tabControl);
             this.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.Name = "MainForm";
-            this.Text = "Preview tabControl Manager";
+            this.Text = "Preview Schedule Manager";
             this.tabControl.ResumeLayout(false);
             this.tabPageActivities.ResumeLayout(false);
             this.tabPageActivities.PerformLayout();

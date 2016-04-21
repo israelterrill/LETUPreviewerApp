@@ -21,7 +21,7 @@ namespace DataClasses
         /// <returns>instance of Map</returns>
         public static Map FromCsv(string csvStr,string hdr = DEFAULT_CSV_HEADER)
         {
-            var parts = csvStr.Split(',');
+            var parts = csvStr.SplitCsv().ToArray();
             var header = hdr.Split(',');
             var result = new Map();
             for (int i = 0; i < header.Length; i++)
