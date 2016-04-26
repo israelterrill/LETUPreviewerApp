@@ -17,7 +17,7 @@ var previewerApp = angular.module('PreviewerApp', [
 
   });
 
-var httpRequestBase = 'http://localhost:44623/api';
+var httpRequestBase = 'http://10.39.30.30:44623/api';
 
 previewerApp.controller('MainController', function($scope, $location) {
 
@@ -72,6 +72,7 @@ previewerApp.controller('HomeController', function($scope, $location) {
 });
 
 previewerApp.controller('MapsController', function($scope, $http, NgMap) {
+  $scope.notFoundImage = 'images/image_not_available.png';
     $scope.config = {}; // use defaults
     $scope.model = {}; // always pass empty object
  $http({
@@ -218,6 +219,7 @@ previewerApp.controller('ScheduleController', function($scope, $location, $http)
 });
 
 previewerApp.controller('ActivitiesController', function($scope, $http, $location) {
+  $scope.defaultImage = 'images/activity.jpg';
   $http({
     method: 'GET',
     url: httpRequestBase + '/activities',
