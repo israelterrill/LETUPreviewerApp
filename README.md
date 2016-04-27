@@ -1,5 +1,8 @@
 # LETU Previewer App
 
+Copyright LeTourneau University, All Rights Reserved
+
+
 The following folders contain the different parts of the project:
 
 
