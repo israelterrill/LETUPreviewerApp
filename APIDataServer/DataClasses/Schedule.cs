@@ -12,6 +12,8 @@ namespace DataClasses
         /// Schedule data file naming standard
         /// </summary>
         public const string FILE_PATTERN = @"^Schedule(?<title>[^_]+)_(?<dates>.*)\.csv$";
+
+        public string FileName { get { return string.Format("Schedule{0}_{1}",ScheduleTitle,ScheduleDates).GetSafeFileName(); } }
 		
         public string ScheduleTitle { get; set; }
         public string ScheduleDates { get; set; }
@@ -43,7 +45,10 @@ namespace DataClasses
                 ScheduleTitle = match.Groups["title"].Value,
                 ScheduleDates = match.Groups["dates"].Value,
             };
-            var contents = File.ReadAllLines(targetPath);
+            string[] contents;
+            using (var stream = File.Open(targetPath, FileMode.Open, FileAccess.Read))
+            using (var reader = new StreamReader(stream))
+                contents = reader.ReadToEnd().Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
             var header = contents.First();
             result.Events = new BindingList<Event>((from line in contents
                                                     where !hasHeader || !line.Equals(header)
@@ -72,7 +77,14 @@ namespace DataClasses
         {
             if (!Directory.Exists(targetDir)) throw new DirectoryNotFoundException();
             var csvStr = string.Join(Environment.NewLine, Events.Select(ev => ev.ToCsv()).ToArray());
-            File.WriteAllText(Path.Combine(targetDir, string.Format("Schedule{0}_{1}.csv", ScheduleTitle, ScheduleDates).GetSafeFileName()), Event.DEFAULT_CSV_HEADER + Environment.NewLine + csvStr);
+            File.WriteAllText(Path.Combine(targetDir, string.Format("{0}.csv", FileName)), Event.DEFAULT_CSV_HEADER + Environment.NewLine + csvStr);
+        }
+
+        public void Update(Schedule updated)
+        {
+            ScheduleTitle = updated.ScheduleTitle;
+            ScheduleDates = updated.ScheduleDates;
+            Events = updated.Events;
         }
     }
 }

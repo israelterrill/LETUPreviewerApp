@@ -21,14 +21,16 @@ namespace APIDataServer
         private const string ACTIVITIES_FILE = "activities.csv";
         private const string ACTIVITIES_PATH = DATA_DIR + @"\" + ACTIVITIES_FILE;
 
-        BindingList<Schedule> schedules = new BindingList<Schedule>();
-        BindingList<Activity> activities = new BindingList<Activity>();
+        private readonly Database Database;
 
         private bool eventSelected;
 
         public MainForm()
         {
             InitializeComponent();
+
+            Database = new Database(DATA_DIR);
+
             Load += ActivityTab_Load;
             Load += ScheduleTab_Load;
             dgvSchedules.UserDeletingRow += DgvSchedulesUserDeletingRow;
@@ -44,43 +46,25 @@ namespace APIDataServer
 
         private void ActivityTab_Load(object sender, EventArgs e)
         {
-            dgvActivities.DataSource = GetActivityEntries();
+            dgvActivities.DataSource = Database.Activities;
             dgvActivities.AutoResizeColumns();
         }
 
         private void ScheduleTab_Load(object sender, EventArgs e)
         {
-            GetScheduleEntriesFromDataFolder();
-            dgvSchedules.DataSource = schedules;
-            if (schedules.Count > 0) dgvEvents.DataSource = schedules.First().Events;
+            dgvSchedules.DataSource = Database.Schedules;
+            if (Database.Schedules.Count > 0) dgvEvents.DataSource = Database.Schedules.First().Events;
             dgvSchedules.AutoResizeColumns();
-        }
-
-        private BindingList<Activity> GetActivityEntries()
-        {
-            var fullPath = Path.GetFullPath(ACTIVITIES_PATH);
-            if (File.Exists(fullPath)) ImportActivities(fullPath);
-            return activities;
-        }
-
-        private void GetScheduleEntriesFromDataFolder()
-        {
-            if (!Directory.Exists(DATA_DIR)) return;
-            var fileNames = Directory.GetFiles(DATA_DIR);
-            var rgxFileName = new Regex(Schedule.FILE_PATTERN);
-            var filteredFileNames = fileNames.Where(fileName => rgxFileName.IsMatch(Path.GetFileName(fileName)));
-
-            foreach (var fileName in filteredFileNames) schedules.Add(Schedule.FromCsv(Path.GetFullPath(fileName)));
         }
 
         private void SaveActivities()
         {
-            using (var fs = File.Create(ACTIVITIES_PATH)) CsvSerializer.SerializeToStream(activities, fs);
+            using (var fs = File.Create(ACTIVITIES_PATH)) CsvSerializer.SerializeToStream(Database.Activities, fs);
         }
 
         private void SaveSchedules()
         {
-            foreach (var schedule in schedules)
+            foreach (var schedule in Database.Schedules)
             {
                 var fullPath = Path.GetFullPath(DATA_DIR);
                 schedule.ToCsv(fullPath);
@@ -93,13 +77,13 @@ namespace APIDataServer
             fileDialog.Multiselect = true;
             if (fileDialog.ShowDialog() != DialogResult.OK) return;
             foreach (var filename in fileDialog.FileNames)
-                schedules.Add(Schedule.FromCsv(filename));
+                Database.Schedules.Add(Schedule.FromCsv(filename));
 
-            dgvSchedules.DataSource = schedules;
+            dgvSchedules.DataSource = Database.Schedules;
             dgvSchedules.Update();
             dgvSchedules.Refresh();
-            if (schedules.Count <= 0) return;
-            dgvEvents.DataSource = schedules.First().Events;
+            if (Database.Schedules.Count <= 0) return;
+            dgvEvents.DataSource = Database.Schedules.First().Events;
             dgvEvents.Update();
             dgvEvents.Refresh();
         }
@@ -108,7 +92,7 @@ namespace APIDataServer
         {
             var folderDialog = new FolderBrowserDialog();
             if (folderDialog.ShowDialog() != DialogResult.OK) return;
-            foreach (var schedule in schedules) schedule.ToCsv(folderDialog.SelectedPath);
+            foreach (var schedule in Database.Schedules) schedule.ToCsv(folderDialog.SelectedPath);
         }
 
         private void btnImportActivity_Click(object sender, EventArgs e)
@@ -131,7 +115,7 @@ namespace APIDataServer
             fileDialog.AddExtension = false;
             fileDialog.FileName = ACTIVITIES_FILE;
             if (fileDialog.ShowDialog() != DialogResult.OK) return;
-            using (var fs = (FileStream)fileDialog.OpenFile()) CsvSerializer.SerializeToStream(activities, fs);
+            using (var fs = (FileStream)fileDialog.OpenFile()) CsvSerializer.SerializeToStream(Database.Activities, fs);
         }
 
         private void btnRemoveActivity_Click(object sender, EventArgs e)
@@ -146,10 +130,10 @@ namespace APIDataServer
 
         private void btnRemoveSchedule_Click(object sender, EventArgs e)
         {
-            if (schedules.Count <= 0) return;
+            if (Database.Schedules.Count <= 0) return;
             if (eventSelected)
             {
-                var schedule = schedules.ElementAt(dgvSchedules.SelectedRows.Cast<DataGridViewRow>().First().Index);
+                var schedule = Database.Schedules.ElementAt(dgvSchedules.SelectedRows.Cast<DataGridViewRow>().First().Index);
                 foreach (var item in dgvEvents.SelectedRows.Cast<DataGridViewRow>().OrderByDescending(r=>r.Index))
                 {
                     DeleteEventFromScheduleFile(schedule, item.Index);
@@ -161,7 +145,7 @@ namespace APIDataServer
             {
                 foreach (var item in dgvSchedules.SelectedRows.Cast<DataGridViewRow>().OrderByDescending(r=>r.Index))
                 {
-                    var schedule = schedules.ElementAt(item.Index);
+                    var schedule = Database.Schedules.ElementAt(item.Index);
                     DeleteScheduleFileInDataDirectory(schedule);
                     dgvSchedules.Rows.RemoveAt(item.Index);
                 }
@@ -172,9 +156,9 @@ namespace APIDataServer
 
         private void dgvSchedules_SelectionChanged(object sender, EventArgs e)
         {
-            if (schedules.Count <= 0 || dgvSchedules.SelectedRows.Count <= 0) return;
+            if (Database.Schedules.Count <= 0 || dgvSchedules.SelectedRows.Count <= 0) return;
             dgvEvents.DataSource =
-                schedules.ElementAt(dgvSchedules.SelectedRows.Cast<DataGridViewRow>().First().Index).Events;
+                Database.Schedules.ElementAt(dgvSchedules.SelectedRows.Cast<DataGridViewRow>().First().Index).Events;
             dgvEvents.Update();
             dgvEvents.Refresh();
             eventSelected = false;
@@ -182,8 +166,8 @@ namespace APIDataServer
 
         void dgvEvents_SelectionChanged(object sender, EventArgs e)
         {
-            if (schedules.Count <= 0 || dgvSchedules.SelectedRows.Count <= 0) return;
-            var selectedSchedule = schedules.ElementAt(dgvSchedules.SelectedRows.Cast<DataGridViewRow>().First().Index);
+            if (Database.Schedules.Count <= 0 || dgvSchedules.SelectedRows.Count <= 0) return;
+            var selectedSchedule = Database.Schedules.ElementAt(dgvSchedules.SelectedRows.Cast<DataGridViewRow>().First().Index);
             if (selectedSchedule.Events.Count <= 0 || dgvEvents.SelectedRows.Count <= 0) return;
             eventSelected = true;
         }
@@ -192,12 +176,12 @@ namespace APIDataServer
         {
             //Export Currently Selected
             var folderDialog = new FolderBrowserDialog();
-            if (folderDialog.ShowDialog() != DialogResult.OK || schedules.Count <= 0) return;
+            if (folderDialog.ShowDialog() != DialogResult.OK || Database.Schedules.Count <= 0) return;
             var selectedCells = dgvSchedules.SelectedCells;
             var usedElements = new List<Schedule>();
             for (var i = 0; i < selectedCells.Count; i++)
             {
-                var schedule = schedules.ElementAt(selectedCells[i].RowIndex);
+                var schedule = Database.Schedules.ElementAt(selectedCells[i].RowIndex);
 
                 if (usedElements.Contains(schedule)) continue;
                 schedule.ToCsv(folderDialog.SelectedPath);
@@ -208,13 +192,13 @@ namespace APIDataServer
         private void DgvSchedulesUserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
         {
             var rows = dgvSchedules.SelectedRows;
-            foreach (var schedule in from DataGridViewRow row in rows select schedules.ElementAt(row.Index))
+            foreach (var schedule in from DataGridViewRow row in rows select Database.Schedules.ElementAt(row.Index))
                 DeleteScheduleFileInDataDirectory(schedule);
         }
 
         private void DeleteScheduleFileInDataDirectory(Schedule schedule)
         {
-            var filename = Path.Combine(DATA_DIR, "Schedule" + (schedule.ScheduleTitle + "_" + schedule.ScheduleDates).GetSafeFileName() + ".csv");
+            var filename = Path.Combine(DATA_DIR, schedule.FileName + ".csv");
             if (File.Exists(filename)) File.Delete(filename);
 
             dgvSchedules.Update();
@@ -223,7 +207,7 @@ namespace APIDataServer
 
         private void DeleteEventFromScheduleFile(Schedule schedule, int index)
         {
-            var filename = Path.Combine(DATA_DIR, "Schedule" + (schedule.ScheduleTitle + "_" + schedule.ScheduleDates).GetSafeFileName() + ".csv");
+            var filename = Path.Combine(DATA_DIR, schedule.FileName + ".csv");
             if (!File.Exists(filename)) return;
             schedule.Events.RemoveAt(index);
             schedule.ToCsv(DATA_DIR);
@@ -234,7 +218,7 @@ namespace APIDataServer
         private void ImportActivities(string filename)
         {
             var newActivities = new BindingList<Activity>(Activity.FromCsvMulti(filename));
-            foreach (var activity in newActivities) activities.Add(activity);
+            foreach (var activity in newActivities) Database.Activities.Add(activity);
         }
 
         private void btnClearActivities_Click(object sender, EventArgs e)
@@ -248,7 +232,7 @@ namespace APIDataServer
         {
             if (eventSelected)
             {
-                var schedule = schedules.ElementAt(dgvSchedules.SelectedRows.Cast<DataGridViewRow>().First().Index);
+                var schedule = Database.Schedules.ElementAt(dgvSchedules.SelectedRows.Cast<DataGridViewRow>().First().Index);
                 schedule.Events.Clear();
                 schedule.ToCsv(DATA_DIR);
                 dgvEvents.Update();
@@ -256,7 +240,7 @@ namespace APIDataServer
             }
             else if (
                 MessageBox.Show(
-                    @"Are you sure you want to remove all Schedules? This will delete the associated files as well.",
+                    @"Are you sure you want to remove all AllSchedules? This will delete the associated files as well.",
                     @"Confirm Clear Selections", MessageBoxButtons.YesNoCancel) == DialogResult.Yes)
             {
                 dgvSchedules.Rows.Clear();

@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 
 namespace DataClasses
@@ -42,7 +43,10 @@ namespace DataClasses
         /// <returns>Question array</returns>
         public static Question[] FromCsvMulti(string targetPath, bool hasHeader = true)
         {
-            var contents = File.ReadAllLines(targetPath);
+            string[] contents;
+            using (var stream = File.Open(targetPath, FileMode.Open, FileAccess.Read))
+            using (var reader = new StreamReader(stream))
+                contents = reader.ReadToEnd().Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
             var header = contents.First();
             return (from line in contents
                     where !hasHeader || !line.Equals(header)
@@ -58,6 +62,12 @@ namespace DataClasses
             return string.Format("{0},{1}",
                 Query.EscapeCommas(),
                 Answer.EscapeCommas());
+        }
+
+        public void Update(Question updated)
+        {
+            Query = updated.Query;
+            Answer = updated.Answer;
         }
     }
 }

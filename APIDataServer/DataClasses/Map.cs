@@ -57,7 +57,10 @@ namespace DataClasses
         /// <returns>Map array</returns>
         public static Map[] FromCsvMulti(string targetPath,bool hasHeader = true)
         {
-            var contents = File.ReadAllLines(targetPath);
+            string[] contents;
+            using (var stream = File.Open(targetPath, FileMode.Open, FileAccess.Read))
+            using (var reader = new StreamReader(stream))
+                contents = reader.ReadToEnd().Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
             var header = contents.First();
             return (from line in contents
                     where !hasHeader || !line.Equals(header)
@@ -76,6 +79,15 @@ namespace DataClasses
                 Lat,
                 Long,
                 ImageLink);
+        }
+
+        public void Update(Map updated)
+        {
+            Name = updated.Name;
+            Code = updated.Code;
+            Lat = updated.Lat;
+            Long = updated.Long;
+            ImageLink = updated.ImageLink;
         }
     }
 }

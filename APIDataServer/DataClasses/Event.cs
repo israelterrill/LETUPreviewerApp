@@ -53,7 +53,10 @@ namespace DataClasses
         /// <returns>Event array</returns>
         public static Event[] FromCsvMulti(string targetPath,bool hasHeader=true)
         {
-            var contents = File.ReadAllLines(targetPath);
+            string[] contents;
+            using (var stream = File.Open(targetPath, FileMode.Open, FileAccess.Read))
+            using (var reader = new StreamReader(stream))
+                contents = reader.ReadToEnd().Split(new[] {'\r','\n'},StringSplitOptions.RemoveEmptyEntries);
             var header = contents.First();
             return (from line in File.ReadAllLines(targetPath)
                     where !hasHeader || !line.Equals(header)
@@ -71,6 +74,14 @@ namespace DataClasses
                                     Date,
                                     Location,
                                     Description.EscapeCommas());
+        }
+
+        public void Update(Event updated)
+        {
+            Title = updated.Title;
+            Date = updated.Date;
+            Location = updated.Location;
+            Description = updated.Description;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 
@@ -38,7 +39,6 @@ namespace DataClasses
                     case "IMAGELINK":
                         result.ImageLink = parts[i];
                         break;
-
                 }
             }
             return result;
@@ -51,7 +51,10 @@ namespace DataClasses
         /// <returns>Activity array</returns>
         public new static Activity[] FromCsvMulti(string targetPath,bool hasHeader=true)
         {
-            var contents = File.ReadAllLines(targetPath);
+            string[] contents;
+            using (var stream = File.Open(targetPath, FileMode.Open, FileAccess.Read))
+            using (var reader = new StreamReader(stream))
+                contents = reader.ReadToEnd().Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
             var header = contents.First();
             return (from line in contents
                     where !hasHeader || !line.Equals(header)
@@ -65,6 +68,12 @@ namespace DataClasses
         public new string ToCsv()
         {
             return string.Format("{0},{1}", base.ToCsv(), ImageLink);
+        }
+
+        public void Update(Activity updated)
+        {
+            base.Update(updated);
+            ImageLink = updated.ImageLink;
         }
    }
 }
