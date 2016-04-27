@@ -59,16 +59,12 @@ namespace APIDataServer
 
         private void SaveActivities()
         {
-            using (var fs = File.Create(ACTIVITIES_PATH)) CsvSerializer.SerializeToStream(Database.Activities, fs);
+            Database.Export(Database.ExportOptions.Activities);
         }
 
         private void SaveSchedules()
         {
-            foreach (var schedule in Database.Schedules)
-            {
-                var fullPath = Path.GetFullPath(DATA_DIR);
-                schedule.ToCsv(fullPath);
-            }
+            Database.Export(Database.ExportOptions.AllSchedules);
         }
 
         private void ImportSchedule()
@@ -92,7 +88,7 @@ namespace APIDataServer
         {
             var folderDialog = new FolderBrowserDialog();
             if (folderDialog.ShowDialog() != DialogResult.OK) return;
-            foreach (var schedule in Database.Schedules) schedule.ToCsv(folderDialog.SelectedPath);
+            Database.Export(Database.ExportOptions.AllSchedules, folderDialog.SelectedPath);
         }
 
         private void btnImportActivity_Click(object sender, EventArgs e)
@@ -184,7 +180,7 @@ namespace APIDataServer
                 var schedule = Database.Schedules.ElementAt(selectedCells[i].RowIndex);
 
                 if (usedElements.Contains(schedule)) continue;
-                schedule.ToCsv(folderDialog.SelectedPath);
+                Database.Export(Database.ExportOptions.SingleSchedule,folderDialog.SelectedPath,schedule);
                 usedElements.Add(schedule);
             }
         }

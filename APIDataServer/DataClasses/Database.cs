@@ -33,17 +33,18 @@ namespace DataClasses
             SingleSchedule = 16,
         }
 
-        public readonly string DataDirectory;
-        public readonly string DataFormat;
+        public string DataDirectory { get; private set; }
+
+        public string DataFormat { get; private set; }
 
         public readonly bool RefreshOnFileChange;
 
         private readonly FileSystemWatcher FileSystemWatcher = new FileSystemWatcher();
 
-        private string SchedulesFile { get { return DataDirectory + "schedule." + DataFormat; } }
-        private string MapDataFile { get { return DataDirectory + "mapdata." + DataFormat; } }
-        private string QuestionsFile { get { return DataDirectory + "questions." + DataFormat; } }
-        private string ActivitiesFile { get { return DataDirectory + "activities." + DataFormat; } }
+        private string SchedulesFile { get { return Path.Combine(DataDirectory, "schedule." + DataFormat); } }
+        private string MapDataFile { get { return Path.Combine(DataDirectory, "mapdata." + DataFormat); } }
+        private string QuestionsFile { get { return Path.Combine(DataDirectory, "questions." + DataFormat); } }
+        private string ActivitiesFile { get { return Path.Combine(DataDirectory, "activities." + DataFormat); } }
 
         public BindingList<Activity> Activities = new BindingList<Activity>();
         public BindingList<Schedule> Schedules = new BindingList<Schedule>();
@@ -74,12 +75,12 @@ namespace DataClasses
 
         private void OnRenamed(object sender, RenamedEventArgs e)
         {
-            var oldFile = Path.GetFileNameWithoutExtension(e.OldFullPath);
-            var newFile = Path.GetFileNameWithoutExtension(e.FullPath);
+            var oldFile = Path.GetFileName(e.OldFullPath);
+            var newFile = Path.GetFileName(e.FullPath);
             var rgxSchedule = new Regex(Schedule.FILE_PATTERN);
             if (rgxSchedule.IsMatch(oldFile))
             {
-                var schedule = Schedules.First(sch => sch.FileName.Equals(oldFile));
+                var schedule = Schedules.First(sch => oldFile.Equals(sch.FileName + "." + DataFormat));
                 if (rgxSchedule.IsMatch(newFile))
                 {
                     var match = rgxSchedule.Match(newFile);
@@ -110,7 +111,7 @@ namespace DataClasses
 
         private void OnChanged(object sender, FileSystemEventArgs e)
         {
-            var file = Path.GetFileNameWithoutExtension(e.FullPath);
+            var file = Path.GetFileName(e.FullPath);
             if (Regex.IsMatch(file, Schedule.FILE_PATTERN))
             {
                 var newSchedule = Schedule.FromCsv(e.FullPath);
@@ -122,7 +123,7 @@ namespace DataClasses
                 Schedule schedule = null;
                 if (e.ChangeType.HasFlag(WatcherChangeTypes.Changed) ||
                     e.ChangeType.HasFlag(WatcherChangeTypes.Deleted))
-                    schedule = Schedules.First(sch => sch.FileName.Equals(file));
+                    schedule = Schedules.First(sch => file.Equals(sch.FileName + "." + DataFormat));
                 if (schedule == null) return;
                 if (e.ChangeType.HasFlag(WatcherChangeTypes.Changed))
                     schedule.Update(newSchedule);
@@ -158,8 +159,11 @@ namespace DataClasses
             }
         }
 
-        public void Export(ExportOptions options, Schedule schedule = null)
+        public void Export(ExportOptions options, string dataDir = null, Schedule schedule = null)
         {
+            if (dataDir == null) dataDir = DataDirectory;
+            var dataDirOld = DataDirectory;
+            DataDirectory = dataDir;
             try
             {
                 switch (DataFormat)
@@ -185,10 +189,14 @@ namespace DataClasses
                     case "csv":
                         if (options.HasFlag(ExportOptions.AllSchedules))
                         {
-                            foreach (var sch in Schedules)
-                            {
-                                sch.ToCsv(DataDirectory);
-                            }
+                            var rgxSchedule = new Regex(Schedule.FILE_PATTERN);
+                            var files = from file in Directory.GetFiles(DataDirectory)
+                                        let fiName = Path.GetFileName(file)
+                                        where rgxSchedule.IsMatch(fiName)
+                                        select file;
+                            foreach (var file in files) File.Delete(file);
+
+                            foreach (var sch in Schedules) sch.ToCsv(DataDirectory);
                         }
                         if (options == ExportOptions.SingleSchedule) schedule.ToCsv(DataDirectory);
                         if (options.HasFlag(ExportOptions.Questions))
@@ -214,6 +222,10 @@ namespace DataClasses
                 Console.WriteLine(ex.Message);
                 Console.WriteLine(ex.StackTrace);
             }
+            finally
+            {
+                DataDirectory = dataDirOld;
+            }
         }
 
         public void Import(ImportOptions options, string scheduleFile = null)
@@ -237,7 +249,7 @@ namespace DataClasses
                         if (options.HasFlag(ImportOptions.MapData))
                         {
                             Map[] newMaps = null;
-                            using (var stream = File.Open(MapDataFile,FileMode.Open,FileAccess.Read))
+                            using (var stream = File.Open(MapDataFile, FileMode.Open, FileAccess.Read))
                             using (var reader = new StreamReader(stream))
                                 newMaps = JsonConvert.DeserializeObject<Map[]>(reader.ReadToEnd());
                             if (newMaps == null) return;
@@ -248,7 +260,7 @@ namespace DataClasses
                         if (options.HasFlag(ImportOptions.Questions))
                         {
                             Question[] newQueries = null;
-                            using (var stream = File.Open(QuestionsFile,FileMode.Open,FileAccess.Read))
+                            using (var stream = File.Open(QuestionsFile, FileMode.Open, FileAccess.Read))
                             using (var reader = new StreamReader(stream))
                                 newQueries = JsonConvert.DeserializeObject<Question[]>(reader.ReadToEnd());
                             if (newQueries == null) return;
