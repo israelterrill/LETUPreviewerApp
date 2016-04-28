@@ -201,18 +201,18 @@ namespace DataClasses
                         if (options == ExportOptions.SingleSchedule) schedule.ToCsv(DataDirectory);
                         if (options.HasFlag(ExportOptions.Questions))
                         {
-                            File.WriteAllText(QuestionsFile, Question.DEFAULT_CSV_HEADER);
-                            File.AppendAllLines(QuestionsFile, Questions.Select(que => que.ToCsv()), Encoding.UTF8);
+                            var lines = new string[] { Question.DEFAULT_CSV_HEADER }.Concat(Questions.Select(que => que.ToCsv()));
+                            File.WriteAllLines(QuestionsFile, lines, Encoding.UTF8);
                         }
                         if (options.HasFlag(ExportOptions.Activities))
                         {
-                            File.WriteAllText(ActivitiesFile, Activity.DEFAULT_CSV_HEADER);
-                            File.AppendAllLines(ActivitiesFile, Activities.Select(act => act.ToCsv()), Encoding.UTF8);
+                            var lines = new string[] { Activity.DEFAULT_CSV_HEADER }.Concat(Activities.Select(act => act.ToCsv()));
+                            File.WriteAllLines(ActivitiesFile, lines, Encoding.UTF8);
                         }
                         if (options.HasFlag(ExportOptions.MapData))
                         {
-                            File.WriteAllText(MapDataFile, Map.DEFAULT_CSV_HEADER);
-                            File.AppendAllLines(MapDataFile, MapData.Select(map => map.ToCsv()), Encoding.UTF8);
+                            var lines = new string[] { Map.DEFAULT_CSV_HEADER }.Concat(MapData.Select(map => map.ToCsv()));
+                            File.WriteAllLines(MapDataFile, lines, Encoding.UTF8);
                         }
                         break;
                 }
